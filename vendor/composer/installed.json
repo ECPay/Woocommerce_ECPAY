@@ -1,0 +1,46 @@
+{
+    "packages": [
+        {
+            "name": "ecpay/sdk",
+            "version": "1.1.0",
+            "version_normalized": "1.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ECPay/SDK_PHP.git",
+                "reference": "5cbb10182652195c6f402a26c4f7749a5920658c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ECPay/SDK_PHP/zipball/5cbb10182652195c6f402a26c4f7749a5920658c",
+                "reference": "5cbb10182652195c6f402a26c4f7749a5920658c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "time": "2021-08-12T11:43:55+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Ecpay\\Sdk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "ECPay SDK",
+            "support": {
+                "issues": "https://github.com/ECPay/SDK_PHP/issues",
+                "source": "https://github.com/ECPay/SDK_PHP/tree/1.1.0"
+            },
+            "install-path": "../ecpay/sdk"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
