@@ -24,10 +24,15 @@ class Wooecpay_Invoice_Response extends WC_Payment_Gateway
                 if ($order = wc_get_order($order_id)){
 
                     // 更新訂單
+
+                    $invoice_number = sanitize_text_field($_POST['invoicenumber']);
+                    $invoice_date   = sanitize_text_field($_POST['invoicedate']);
+                    $invoice_time   = sanitize_text_field($_POST['invoicetime']);
+                    $invoice_code   = sanitize_text_field($_POST['invoicecode']);
   
-                    $order->update_meta_data( '_wooecpay_invoice_no', $_POST['invoicenumber'] );
-                    $order->update_meta_data( '_wooecpay_invoice_date', $_POST['invoicedate'].' '.$_POST['invoicetime'] ); 
-                    $order->update_meta_data( '_wooecpay_invoice_random_number', $_POST['invoicecode']); 
+                    $order->update_meta_data( '_wooecpay_invoice_no', $invoice_number );
+                    $order->update_meta_data( '_wooecpay_invoice_date', $invoice_date.' '.$invoice_time ); 
+                    $order->update_meta_data( '_wooecpay_invoice_random_number', $invoice_code); 
 
                     $order->add_order_note('延遲發票開立成功');
                     $order->save();

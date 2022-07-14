@@ -183,7 +183,7 @@ class Wooecpay_invoice {
 
 					    $data = [
 					        'MerchantID' 	=> $api_payment_info['merchant_id'],
-					        'LoveCode' 		=> $_POST['wooecpay_invoice_love_code'],
+					        'LoveCode' 		=> sanitize_text_field($_POST['wooecpay_invoice_love_code']),
 					    ];
 					    $input = [
 					        'MerchantID' => $api_payment_info['merchant_id'],
@@ -247,7 +247,7 @@ class Wooecpay_invoice {
 
 					    $data = [
 					        'MerchantID' 	=> $api_payment_info['merchant_id'],
-					        'BarCode' 		=> $_POST['wooecpay_invoice_carruer_num'],
+					        'BarCode' 		=> sanitize_text_field($_POST['wooecpay_invoice_carruer_num']),  
 					    ];
 
 					    $input = [

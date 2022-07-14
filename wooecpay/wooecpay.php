@@ -11,10 +11,9 @@
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain: wooecpay
  * Domain Path: /languages
- * WC requires at least: 5
- * WC tested up to: 5.8.2
+ * WC requires at least: 6
+ * WC tested up to: 6.5.1
  */
 
 // 相關檢查

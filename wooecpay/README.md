@@ -1,8 +1,10 @@
 綠界科技 WooCommerce 模組
 ===============
 <p align="center">
-    <img alt="Last Release" src="https://img.shields.io/github/release/ECPay/WooCommerce.svg">
+    <img alt="Last Release" src="https://img.shields.io/github/release/ECPay/Woocommerce_ECPAY.svg">
 </p>
+
+
 
 * 綠界科技外掛套件，提供合作特店以及個人會員使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
 
@@ -107,7 +109,7 @@
 
 |  | 特店編號(MerchantID) | HashKey | HashIV |
 | -------- | -------- | -------- | -------- |
-| 金流     | 2000132     | ejCk326UnaZWKisg     | q9jcZX8Ib9LM8wYk     |
+| 金流     | 3002607     | pwFHCqoQZGmho4w6     | EkRm7iFT261dpevs     |
 | 物流(B2C)(Home)     | 2000132     | 5294y06JbISpM5x9     | v77hoKGq4kWxNNIS     |
 | 物流(C2C)| 2000933     | XBERn1YOvpM9nfZc     | h1ONHk4P4yqbl5LK     |
 | 電子發票(B2C)     | 2000132     | ejCk326UnaZWKisg     | q9jcZX8Ib9LM8wYk     |

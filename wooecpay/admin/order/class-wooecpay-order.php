@@ -10,7 +10,7 @@ class Wooecpay_Order {
 
         if (is_admin()) {
 
-        	wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
+        	// wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
             add_action('admin_enqueue_scripts' , array( $this, 'wooecpay_register_scripts' ));
 
 			if ('yes' === get_option('wooecpay_ecpay_enabled_payment', 'yes')) {
@@ -72,7 +72,7 @@ class Wooecpay_Order {
 	public function add_address_meta($order) {
 
 		echo '<style>.order_data_column:nth-child(2) .address p:first-child {display: none;}</style>';
-		echo '<p><strong>帳單姓名:<br/></strong>' . get_post_meta( $order->get_id(), '_billing_last_name', true ) . ' ' . get_post_meta( $order->get_id(), '_billing_first_name', true ) . '</p>';
+		echo wp_kses_post('<p><strong>帳單姓名:<br/></strong>' . get_post_meta( $order->get_id(), '_billing_last_name', true ) . ' ' . get_post_meta( $order->get_id(), '_billing_first_name', true ) . '</p>');
 	}
 
 	/**
@@ -83,46 +83,46 @@ class Wooecpay_Order {
 		$payment_method = get_post_meta( $order->get_id(), '_payment_method', true ) ;
 
 		echo '<p>&nbsp;</p>';
-		echo '<h3>'.__('Gateway info', 'wooecpay').'</h3>' ;
+		echo '<h3>'.__('Gateway info', 'wooecpay').'</h3>';
 
-		echo '<p><strong>'.__('Payment Type', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_payment_method_title', true ) . '</p>' ;
+		echo wp_kses_post('<p><strong>'.__('Payment Type', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_payment_method_title', true ) . '</p>') ;
 
 		switch ( $payment_method) {
 
 			case 'Wooecpay_Gateway_Credit':
 				
-				echo '<p><strong>信用卡前六碼:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_card6no', true ) . '</p>' ;
-				echo '<p><strong>信用卡後四碼:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_card4no', true ) . '</p>' ;
+				echo wp_kses_post('<p><strong>信用卡前六碼:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_card6no', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>信用卡後四碼:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_card4no', true ) . '</p>') ;
 
 			break;
 
 			case 'Wooecpay_Gateway_Credit_Installment':
 				
-				echo '<p><strong>期數:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_payment_number_of_periods', true ) . '數</p>' ;
+				echo wp_kses_post('<p><strong>期數:&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_payment_number_of_periods', true ) . '數</p>') ;
 
 			break;
 
 			case 'Wooecpay_Gateway_Atm':
 				
-				echo '<p><strong>'.__('Bank code', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_BankCode', true ) . '</p>' ;
-				echo '<p><strong>'.__('ATM No', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_vAccount', true ) . '</p>' ;
-				echo '<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_ExpireDate', true ) . '</p>' ;
+				echo wp_kses_post('<p><strong>'.__('Bank code', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_BankCode', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('ATM No', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_vAccount', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_atm_ExpireDate', true ) . '</p>') ;
 
 			break;
 
 			case 'Wooecpay_Gateway_Cvs':
 				
-				echo '<p><strong>'.__('CVS No', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_cvs_PaymentNo', true ) . '</p>' ;
-				echo '<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_cvs_ExpireDate', true ) . '</p>' ;
+				echo wp_kses_post('<p><strong>'.__('CVS No', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_cvs_PaymentNo', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_cvs_ExpireDate', true ) . '</p>') ;
 
 			break;
 
 			case 'Wooecpay_Gateway_Barcode':
 				
-				echo '<p><strong>'.__('barcode one', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode1', true ) . '</p>' ;
-				echo '<p><strong>'.__('barcode two', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode2', true ) . '</p>' ;
-				echo '<p><strong>'.__('barcode three', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode3', true ) . '</p>' ;
-				echo '<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_ExpireDate', true ) . '</p>' ;
+				echo wp_kses_post('<p><strong>'.__('barcode one', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode1', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('barcode two', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode2', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('barcode three', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_Barcode3', true ) . '</p>') ;
+				echo wp_kses_post('<p><strong>'.__('Payment deadline', 'wooecpay').':&nbsp;</strong>'. get_post_meta( $order->get_id(), '_ecpay_barcode_ExpireDate', true ) . '</p>') ;
 
 			break;
 			
@@ -187,22 +187,22 @@ class Wooecpay_Order {
 			] ;
 
 			echo '<div class="logistic_button_display">';
-			echo '<h3>發票資訊</h3>' ;
-			echo '<p><strong>發票號碼:</strong>'. $wooecpay_invoice_no . '</p>' ;	
-			echo '<p><strong>開立時間:</strong>'. $wooecpay_invoice_date . '</p>' ;	
-			echo '<p><strong>隨機碼:</strong>'. $wooecpay_invoice_random_number . '</p>' ;
+			echo '<h3>發票資訊</h3>';
+			echo wp_kses_post('<p><strong>發票號碼:</strong>'. $wooecpay_invoice_no . '</p>') ;	
+			echo wp_kses_post('<p><strong>開立時間:</strong>'. $wooecpay_invoice_date . '</p>') ;	
+			echo wp_kses_post('<p><strong>隨機碼:</strong>'. $wooecpay_invoice_random_number . '</p>') ;
 
 			switch ($wooecpay_invoice_issue_type) {
 				
 				case '1':
 					$wooecpay_invoice_issue_type_dsp = '一般開立發票';
-					echo '<p><strong>開立方式:</strong>'. $wooecpay_invoice_issue_type_dsp . '</p>' ;
+					echo wp_kses_post('<p><strong>開立方式:</strong>'. $wooecpay_invoice_issue_type_dsp . '</p>') ;
 					break;
 
 				case '2':
 					$wooecpay_invoice_issue_type_dsp = '延遲開立發票';
-					echo '<p><strong>開立方式:</strong>'. $wooecpay_invoice_issue_type_dsp . '</p>' ;
-					echo '<p><strong>交易單號:</strong>'. $wooecpay_invoice_tsr . '</p>' ;
+					echo wp_kses_post('<p><strong>開立方式:</strong>'. $wooecpay_invoice_issue_type_dsp . '</p>') ;
+					echo wp_kses_post('<p><strong>交易單號:</strong>'. $wooecpay_invoice_tsr . '</p>') ;
 					break;
 				default:
 					break;
@@ -211,27 +211,27 @@ class Wooecpay_Order {
 
 
 			if(isset($invoiceCarruerType[$wooecpay_invoice_carruer_type])){
-				echo '<p><strong>開立類型:</strong>'. $invoiceCarruerType[$wooecpay_invoice_carruer_type] . '</p>' ;
+				echo wp_kses_post('<p><strong>開立類型:</strong>'. $invoiceCarruerType[$wooecpay_invoice_carruer_type] . '</p>') ;
 			}
 
 			if(isset($invoiceType[$wooecpay_invoice_type])){
-				echo '<p><strong>發票開立:</strong>'. $invoiceType[$wooecpay_invoice_type] . '</p>' ;
+				echo wp_kses_post('<p><strong>發票開立:</strong>'. $invoiceType[$wooecpay_invoice_type] . '</p>') ;
 			}
 
 			switch ($wooecpay_invoice_type) {
 				case 'p':
 					if(!empty($wooecpay_invoice_carruer_num)){
-						echo '<p><strong>載具編號:</strong>'. $wooecpay_invoice_carruer_num . '</p>' ;
+						echo wp_kses_post('<p><strong>載具編號:</strong>'. $wooecpay_invoice_carruer_num . '</p>') ;
 					}
 				break;
 				
 				case 'c':
-					echo '<p><strong>公司名稱:</strong>'. $billing_company . '</p>' ;
-					echo '<p><strong>統一編號:</strong>'. $wooecpay_invoice_customer_identifier . '</p>' ;
+					echo wp_kses_post('<p><strong>公司名稱:</strong>'. $billing_company . '</p>') ;
+					echo wp_kses_post('<p><strong>統一編號:</strong>'. $wooecpay_invoice_customer_identifier . '</p>') ;
 				break;
 
 				case 'd':
-					echo '<p><strong>愛心碼:</strong>'. $wooecpay_invoice_love_code . '</p>' ;
+					echo wp_kses_post('<p><strong>愛心碼:</strong>'. $wooecpay_invoice_love_code . '</p>') ;
 				break;
 			}
 
@@ -390,11 +390,11 @@ class Wooecpay_Order {
 		                $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
 		                $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
 		            ){
-		            	echo '<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>' ;	
-		            	echo '<p><strong>超商名稱:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_name', true ) . '</p>' ;
+		            	echo wp_kses_post('<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>') ;	
+		            	echo wp_kses_post('<p><strong>超商名稱:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_name', true ) . '</p>') ;
 
 		            	if ('yes' === get_option('wooecpay_keep_logistic_phone', 'yes')) {
-		            		echo '<p><strong>收件人電話:</strong>'. get_post_meta( $order->get_id(), 'wooecpay_shipping_phone', true ) . '</p>' ;
+		            		echo wp_kses_post('<p><strong>收件人電話:</strong>'. get_post_meta( $order->get_id(), 'wooecpay_shipping_phone', true ) . '</p>') ;
 		            	}	
 		            }
 
@@ -402,13 +402,10 @@ class Wooecpay_Order {
 		        	echo '<h3>物流單資訊</h3>' ;
 
 		        	if(true){
-		        		echo '<p><strong>廠商交易編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_merchant_trade_no', true ) . '</p>' ;	
-		        		// echo '<p><strong>狀態說明:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_RtnMsg', true ) . get_post_meta( $order->get_id(), '_wooecpay_logistic_RtnCode', true )  . '</p>' ;	
-		        		echo '<p><strong>綠界物流編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true ) . '</p>' ;	
-		        		// echo '<p><strong>物流類型:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_LogisticsType', true ) .' '. get_post_meta( $order->get_id(), '_wooecpay_logistic_LogisticsSubType', true ) . '</p>' ;		
-		        		echo '<p><strong>寄貨編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSPaymentNo', true ) . '</p>' ;	
-		        		// echo '<p><strong>驗證碼:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSValidationNo', true ) . '</p>' ;	
-		        		echo '<p><strong>托運單號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_BookingNote', true ) . '</p>' ;	
+		        		echo wp_kses_post('<p><strong>廠商交易編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_merchant_trade_no', true ) . '</p>') ;	 
+		        		echo wp_kses_post('<p><strong>綠界物流編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true ) . '</p>') ;		
+		        		echo wp_kses_post('<p><strong>寄貨編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSPaymentNo', true ) . '</p>') ;		
+		        		echo wp_kses_post('<p><strong>托運單號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_BookingNote', true ) . '</p>') ;	
 		        	}
 
 		        	// 產生地圖按鈕兒
@@ -451,7 +448,6 @@ class Wooecpay_Order {
 		                    } catch (RtnException $e) {
 		                        echo '(' . $e->getCode() . ')' . $e->getMessage() . PHP_EOL;
 		                    }
-
 
 		        		echo '<input class=\'button\' type=\'button\' onclick=\'ecpayChangeStore();\' value=\'變更門市\' />&nbsp;&nbsp;';
 		        	}
@@ -516,7 +512,6 @@ class Wooecpay_Order {
 		                        echo '(' . $e->getCode() . ')' . $e->getMessage() . PHP_EOL;
 		                    }
 
-
 		        		echo '<input class=\'button\' type=\'button\' onclick=\'ecpayLogisticPrint();\' value=\'列印物流單\' />&nbsp;&nbsp;';
 		        	}
 		        	
@@ -539,7 +534,7 @@ class Wooecpay_Order {
 			'msg'	=> '',
 		];
 
-		$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : '' ;
+		$order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id'])	: '' ;
 
 		if ($order = wc_get_order($order_id)){
 
@@ -707,10 +702,9 @@ class Wooecpay_Order {
 	 */
 	public function ajax_send_invoice_create()
 	{
-		$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : '' ;
+		$order_id = isset($_POST['order_id'])	? sanitize_text_field($_POST['order_id'])	: '' ;
 		$this->invoice_create($order_id);
 	}
-
 
 	/**
 	 * 開立發票程序
@@ -1064,7 +1058,7 @@ class Wooecpay_Order {
 	 */
 	public function ajax_send_invoice_invalid()
 	{
-		$order_id = isset($_POST['order_id']) ? $_POST['order_id'] : '' ;
+		$order_id = isset($_POST['order_id'])	? sanitize_text_field($_POST['order_id'])	: '' ;
 		$this->invoice_invalid($order_id);
 	}
 

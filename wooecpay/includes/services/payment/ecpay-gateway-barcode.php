@@ -26,21 +26,21 @@ class Wooecpay_Gateway_Barcode extends Wooecpay_Gateway_Base
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
 
         if (is_checkout() || is_view_order_page()) {
-            wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
+            // wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
         }
     }
 
     public function process_admin_options()
     {
         $_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] = (int) $_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'];
-        if ($_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] < 1 || $_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] > 60) {
+        if ($_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] < 1 || (int) $_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] > 60) {
             
             $_POST['woocommerce_Wooecpay_Gateway_Barcode_expire_date'] = 7;
             WC_Admin_Settings::add_error(__('BARCODE payment deadline out of range. Set as default value.', 'wooecpay'));
         }
 
         $_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] = (int) $_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'];
-        if ($_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] > 0 && $_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] < 30) {
+        if ($_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] > 0 && (int) $_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] < 30) {
             
             $_POST['woocommerce_Wooecpay_Gateway_Barcode_min_amount'] = 0;
             WC_Admin_Settings::add_error(sprintf(__('%s minimum amount out of range. Set as default value.', 'wooecpay'), $this->method_title));

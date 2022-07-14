@@ -54,9 +54,9 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
         parent::payment_fields();
 
         echo '<p>' . _x('Number of periods', 'Checkout info', 'wooecpay');
-        echo ' <select name="ecpay_number_of_periods">';
+        echo '<select name="ecpay_number_of_periods">';
         foreach ($this->number_of_periods as $number_of_periods) {
-            echo '<option value="' . $number_of_periods . '">' . $number_of_periods . '</option>';
+            echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
         }
         echo '</select>';
     }

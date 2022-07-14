@@ -44,19 +44,38 @@ class Wooecpay_Logistic_Response extends WC_Payment_Gateway
                     // 不存在
                     if(empty($CVSStoreID)){
 
+                        $CVSStoreID   = sanitize_text_field($_POST['CVSStoreID']);
+                        $CVSStoreName = sanitize_text_field($_POST['CVSStoreName']);
+                        $CVSAddress   = sanitize_text_field($_POST['CVSAddress']);
+                        $CVSTelephone = sanitize_text_field($_POST['CVSTelephone']);
+                        
+                        // 驗證
+                        if (mb_strlen( $CVSStoreName, "utf-8") > 10) {
+                            $CVSStoreName = mb_substr($CVSStoreName, 0, 10, "utf-8");
+                        }
+                        if (mb_strlen( $CVSAddress, "utf-8") > 60) {
+                            $CVSAddress = mb_substr($CVSAddress , 0, 60, "utf-8");
+                        }
+                        if (strlen($CVSTelephone) > 20) {
+                            $CVSTelephone = substr($CVSTelephone  , 0, 20);
+                        }
+                        if (strlen($CVSStoreID) > 10) {
+                            $CVSStoreID = substr($CVSTelephone , 0, 10);
+                        }
+
                         $order->set_shipping_company('');
                         $order->set_shipping_address_2('');
                         $order->set_shipping_city('');
                         $order->set_shipping_state('');
                         $order->set_shipping_postcode('');
-                        $order->set_shipping_address_1($_POST['CVSAddress']);
+                        $order->set_shipping_address_1($CVSAddress);
 
-                        $order->update_meta_data( '_ecpay_logistic_cvs_store_id', $_POST['CVSStoreID'] ); 
-                        $order->update_meta_data( '_ecpay_logistic_cvs_store_name', $_POST['CVSStoreName'] ); 
-                        $order->update_meta_data( '_ecpay_logistic_cvs_store_address', $_POST['CVSAddress'] );  
-                        $order->update_meta_data( '_ecpay_logistic_cvs_store_telephone', $_POST['CVSTelephone'] ); 
+                        $order->update_meta_data( '_ecpay_logistic_cvs_store_id', $CVSStoreID ); 
+                        $order->update_meta_data( '_ecpay_logistic_cvs_store_name', $CVSStoreName ); 
+                        $order->update_meta_data( '_ecpay_logistic_cvs_store_address', $CVSAddress );  
+                        $order->update_meta_data( '_ecpay_logistic_cvs_store_telephone', $CVSTelephone ); 
 
-                        $order->add_order_note(sprintf(__('CVS store %1$s (%2$s)', 'wooecpay'),$_POST['CVSStoreName'],$_POST['CVSStoreID']));
+                        $order->add_order_note(sprintf(__('CVS store %1$s (%2$s)', 'wooecpay'), $CVSStoreName, $CVSStoreID));
 
                         $order->save();
                     }
@@ -176,12 +195,31 @@ class Wooecpay_Logistic_Response extends WC_Payment_Gateway
                     $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
                 ){
 
-                    $order->update_meta_data( '_ecpay_logistic_cvs_store_id', $_POST['CVSStoreID'] ); 
-                    $order->update_meta_data( '_ecpay_logistic_cvs_store_name', $_POST['CVSStoreName'] ); 
-                    $order->update_meta_data( '_ecpay_logistic_cvs_store_address', $_POST['CVSAddress'] );  
-                    $order->update_meta_data( '_ecpay_logistic_cvs_store_telephone', $_POST['CVSTelephone'] ); 
+                    $CVSStoreID   = sanitize_text_field($_POST['CVSStoreID']);
+                    $CVSStoreName = sanitize_text_field($_POST['CVSStoreName']);
+                    $CVSAddress   = sanitize_text_field($_POST['CVSAddress']);
+                    $CVSTelephone = sanitize_text_field($_POST['CVSTelephone']);
+                    
+                    // 驗證
+                    if (mb_strlen( $CVSStoreName, "utf-8") > 10) {
+                        $CVSStoreName = mb_substr($CVSStoreName, 0, 10, "utf-8");
+                    }
+                    if (mb_strlen( $CVSAddress, "utf-8") > 60) {
+                        $CVSAddress = mb_substr($CVSAddress , 0, 60, "utf-8");
+                    }
+                    if (strlen($CVSTelephone) > 20) {
+                        $CVSTelephone = substr($CVSTelephone  , 0, 20);
+                    }
+                    if (strlen($CVSStoreID) > 10) {
+                        $CVSStoreID = substr($CVSTelephone , 0, 10);
+                    }
 
-                    $order->add_order_note(sprintf(__('Change store %1$s (%2$s)', 'wooecpay'),$_POST['CVSStoreName'],$_POST['CVSStoreID']));
+                    $order->update_meta_data( '_ecpay_logistic_cvs_store_id', $CVSStoreID ); 
+                    $order->update_meta_data( '_ecpay_logistic_cvs_store_name', $CVSStoreName ); 
+                    $order->update_meta_data( '_ecpay_logistic_cvs_store_address', $CVSAddress );  
+                    $order->update_meta_data( '_ecpay_logistic_cvs_store_telephone', $CVSTelephone ); 
+
+                    $order->add_order_note(sprintf(__('Change store %1$s (%2$s)', 'wooecpay'),$CVSStoreName,$CVSStoreID));
 
                     $order->save();
                 }
@@ -192,15 +230,15 @@ class Wooecpay_Logistic_Response extends WC_Payment_Gateway
                 echo '<tbody>';
                 echo '<tr>';
                 echo '<td>超商店舖編號:</td>';
-                echo '<td>'. $_POST['CVSStoreID'].'</td>';
+                echo wp_kses_post('<td>'. $CVSStoreID.'</td>');
                 echo '</tr>';
                 echo '<tr>';
                 echo '<td>超商店舖名稱:</td>';
-                echo '<td>'. $_POST['CVSStoreName'].'</td>';
+                echo wp_kses_post('<td>'. $CVSStoreName.'</td>');
                 echo '</tr>';
                 echo '<tr>';
                 echo '<td>超商店舖地址:</td>';
-                echo '<td>'. $_POST['CVSAddress'].'</td>';
+                echo wp_kses_post('<td>'. $CVSAddress.'</td>');
                 echo '</tr>';
                 echo '</tbody>';
                 echo '</table>';
@@ -245,7 +283,10 @@ class Wooecpay_Logistic_Response extends WC_Payment_Gateway
                         $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' 
                     ){
                         
-                        $order->add_order_note('物流貨態回傳:'.$_POST['RtnMsg'].' ('.$_POST['RtnCode'].')');
+                        $RtnMsg  = sanitize_text_field($_POST['RtnMsg']);
+                        $RtnCode = sanitize_text_field($_POST['RtnCode']);
+
+                        $order->add_order_note('物流貨態回傳:'.$RtnMsg.' ('.$RtnCode.')');
                         $order->save();
                     }
                 }
@@ -388,8 +429,6 @@ class Wooecpay_Logistic_Response extends WC_Payment_Gateway
         if (isset($info['MerchantTradeNo'])) {
 
             $order_id = substr($info['MerchantTradeNo'], strlen($order_prefix), strrpos($info['MerchantTradeNo'], 'SN'));
-
-
             $order_id = (int) $order_id;
             if ($order_id > 0) {
                 return $order_id;
