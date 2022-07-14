@@ -1,12 +1,12 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Green World FinTech Service Co., Ltd. (https://www.ecpay.com.tw)
- * @version 1.0.110115
+ * @version 1.0.22007080
  *
- * Plugin Name: Ecpay for WooCommerce
+ * Plugin Name: Ecpay Ecommerce  for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
- * Description: Ecpay Plug for WooCommerce
- * Version: 1.0.2201150
+ * Description: Ecpay Ecommerce Plug for WooCommerce
+ * Version: 1.0.22007080
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
@@ -20,7 +20,7 @@
 defined( 'ABSPATH' ) or exit;
 
 // 相關常數定義
-define( 'WOOECPAY_VERSION', '1.0.2201150' );
+define( 'WOOECPAY_VERSION', '1.0.22007080' );
 define( 'WOOECPAY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
