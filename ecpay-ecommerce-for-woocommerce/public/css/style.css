@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text');
+
+.code39 {
+    font-family: 'Libre Barcode 39 Text', cursive;
+    font-size: 50px;
+    line-height: normal;
+    letter-spacing: 0;
+}
+
+.code39_order {
+    font-family: 'Libre Barcode 39 Text', cursive;
+    font-size: 27px;
+    line-height: normal;
+    letter-spacing: 0;
+}
