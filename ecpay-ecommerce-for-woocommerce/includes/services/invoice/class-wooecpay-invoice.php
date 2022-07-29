@@ -311,9 +311,9 @@ class Wooecpay_invoice {
 
         } else {
             
-            $merchant_id = get_option('wooecpay_logistic_mid');
-            $hash_key    = get_option('wooecpay_logistic_hashkey');
-            $hash_iv     = get_option('wooecpay_logistic_hashiv');
+            $merchant_id = get_option('wooecpay_invoice_mid');
+            $hash_key    = get_option('wooecpay_invoice_hashkey');
+            $hash_iv     = get_option('wooecpay_invoice_hashiv');
 
             $api_info = [
                 'merchant_id'   => $merchant_id,

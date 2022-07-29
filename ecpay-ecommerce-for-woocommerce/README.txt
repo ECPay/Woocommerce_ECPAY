@@ -4,7 +4,7 @@ Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, 
 Requires at least: 6.0
 Tested up to: 6.0
 Requires PHP: 7.4 
-Stable tag: 1.0.220714
+Stable tag: 1.0.2207280
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,9 +18,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
-
-v1.0.220714
-調整程式寫法符合 woocommerce 要求
 
 v1.0.22007080
 修正相容性至 WordPress Version 6.0

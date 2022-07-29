@@ -6,7 +6,7 @@
  * Plugin Name: ECPay Ecommerce for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
  * Description: Ecpay Plug for WooCommerce
- * Version: 1.0.220714
+ * Version: 1.0.220728
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
@@ -20,7 +20,7 @@
 defined( 'ABSPATH' ) or exit;
 
 // 相關常數定義
-define( 'WOOECPAY_VERSION', '1.0.220714' );
+define( 'WOOECPAY_VERSION', '1.0.220728' );
 define( 'WOOECPAY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
