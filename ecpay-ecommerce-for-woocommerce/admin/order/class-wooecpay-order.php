@@ -1462,7 +1462,10 @@ class Wooecpay_Order {
             foreach ($order->get_items() as $item) {
                 $item_name .=  trim($item->get_name()) . ' ' ;
             }
-        }
+	}
+
+	//字數限制，中文25字，英文50字
+        $item_name = mb_substr($item_name, 0, 20, 'utf-8');
 
         return $item_name;
     }
