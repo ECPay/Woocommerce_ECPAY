@@ -32,10 +32,10 @@
 安裝
 -----------------
 ### 方法一:Wordpress 市集網址
-可透過 Wordpress 市集直接下載安裝
+建議透過 Wordpress 市集直接下載安裝
 https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 
-#### 方法二：透過GITHUB解壓縮套件檔
+### 方法二：透過GITHUB下載套件檔
 將下載的套件檔解壓縮，解壓縮完成後中會有一份壓縮檔「ecpay-ecommerce-for-woocommerce.zip」，用來上傳的外掛模組。
 
 #### 上傳模組
@@ -47,13 +47,13 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 設定與功能項目
 -----------------
 
-#### 參數設定
+### 參數設定
 ##### 設定路徑
 - `購物車後台` -> `WooCommerce` -> `設定(Settings)`，點選綠界科技分頁。
 
-##### 主要設定
+#### 主要設定
 - 您可在此勾選需要啟用的綠界服務。
-##### 金流設定
+#### 金流設定
 - 您可在此設定金流相關參數。
     - 訂單編號前綴
     - 綠界訂單顯示商品名稱
@@ -62,7 +62,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
     - 金鑰(Hash Key)
     - 向量(Hash IV)
 
-##### 物流設定
+#### 物流設定
 - 您可在此設定物流相關參數。
     - 訂單編號前綴
     - 自動建立物流訂單
@@ -78,7 +78,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 
 - 您需要至 `運送方式` -> `運送區域`-> `編輯` -> `新增運送方式` ，加入要提供的綠界物流種類，並可進入個別物流種類中編輯運費、免運以及啟用門檻。
 
-##### 電子發票設定
+#### 電子發票設定
 - 您可在此設定電子發票相關參數。
     - 訂單編號前綴
     - 開立發票模式
@@ -89,10 +89,10 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
     - 商店代號(Merchant ID)
     - 金鑰(Hash Key)
     - 向量(Hash IV)
-##### 注意事項
+#### 注意事項
 - 如需超商取貨付款功能，請至 - `購物車後台` -> `WooCommerce` -> `設定(Settings)` -> `付款` -> `貨到付款` -> `啟用運送方式` ，加入超商取貨付款的物流種類。
 
-#### 後台訂單
+### 後台訂單
 
 - 您可在訂單詳細資料中操作相關動作。
     - 物流
@@ -109,7 +109,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 附錄
 -----------------
 
-#### 測試串接參數
+### 測試串接參數
 
 |  | 特店編號(MerchantID) | HashKey | HashIV |
 | -------- | -------- | -------- | -------- |
