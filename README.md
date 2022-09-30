@@ -31,23 +31,23 @@
 
 安裝
 -----------------
-### 方法一:Wordpress 市集網址
+#### 方法一:Wordpress 市集網址
 建議透過 Wordpress 市集直接下載安裝
 https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 
-### 方法二：透過GITHUB下載套件檔
+#### 方法二：透過GITHUB下載套件檔
 將下載的套件檔解壓縮，解壓縮完成後中會有一份壓縮檔「ecpay-ecommerce-for-woocommerce.zip」，用來上傳的外掛模組。
 
-#### 上傳模組
+##### 上傳模組
 `購物車後台` -> `外掛(Plugins)` -> `安裝外掛(Add New)` -> `上傳外掛(Upload Plugin)` -> `選擇檔案(選擇壓縮檔「wooecpay.zip」)`-> `立即安裝(Install Now)`。
 
-#### 啟用模組
+##### 啟用模組
 安裝完成後，畫面會顯示是否安裝成功，若安裝成功會出現`啟用外掛(Active Plugin)`的按鈕，按下`啟用外掛(Active Plugin)`後即可開始使用綠界模組。
 
 設定與功能項目
 -----------------
 
-### 參數設定
+#### 參數設定
 ##### 設定路徑
 - `購物車後台` -> `WooCommerce` -> `設定(Settings)`，點選綠界科技分頁。
 
@@ -92,7 +92,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 #### 注意事項
 - 如需超商取貨付款功能，請至 - `購物車後台` -> `WooCommerce` -> `設定(Settings)` -> `付款` -> `貨到付款` -> `啟用運送方式` ，加入超商取貨付款的物流種類。
 
-### 後台訂單
+#### 後台訂單
 
 - 您可在訂單詳細資料中操作相關動作。
     - 物流
