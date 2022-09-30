@@ -39,10 +39,10 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 將下載的套件檔解壓縮，解壓縮完成後中會有一份壓縮檔「ecpay-ecommerce-for-woocommerce.zip」，用來上傳的外掛模組。
 
 ##### 上傳模組
-`購物車後台` -> `外掛(Plugins)` -> `安裝外掛(Add New)` -> `上傳外掛(Upload Plugin)` -> `選擇檔案(選擇壓縮檔「wooecpay.zip」)`-> `立即安裝(Install Now)`。
+	- `購物車後台` -> `外掛(Plugins)` -> `安裝外掛(Add New)` -> `上傳外掛(Upload Plugin)` -> `選擇檔案(選擇壓縮檔「wooecpay.zip」)`-> `立即安裝(Install Now)`。
 
 ##### 啟用模組
-安裝完成後，畫面會顯示是否安裝成功，若安裝成功會出現`啟用外掛(Active Plugin)`的按鈕，按下`啟用外掛(Active Plugin)`後即可開始使用綠界模組。
+	- 安裝完成後，畫面會顯示是否安裝成功，若安裝成功會出現`啟用外掛(Active Plugin)`的按鈕，按下`啟用外掛(Active Plugin)`後即可開始使用綠界模組。
 
 設定與功能項目
 -----------------
