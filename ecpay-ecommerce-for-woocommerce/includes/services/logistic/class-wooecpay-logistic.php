@@ -69,8 +69,8 @@ class Wooecpay_Logistic {
        
         if ( ! is_admin() ) {
 
-			$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
-			$chosen_shipping = $chosen_methods[0];
+        	$chosen_shipping_tmp = wc_get_chosen_shipping_method_ids();
+        	$chosen_shipping = $chosen_shipping_tmp[0] ;
 
 			if(!empty($chosen_shipping)){
 
@@ -89,6 +89,7 @@ class Wooecpay_Logistic {
 							$key == 'Wooecpay_Gateway_Atm' ||
 							$key == 'Wooecpay_Gateway_Cvs' ||
 							$key == 'Wooecpay_Gateway_Barcode' ||
+							$key == 'Wooecpay_Gateway_Applepay' ||
 							$key == 'cod'
 						){
 

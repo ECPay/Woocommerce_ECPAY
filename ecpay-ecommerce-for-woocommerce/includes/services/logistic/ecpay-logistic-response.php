@@ -103,7 +103,8 @@ class Wooecpay_Logistic_Response
                 // 紀錄訂單其他資訊
                 $order->update_meta_data( '_wooecpay_payment_order_prefix', get_option('wooecpay_payment_order_prefix') ); // 前綴
                 $order->update_meta_data( '_wooecpay_payment_merchant_trade_no', $merchant_trade_no ); //MerchantTradeNo 
-
+                $order->update_meta_data( '_wooecpay_query_trade_tag', 0);
+                
                 $order->add_order_note(sprintf(__('Ecpay Payment Merchant Trade No %s', 'ecpay-ecommerce-for-woocommerce'), $merchant_trade_no));
 
                 $order->save();
@@ -124,7 +125,7 @@ class Wooecpay_Logistic_Response
                         'MerchantTradeDate' => date('Y/m/d H:i:s'),
                         'PaymentType'       => 'aio',
                         'TotalAmount'       => (int) ceil($order->get_total()),
-                        'TradeDesc'         => UrlService::ecpayUrlEncode(get_bloginfo('name')),
+                        'TradeDesc'         => 'woocommerce_v2',
                         'ItemName'          => $item_name,
                         'ChoosePayment'     => $this->get_ChoosePayment($order->get_payment_method()),
                         'EncryptType'       => 1,
@@ -290,6 +291,8 @@ class Wooecpay_Logistic_Response
 
                         $order->add_order_note('物流貨態回傳:'.$RtnMsg.' ('.$RtnCode.')');
                         $order->save();
+
+                        echo '1|OK';
                     }
                 }
             }
@@ -378,15 +381,15 @@ class Wooecpay_Logistic_Response
             break;
 
             case 'ATM':
-                $input['ExpireDate'] = $this->get_option('_wooecpay_payment_expire_date', 3);
+                $input['ExpireDate'] = get_option('_wooecpay_payment_expire_date', 3);
             break;
 
             case 'BARCODE':               
-                $input['StoreExpireDate'] = $this->get_option('_wooecpay_payment_expire_date', 3);
+                $input['StoreExpireDate'] = get_option('_wooecpay_payment_expire_date', 3);
             break;
 
             case 'CVS':
-                $input['StoreExpireDate'] = $this->get_option('_wooecpay_payment_expire_date', 86400);
+                $input['StoreExpireDate'] = get_option('_wooecpay_payment_expire_date', 86400);
             break;
         }
 
@@ -415,6 +418,10 @@ class Wooecpay_Logistic_Response
             break;
             case 'Wooecpay_Gateway_Barcode':
                 $choose_payment = 'BARCODE' ;
+            break;
+
+            case 'Wooecpay_Gateway_Applepay':
+                $choose_payment = 'ApplePay' ;
             break;
         }
 

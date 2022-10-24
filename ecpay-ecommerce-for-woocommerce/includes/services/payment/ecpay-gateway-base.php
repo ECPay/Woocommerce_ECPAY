@@ -45,41 +45,35 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway
 
                 // 執行地圖選擇
 
-                // 取出商店代號
-                $CVSStoreID = $order->get_meta('_ecpay_logistic_cvs_store_id') ;
-                
-                if(empty($CVSStoreID)){
+                // 不存在則走向地圖API
+                $api_logistic_info  = $this->get_ecpay_logistic_api_info();
+                $client_back_url    = WC()->api_request_url('wooecpay_logistic_map_callback', true);
+                $MerchantTradeNo    = $this->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
+                $LogisticsType      = $this->get_logistics_sub_type($shipping_method_id) ;
 
-                    // 不存在則走向地圖API
-                    $api_logistic_info  = $this->get_ecpay_logistic_api_info();
-                    $client_back_url    = WC()->api_request_url('wooecpay_logistic_map_callback', true);
-                    $MerchantTradeNo    = $this->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
-                    $LogisticsType      = $this->get_logistics_sub_type($shipping_method_id) ;
+                try {
+                    $factory = new Factory([
+                        'hashKey'       => $api_logistic_info['hashKey'],
+                        'hashIv'        => $api_logistic_info['hashIv'],
+                        'hashMethod'    => 'md5',
+                    ]);
+                    $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
 
-                    try {
-                        $factory = new Factory([
-                            'hashKey'       => $api_logistic_info['hashKey'],
-                            'hashIv'        => $api_logistic_info['hashIv'],
-                            'hashMethod'    => 'md5',
-                        ]);
-                        $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
+                    $input = [
+                        'MerchantID'        => $api_logistic_info['merchant_id'],
+                        'MerchantTradeNo'   => $MerchantTradeNo,
+                        'LogisticsType'     => $LogisticsType['type'],
+                        'LogisticsSubType'  => $LogisticsType['sub_type'],
+                        'IsCollection'      => 'Y',
+                        'ServerReplyURL'    => $client_back_url,
+                    ];
 
-                        $input = [
-                            'MerchantID'        => $api_logistic_info['merchant_id'],
-                            'MerchantTradeNo'   => $MerchantTradeNo,
-                            'LogisticsType'     => $LogisticsType['type'],
-                            'LogisticsSubType'  => $LogisticsType['sub_type'],
-                            'IsCollection'      => 'Y',
-                            'ServerReplyURL'    => $client_back_url,
-                        ];
+                    $form_map = $autoSubmitFormService->generate($input, $api_logistic_info['action']);
+        
+                    echo $form_map ;
 
-                        $form_map = $autoSubmitFormService->generate($input, $api_logistic_info['action']);
-
-                        echo $form_map ;
-
-                    } catch (RtnException $e) {
-                        echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
-                    }
+                } catch (RtnException $e) {
+                    echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
                 }
 
 
@@ -103,6 +97,8 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway
                 // 紀錄訂單其他資訊
                 $order->update_meta_data( '_wooecpay_payment_order_prefix', get_option('wooecpay_payment_order_prefix') ); // 前綴
                 $order->update_meta_data( '_wooecpay_payment_merchant_trade_no', $merchant_trade_no ); //MerchantTradeNo 
+                $order->update_meta_data( '_wooecpay_query_trade_tag', 0);
+
                 $order->add_order_note(sprintf(__('Ecpay Payment Merchant Trade No %s', 'ecpay-ecommerce-for-woocommerce'), $merchant_trade_no));
 
                 $order->save();
@@ -122,7 +118,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway
                         'MerchantTradeDate' => date('Y/m/d H:i:s'),
                         'PaymentType'       => 'aio',
                         'TotalAmount'       => (int) ceil($order->get_total()),
-                        'TradeDesc'         => UrlService::ecpayUrlEncode(get_bloginfo('name')),
+                        'TradeDesc'         => 'woocommerce_v2',
                         'ItemName'          => $item_name,
                         'ChoosePayment'     => $this->payment_type,
                         'EncryptType'       => 1,

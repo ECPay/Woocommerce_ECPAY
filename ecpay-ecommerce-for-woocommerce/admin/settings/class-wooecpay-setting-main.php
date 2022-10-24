@@ -52,6 +52,7 @@ class Wooecpay_Setting_Main extends WC_Settings_Page {
 
 		if ( $current_section == '' ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=wc-settings&tab=wooecpay_setting&section=ecpay_main' ) );
+			exit;
 		}
 		$settings = $this->get_settings( $current_section );
 

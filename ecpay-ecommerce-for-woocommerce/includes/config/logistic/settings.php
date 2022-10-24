@@ -13,6 +13,14 @@ return [
         'desc_tip' => true
     ],
     [
+        'title' => __( 'Display order item name', 'ecpay-ecommerce-for-woocommerce' ),
+        'id' => 'wooecpay_enabled_logistic_disp_item_name',
+        'type' => 'checkbox',
+        'default' => 'no',
+        'desc'     => __( 'Display order item name', 'ecpay-ecommerce-for-woocommerce' ),
+        'desc_tip' => false
+    ],
+    [
         'title' => __('CVS type', 'ecpay-ecommerce-for-woocommerce'),
         'id' => 'wooecpay_logistic_cvs_type',
         'type' => 'select',

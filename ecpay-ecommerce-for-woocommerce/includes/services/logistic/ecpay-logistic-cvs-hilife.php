@@ -21,4 +21,18 @@ class Wooecpay_Logistic_CVS_Hilife extends Wooecpay_Logistic_Base
         parent::__construct();
 
     }
+
+    public function is_available($package)
+    {
+        $is_available = true;
+
+        $total = WC()->cart->cart_contents_total ;
+
+        // 金額超過2萬元時不顯示綠界超商物流
+        if($total >= 20000){
+           $is_available = false ; 
+        }
+
+        return apply_filters('woocommerce_shipping_' . $this->id . '_is_available', $is_available, $package, $this);
+    }  
 }

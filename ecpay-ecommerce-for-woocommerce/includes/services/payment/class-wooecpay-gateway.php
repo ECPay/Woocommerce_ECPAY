@@ -36,6 +36,8 @@ class Wooecpay_Gateway {
 		include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/ecpay-gateway-webatm.php';
 		include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/ecpay-gateway-barcode.php';	
 		include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/ecpay-gateway-cvs.php';
+        include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/ecpay-gateway-applepay.php';
+
         include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/woocommerce-gateway-cod.php';  // 貨到付款相關程序
 	}
 
@@ -47,6 +49,7 @@ class Wooecpay_Gateway {
         $methods[] = 'Wooecpay_Gateway_Atm';
         $methods[] = 'Wooecpay_Gateway_Cvs';
         $methods[] = 'Wooecpay_Gateway_Barcode';
+        $methods[] = 'Wooecpay_Gateway_Applepay';
 
         return $methods;
     }	

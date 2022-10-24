@@ -53,11 +53,25 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
     {
         parent::payment_fields();
 
+        $total = $this->get_order_total();
+
         echo '<p>' . _x('Number of periods', 'Checkout info', 'ecpay-ecommerce-for-woocommerce');
         echo '<select name="ecpay_number_of_periods">';
+        
         foreach ($this->number_of_periods as $number_of_periods) {
-            echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
+
+            // 圓夢分期有2W的限制
+            if($number_of_periods == 30){
+
+                if($total >= 20000){
+                    echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
+                }
+
+            } else {
+                echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
+            }
         }
+
         echo '</select>';
     }
 
