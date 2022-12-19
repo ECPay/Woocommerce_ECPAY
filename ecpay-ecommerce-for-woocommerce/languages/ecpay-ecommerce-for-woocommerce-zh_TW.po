@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Ecpay for WooCommerce\n"
-"POT-Creation-Date: 2022-05-05 18:54+0800\n"
-"PO-Revision-Date: 2022-05-31 14:24+0800\n"
+"Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
+"POT-Creation-Date: 2022-11-15 11:24+0800\n"
+"PO-Revision-Date: 2022-11-23 10:30+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: wooecpay.php\n"
+"X-Poedit-WPHeader: ecpay-ecommerce-for-woocommerce.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
@@ -21,71 +21,71 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: admin/order/class-wooecpay-order.php:58
+#: admin/order/class-wooecpay-order.php:68
 msgid "Full address"
 msgstr "完整地址"
 
-#: admin/order/class-wooecpay-order.php:83
+#: admin/order/class-wooecpay-order.php:93
 msgid "Gateway info"
 msgstr "金流資訊"
 
-#: admin/order/class-wooecpay-order.php:85
+#: admin/order/class-wooecpay-order.php:95
 msgid "Payment Type"
 msgstr "付款方式"
 
-#: admin/order/class-wooecpay-order.php:97
+#: admin/order/class-wooecpay-order.php:114
 #: includes/templates/payment/atm.php:29
 #: includes/templates/payment_email/atm.php:27
 msgid "Bank code"
 msgstr "銀行代碼"
 
-#: admin/order/class-wooecpay-order.php:98
+#: admin/order/class-wooecpay-order.php:115
 #: includes/templates/payment_email/atm.php:35
 msgid "ATM No"
 msgstr "匯款帳號"
 
-#: admin/order/class-wooecpay-order.php:99
-#: admin/order/class-wooecpay-order.php:106
-#: admin/order/class-wooecpay-order.php:115
+#: admin/order/class-wooecpay-order.php:116
+#: admin/order/class-wooecpay-order.php:123
+#: admin/order/class-wooecpay-order.php:132
 #: includes/config/payment/settings-gateway-atm.php:46
 #: includes/config/payment/settings-gateway-barcode.php:47
 #: includes/templates/payment/atm.php:43
 #: includes/templates/payment/barcode.php:46
 #: includes/templates/payment/cvs.php:30
 #: includes/templates/payment_email/atm.php:43
-#: includes/templates/payment_email/barcode.php:46
-#: includes/templates/payment_email/cvs.php:30
+#: includes/templates/payment_email/barcode.php:45
+#: includes/templates/payment_email/cvs.php:29
 msgid "Payment deadline"
 msgstr "付款截止日"
 
-#: admin/order/class-wooecpay-order.php:105
+#: admin/order/class-wooecpay-order.php:122
 #: includes/templates/payment/cvs.php:22
-#: includes/templates/payment_email/cvs.php:22
+#: includes/templates/payment_email/cvs.php:21
 msgid "CVS No"
 msgstr "超商代碼"
 
-#: admin/order/class-wooecpay-order.php:112
-#: includes/templates/payment_email/barcode.php:22
+#: admin/order/class-wooecpay-order.php:129
+#: includes/templates/payment_email/barcode.php:21
 msgid "barcode one"
 msgstr "第一段條碼"
 
-#: admin/order/class-wooecpay-order.php:113
-#: includes/templates/payment_email/barcode.php:30
+#: admin/order/class-wooecpay-order.php:130
+#: includes/templates/payment_email/barcode.php:29
 msgid "barcode two"
 msgstr "第二段條碼"
 
-#: admin/order/class-wooecpay-order.php:114
-#: includes/templates/payment_email/barcode.php:38
+#: admin/order/class-wooecpay-order.php:131
+#: includes/templates/payment_email/barcode.php:37
 msgid "barcode three"
 msgstr "第三段條碼"
 
-#: admin/order/class-wooecpay-order.php:754
-#: admin/order/class-wooecpay-order.php:907
+#: admin/order/class-wooecpay-order.php:898
+#: admin/order/class-wooecpay-order.php:1063
 #: includes/config/logistic/settings-logistic-base.php:21
 msgid "Shipping fee"
 msgstr "物流費"
 
-#: admin/order/class-wooecpay-order.php:1079
+#: admin/order/class-wooecpay-order.php:1244
 msgid "Invalid invoice"
 msgstr "作廢發票"
 
@@ -108,7 +108,7 @@ msgstr "物流設定"
 msgid "E-Invoice setting"
 msgstr "電子發票設定"
 
-#: admin/settings/class-wooecpay-setting.php:12
+#: admin/settings/class-wooecpay-setting.php:16
 msgid "Ecpay"
 msgstr "綠界科技"
 
@@ -157,40 +157,42 @@ msgid "Donate unit"
 msgstr "預設捐贈單位"
 
 #: includes/config/invoice/settings.php:54
-#: includes/config/logistic/settings.php:85
+#: includes/config/logistic/settings.php:93
 #: includes/config/payment/settings.php:36
 msgid "API settings"
 msgstr "API設定"
 
 #: includes/config/invoice/settings.php:59
 #: includes/config/invoice/settings.php:61
-#: includes/config/logistic/settings.php:90
-#: includes/config/logistic/settings.php:92
-#: includes/config/logistic/settings.php:95
+#: includes/config/logistic/settings.php:98
+#: includes/config/logistic/settings.php:100
+#: includes/config/logistic/settings.php:103
 #: includes/config/payment/settings.php:41
 #: includes/config/payment/settings.php:43
 msgid "ECPay sandbox"
 msgstr "啟用測試模式"
 
 #: includes/config/invoice/settings.php:67
-#: includes/config/logistic/settings.php:98
+#: includes/config/logistic/settings.php:106
 #: includes/config/payment/settings.php:49
 msgid "MerchantID"
 msgstr "商店代號"
 
 #: includes/config/invoice/settings.php:73
-#: includes/config/logistic/settings.php:104
+#: includes/config/logistic/settings.php:112
 #: includes/config/payment/settings.php:55
 msgid "HashKey"
 msgstr "HashKey"
 
 #: includes/config/invoice/settings.php:79
-#: includes/config/logistic/settings.php:110
+#: includes/config/logistic/settings.php:118
 #: includes/config/payment/settings.php:61
 msgid "HashIV"
 msgstr "HashIV"
 
 #: includes/config/logistic/settings-logistic-base.php:4
+#: includes/config/logistic/settings-logistic-post.php:4
+#: includes/config/payment/settings-gateway-applepay.php:11
 #: includes/config/payment/settings-gateway-atm.php:10
 #: includes/config/payment/settings-gateway-barcode.php:11
 #: includes/config/payment/settings-gateway-credit-installment.php:11
@@ -201,6 +203,8 @@ msgid "Title"
 msgstr "標題"
 
 #: includes/config/logistic/settings-logistic-base.php:7
+#: includes/config/logistic/settings-logistic-post.php:7
+#: includes/config/payment/settings-gateway-applepay.php:14
 #: includes/config/payment/settings-gateway-atm.php:13
 #: includes/config/payment/settings-gateway-barcode.php:14
 #: includes/config/payment/settings-gateway-credit-installment.php:14
@@ -211,32 +215,41 @@ msgid "This controls the title which the user sees during checkout."
 msgstr "使用者在結帳時所看到的標題."
 
 #: includes/config/logistic/settings-logistic-base.php:11
+#: includes/config/logistic/settings-logistic-post.php:11
 msgid "Tax status"
 msgstr "稅金狀態"
 
 #: includes/config/logistic/settings-logistic-base.php:15
+#: includes/config/logistic/settings-logistic-post.php:15
 msgid "Taxable"
 msgstr "應課稅"
 
 #: includes/config/logistic/settings-logistic-base.php:16
+#: includes/config/logistic/settings-logistic-post.php:16
 msgctxt "Tax status"
 msgid "None"
 msgstr "無"
 
 #: includes/config/logistic/settings-logistic-base.php:28
+#: includes/config/logistic/settings-logistic-post.php:49
 msgid "Free shipping requires..."
 msgstr "免費運送需要條件..."
 
 #: includes/config/logistic/settings-logistic-base.php:32
+#: includes/config/logistic/settings-logistic-post.php:53
 msgid "N/A"
 msgstr "N/A"
 
 #: includes/config/logistic/settings-logistic-base.php:33
+#: includes/config/logistic/settings-logistic-post.php:54
 msgid "A valid free shipping coupon"
 msgstr "一個有效的免運費折價卷"
 
 #: includes/config/logistic/settings-logistic-base.php:34
 #: includes/config/logistic/settings-logistic-base.php:41
+#: includes/config/logistic/settings-logistic-post.php:55
+#: includes/config/logistic/settings-logistic-post.php:62
+#: includes/config/payment/settings-gateway-applepay.php:25
 #: includes/config/payment/settings-gateway-atm.php:24
 #: includes/config/payment/settings-gateway-barcode.php:25
 #: includes/config/payment/settings-gateway-credit-installment.php:25
@@ -247,17 +260,36 @@ msgid "A minimum order amount"
 msgstr "一個最低訂單金額"
 
 #: includes/config/logistic/settings-logistic-base.php:35
+#: includes/config/logistic/settings-logistic-post.php:56
 msgid "A minimum order amount OR a coupon"
 msgstr "每筆訂單的最小金額或使用折價卷"
 
 #: includes/config/logistic/settings-logistic-base.php:36
+#: includes/config/logistic/settings-logistic-post.php:57
 msgid "A minimum order amount AND a coupon"
 msgstr "每筆訂單的最小金額以及使用折價卷"
 
 #: includes/config/logistic/settings-logistic-base.php:45
+#: includes/config/logistic/settings-logistic-post.php:66
 msgid ""
 "Users will need to spend this amount to get free shipping (if enabled above)."
 msgstr "消費者可以獲得免運費的最低消費金額 (如果上面有啟用)"
+
+#: includes/config/logistic/settings-logistic-post.php:21
+msgid "Shipping fee1"
+msgstr "物流費(5kg以下)"
+
+#: includes/config/logistic/settings-logistic-post.php:28
+msgid "Shipping fee2"
+msgstr "物流費(5-10kg)"
+
+#: includes/config/logistic/settings-logistic-post.php:35
+msgid "Shipping fee3"
+msgstr "物流費(10-15kg)"
+
+#: includes/config/logistic/settings-logistic-post.php:42
+msgid "Shipping fee4"
+msgstr "物流費(15-20kg以下)"
 
 #: includes/config/logistic/settings.php:12
 #: includes/config/payment/settings.php:12
@@ -265,60 +297,67 @@ msgid "Only letters and numbers allowed."
 msgstr "僅允許英文與數字。"
 
 #: includes/config/logistic/settings.php:16
+#: includes/config/logistic/settings.php:20
+#: includes/config/payment/settings.php:16
+#: includes/config/payment/settings.php:18
+msgid "Display order item name"
+msgstr "綠界訂單顯示商品名稱"
+
+#: includes/config/logistic/settings.php:24
 msgid "CVS type"
 msgstr "超商取貨類型"
 
-#: includes/config/logistic/settings.php:21
+#: includes/config/logistic/settings.php:29
 msgid "C2C"
 msgstr "C2C"
 
-#: includes/config/logistic/settings.php:22
+#: includes/config/logistic/settings.php:30
 msgid "B2C"
 msgstr "B2C"
 
-#: includes/config/logistic/settings.php:26
+#: includes/config/logistic/settings.php:34
 msgid "Auto get shipping payment no"
 msgstr "自動建立物流訂單"
 
-#: includes/config/logistic/settings.php:30
+#: includes/config/logistic/settings.php:38
 msgid ""
 "Auto get shipping payment no when payment complete ( only for ecpay gateway )"
 msgstr "當付款完成後自動建立物流訂單，僅支援綠界付款方式"
 
-#: includes/config/logistic/settings.php:34
+#: includes/config/logistic/settings.php:42
 msgid "Sender name"
 msgstr "寄件人姓名"
 
-#: includes/config/logistic/settings.php:37
+#: includes/config/logistic/settings.php:45
 msgid "Name length between 1 to 10 letter"
 msgstr "僅允許1至10字數"
 
-#: includes/config/logistic/settings.php:41
+#: includes/config/logistic/settings.php:49
 msgid "Sender phone"
 msgstr "寄件人電話"
 
-#: includes/config/logistic/settings.php:44
+#: includes/config/logistic/settings.php:52
 msgid "Phone format (0x)xxxxxxx#xx"
 msgstr "電話格式 (0x)xxxxxxx#xx"
 
-#: includes/config/logistic/settings.php:52
+#: includes/config/logistic/settings.php:60
 msgid "Sender cellphone"
 msgstr "寄件人手機"
 
-#: includes/config/logistic/settings.php:55
+#: includes/config/logistic/settings.php:63
 msgid "Cellphone format 09xxxxxxxx"
 msgstr "手機格式  09xxxxxxxx"
 
-#: includes/config/logistic/settings.php:63
+#: includes/config/logistic/settings.php:71
 msgid "Sender zipcode"
 msgstr "寄件人郵遞區號"
 
-#: includes/config/logistic/settings.php:68
+#: includes/config/logistic/settings.php:76
 msgid "Sender address"
 msgstr "寄件人地址"
 
-#: includes/config/logistic/settings.php:73
-#: includes/config/logistic/settings.php:77
+#: includes/config/logistic/settings.php:81
+#: includes/config/logistic/settings.php:85
 msgid "Keep shipping phone"
 msgstr "永遠顯示收件人行動電話"
 
@@ -338,6 +377,7 @@ msgstr "啟用綠界物流"
 msgid "Enable ECPay invoice method"
 msgstr "啟用綠界電子發票"
 
+#: includes/config/payment/settings-gateway-applepay.php:4
 #: includes/config/payment/settings-gateway-atm.php:4
 #: includes/config/payment/settings-gateway-barcode.php:4
 #: includes/config/payment/settings-gateway-credit-installment.php:4
@@ -348,6 +388,7 @@ msgid "Enable/Disable"
 msgstr "啟用/停用"
 
 #. translators: %s: Gateway method title
+#: includes/config/payment/settings-gateway-applepay.php:6
 #: includes/config/payment/settings-gateway-atm.php:5
 #: includes/config/payment/settings-gateway-barcode.php:6
 #: includes/config/payment/settings-gateway-credit-installment.php:6
@@ -358,6 +399,7 @@ msgstr "啟用/停用"
 msgid "Enable %s"
 msgstr "啟用 %s"
 
+#: includes/config/payment/settings-gateway-applepay.php:18
 #: includes/config/payment/settings-gateway-atm.php:17
 #: includes/config/payment/settings-gateway-barcode.php:18
 #: includes/config/payment/settings-gateway-credit-installment.php:18
@@ -367,6 +409,7 @@ msgstr "啟用 %s"
 msgid "Description"
 msgstr "描述"
 
+#: includes/config/payment/settings-gateway-applepay.php:22
 #: includes/config/payment/settings-gateway-atm.php:21
 #: includes/config/payment/settings-gateway-barcode.php:22
 #: includes/config/payment/settings-gateway-credit-installment.php:22
@@ -376,6 +419,7 @@ msgstr "描述"
 msgid "This controls the description which the user sees during checkout."
 msgstr "此項目控制使用者在結帳時會看到的說明。"
 
+#: includes/config/payment/settings-gateway-applepay.php:29
 #: includes/config/payment/settings-gateway-atm.php:28
 #: includes/config/payment/settings-gateway-barcode.php:29
 #: includes/config/payment/settings-gateway-credit-installment.php:29
@@ -437,11 +481,6 @@ msgstr "付款截止 (分)"
 #: includes/config/payment/settings-gateway-cvs.php:51
 msgid "CVS allowable payment deadline from 1 minute to 30 days."
 msgstr "超商代碼允許的繳費期限為 1分鐘到 30 天。"
-
-#: includes/config/payment/settings.php:16
-#: includes/config/payment/settings.php:18
-msgid "Display order item name"
-msgstr "綠界訂單顯示商品名稱"
 
 #: includes/config/payment/settings.php:24
 msgid "Show payment info in email"
@@ -516,32 +555,40 @@ msgstr "綠界物流 超商取貨 OK超商"
 msgid "Ecpay Home Ecan"
 msgstr "綠界物流 宅配 宅配通"
 
+#: includes/services/logistic/ecpay-logistic-home-post.php:9
+msgid "Ecpay Home POST"
+msgstr "綠界物流 宅配 中華郵政"
+
 #: includes/services/logistic/ecpay-logistic-home-tcat.php:9
 msgid "Ecpay Home Tcat"
 msgstr "綠界物流 宅配 黑貓"
 
-#: includes/services/logistic/ecpay-logistic-response.php:59
-#: includes/services/payment/woocommerce-gateway-cod.php:81
+#: includes/services/logistic/ecpay-logistic-response.php:79
 #, php-format
 msgid "CVS store %1$s (%2$s)"
 msgstr "超商 %1$s (%2$s)"
 
-#: includes/services/logistic/ecpay-logistic-response.php:87
-#: includes/services/payment/ecpay-gateway-base.php:98
+#: includes/services/logistic/ecpay-logistic-response.php:108
+#: includes/services/payment/ecpay-gateway-base.php:102
 #, php-format
 msgid "Ecpay Payment Merchant Trade No %s"
 msgstr "綠界金流特店交易編號 %s"
 
-#: includes/services/logistic/ecpay-logistic-response.php:185
+#: includes/services/logistic/ecpay-logistic-response.php:225
+#: includes/services/payment/woocommerce-gateway-cod.php:130
 #, php-format
 msgid "Change store %1$s (%2$s)"
 msgstr "變更門市 %1$s (%2$s)"
 
-#: includes/services/logistic/ecpay-logistic-response.php:344
-#: includes/services/payment/ecpay-gateway-base.php:281
+#: includes/services/logistic/ecpay-logistic-response.php:377
+#: includes/services/payment/ecpay-gateway-base.php:273
 #, php-format
 msgid "Credit installment to %d"
 msgstr "信用卡分期期數 %d"
+
+#: includes/services/payment/ecpay-gateway-applepay.php:50
+msgid "Pay via ECPay Applepay"
+msgstr "透過綠界ApplePay付款"
 
 #: includes/services/payment/ecpay-gateway-atm.php:37
 #: includes/services/payment/ecpay-gateway-barcode.php:46
@@ -574,12 +621,12 @@ msgstr "%1$s 最大訂購金額超過標準的限制 (%2$d)。"
 msgid "Pay via ECPay BARCODE"
 msgstr "透過綠界條碼付款"
 
-#: includes/services/payment/ecpay-gateway-credit-installment.php:56
+#: includes/services/payment/ecpay-gateway-credit-installment.php:58
 msgctxt "Checkout info"
 msgid "Number of periods"
 msgstr "分期期數"
 
-#: includes/services/payment/ecpay-gateway-credit-installment.php:67
+#: includes/services/payment/ecpay-gateway-credit-installment.php:81
 msgid "Pay via ECPay Credit(installment)"
 msgstr "透過綠界信用卡分期付款"
 
@@ -595,11 +642,11 @@ msgstr "超商代碼繳費期限超過限制，調整為預設值。"
 msgid "Pay via ECPay CVS"
 msgstr "透過綠界超商代碼付款"
 
-#: includes/services/payment/ecpay-gateway-response.php:45
+#: includes/services/payment/ecpay-gateway-response.php:53
 msgid "Payment completed"
 msgstr "付款完成"
 
-#: includes/services/payment/ecpay-gateway-response.php:108
+#: includes/services/payment/ecpay-gateway-response.php:132
 msgid "Payment failed within paid order"
 msgstr "已付款的訂單收到付款失敗訊息"
 
@@ -627,8 +674,8 @@ msgstr "超商店舖地址"
 #: includes/templates/payment/barcode.php:16
 #: includes/templates/payment/cvs.php:16
 #: includes/templates/payment_email/atm.php:12
-#: includes/templates/payment_email/barcode.php:16
-#: includes/templates/payment_email/cvs.php:16
+#: includes/templates/payment_email/barcode.php:15
+#: includes/templates/payment_email/cvs.php:15
 msgid "Payment info"
 msgstr "付款資訊"
 
@@ -655,15 +702,15 @@ msgstr "第三段條碼"
 
 #: includes/templates/payment/barcode.php:50
 #: includes/templates/payment/cvs.php:34
-#: includes/templates/payment_email/barcode.php:50
-#: includes/templates/payment_email/cvs.php:34
+#: includes/templates/payment_email/barcode.php:49
+#: includes/templates/payment_email/cvs.php:33
 #, php-format
 msgctxt "Datetime"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
 #. Plugin Name of the plugin/theme
-msgid "Ecpay for WooCommerce"
+msgid "ECPay Ecommerce for WooCommerce"
 msgstr "Ecpay for WooCommerce"
 
 #. Plugin URI of the plugin/theme

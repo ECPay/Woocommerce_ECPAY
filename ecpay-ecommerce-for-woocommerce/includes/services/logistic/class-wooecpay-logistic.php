@@ -16,6 +16,8 @@ class Wooecpay_Logistic {
 			add_filter('woocommerce_checkout_fields', array($this, 'wooecpay_show_logistic_fields' ), 11 ,1);		// 收件人手機
 			add_action('woocommerce_checkout_create_order', array($this, 'wooecpay_save_logistic_fields'), 11, 2); 
 		}
+
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_weight_order' ));
 	}
 
 	/**
@@ -46,6 +48,7 @@ class Wooecpay_Logistic {
 		
 		include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-home-tcat.php';
 		// include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-home-ecan.php';
+		include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-home-post.php';
 	}
 
 	public function add_method($methods)
@@ -60,6 +63,7 @@ class Wooecpay_Logistic {
 
         $methods['Wooecpay_Logistic_Home_Tcat']     = 'Wooecpay_Logistic_Home_Tcat';
         // $methods['Wooecpay_Logistic_Home_Ecan']     = 'Wooecpay_Logistic_Home_Ecan';
+        $methods['Wooecpay_Logistic_Home_Post']     = 'Wooecpay_Logistic_Home_Post';
 
         return $methods;
     }
@@ -98,6 +102,17 @@ class Wooecpay_Logistic {
 						}
 					}
 				}	
+
+				// 限制貨到付款僅適用超商物流
+				$chosen_methods = WC()->session->get( 'chosen_shipping_methods' );
+				$chosen_shipping = $chosen_methods[0];
+				
+				if ( isset( $available_gateways['cod'] ) && (
+					0 === strpos( $chosen_shipping, 'Wooecpay_Logistic_Home_Tcat' ) || 
+					0 === strpos( $chosen_shipping, 'Wooecpay_Logistic_Home_Post' )
+				) ){
+					unset( $available_gateways['cod'] );
+				}
 			}	
        	}
 
@@ -129,5 +144,14 @@ class Wooecpay_Logistic {
     	){
     		$order->update_meta_data('wooecpay_shipping_phone', $data['billing_phone']);
     	}
+    }
+
+    /**
+     * 額外增加訂單重量欄位
+     */
+    public function save_weight_order($order_id) 
+	{
+        $weight = WC()->cart->get_cart_contents_weight();
+        update_post_meta( $order_id, '_cart_weight', $weight );
     }
 }

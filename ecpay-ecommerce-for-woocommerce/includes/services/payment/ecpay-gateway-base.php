@@ -419,6 +419,11 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway
                 $logisticsType['type'] = 'HOME' ;
                 $logisticsType['sub_type'] = 'ECAN' ;
             break;
+
+            case 'Wooecpay_Logistic_Home_Post':
+                $logisticsType['type'] = 'HOME' ;
+                $logisticsType['sub_type'] = 'POST' ;
+            break;
         }
 
         return $logisticsType;

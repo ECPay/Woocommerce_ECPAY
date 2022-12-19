@@ -77,8 +77,25 @@ class Wooecpay_Order {
 	 * 訂單頁面姓名欄位格式調整
 	 */
 	public function add_address_meta($order) {
-
 		echo '<style>.order_data_column:nth-child(2) .address p:first-child {display: none;}</style>';
+		
+		$shipping_method_id = $order->get_items('shipping') ;
+		if (!empty($shipping_method_id)) {
+			$shipping_method_id = reset($shipping_method_id);    
+			$shipping_method_id = $shipping_method_id->get_method_id() ;
+		}
+		if (
+			$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
+			$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
+			$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
+			$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart'
+		) {
+			echo '<style>.logistic_csv_info {display: inline-block;}</style>';
+		}
+		else {
+			echo '<style>.logistic_button_display {display: inline-block;}</style>';
+		}
+
 		echo wp_kses_post('<p><strong>帳單姓名:<br/></strong>' . get_post_meta( $order->get_id(), '_billing_last_name', true ) . ' ' . get_post_meta( $order->get_id(), '_billing_first_name', true ) . '</p>');
 	}
 
@@ -435,7 +452,8 @@ class Wooecpay_Order {
               $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
               $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
               $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-              $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' 
+              $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+              $shipping_method_id == 'Wooecpay_Logistic_Home_Post'
           ){
           	
           	if(
@@ -489,7 +507,8 @@ class Wooecpay_Order {
             $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
             $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
             $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-            $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' 
+            $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+            $shipping_method_id == 'Wooecpay_Logistic_Home_Post'
         ){
       	
       	// 判斷是否為超商取貨
@@ -499,13 +518,16 @@ class Wooecpay_Order {
               $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
               $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
           ){
-          	echo wp_kses_post('<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>') ;	
+			echo '<div class="logistic_csv_info">';
+        	echo '<h3>超商資訊</h3>' ;
+			echo wp_kses_post('<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>') ;	
           	echo wp_kses_post('<p><strong>超商名稱:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_name', true ) . '</p>') ;
 
           	if ('yes' === get_option('wooecpay_keep_logistic_phone', 'yes')) {
           		echo wp_kses_post('<p><strong>收件人電話:</strong>'. get_post_meta( $order->get_id(), 'wooecpay_shipping_phone', true ) . '</p>') ;
           	}	
-          }
+			echo '</div>' ;
+		}
 
           echo '<div class="logistic_button_display">';
         	echo '<h3>物流單資訊</h3>' ;
@@ -593,7 +615,7 @@ class Wooecpay_Order {
 
 							case 'Wooecpay_Logistic_Home_Tcat':
 							case 'Wooecpay_Logistic_Home_Ecan':
-
+							case 'Wooecpay_Logistic_Home_Post':
 							break;
 							
 							default:
@@ -659,7 +681,8 @@ class Wooecpay_Order {
           $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
           $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
           $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-          $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' 
+          $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+          $shipping_method_id == 'Wooecpay_Logistic_Home_Post' 
       ){
 
       	$LogisticsType 			= $this->get_logistics_sub_type($shipping_method_id) ;
@@ -723,6 +746,9 @@ class Wooecpay_Order {
 
         if($LogisticsType['type'] == 'HOME'){
 
+        	// 重量計算
+        	$goods_weight = get_post_meta( $order->get_id(), '_cart_weight', true ) ;
+
         	$inputLogisticOrder = [
 		        'MerchantID'        		=> $api_logistic_info['merchant_id'],
 		        'MerchantTradeNo' 			=> $MerchantTradeNo,
@@ -731,6 +757,7 @@ class Wooecpay_Order {
 		        'LogisticsSubType' 			=> $LogisticsType['sub_type'],
 		        'GoodsAmount' 					=> $order->get_total(),
 		        'GoodsName'							=> $item_name,
+		        'GoodsWeight' 					=> $goods_weight,
 		        'SenderName' 						=> $sender_name,
 		        'SenderCellPhone' 			=> $sender_cellphone,
 		        'SenderZipCode' 				=> $sender_zipcode,
@@ -1419,6 +1446,7 @@ class Wooecpay_Order {
 
         			case 'Wooecpay_Logistic_Home_Tcat':
         			case 'Wooecpay_Logistic_Home_Ecan':
+        			case 'Wooecpay_Logistic_Home_Post':
         				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/helper/printTradeDocument' ;
         			break;
         			
@@ -1436,6 +1464,7 @@ class Wooecpay_Order {
         			case 'Wooecpay_Logistic_CVS_Hilife':
         			case 'Wooecpay_Logistic_Home_Tcat':
         			case 'Wooecpay_Logistic_Home_Ecan':
+        			case 'Wooecpay_Logistic_Home_Post':
         				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/helper/printTradeDocument' ;
         			break;
         			default:
@@ -1486,6 +1515,7 @@ class Wooecpay_Order {
 
         			case 'Wooecpay_Logistic_Home_Tcat':
         			case 'Wooecpay_Logistic_Home_Ecan':
+        			case 'Wooecpay_Logistic_Home_Post':
         				$api_info['action'] = 'https://logistics.ecpay.com.tw/helper/printTradeDocument' ;
         			break;
         			
@@ -1503,6 +1533,7 @@ class Wooecpay_Order {
         			case 'Wooecpay_Logistic_CVS_Hilife':
         			case 'Wooecpay_Logistic_Home_Tcat':
         			case 'Wooecpay_Logistic_Home_Ecan':
+        			case 'Wooecpay_Logistic_Home_Post':
         				$api_info['action'] = 'https://logistics.ecpay.com.tw/helper/printTradeDocument' ;
         			break;
         			default:
@@ -1591,6 +1622,11 @@ class Wooecpay_Order {
       case 'Wooecpay_Logistic_Home_Ecan':
       	$logisticsType['type'] = 'HOME' ;
       	$logisticsType['sub_type'] = 'ECAN' ;
+      break;
+
+      case 'Wooecpay_Logistic_Home_Post':
+      	$logisticsType['type'] = 'HOME' ;
+      	$logisticsType['sub_type'] = 'POST' ;
       break;
     }
 

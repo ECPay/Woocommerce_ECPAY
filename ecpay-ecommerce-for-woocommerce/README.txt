@@ -4,7 +4,7 @@ Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, 
 Requires at least: 6.0
 Tested up to: 6.0
 Requires PHP: 7.4 
-Stable tag: 1.0.2207280
+Stable tag: 1.0.221123
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 v1.0.22007080
 修正相容性至 WordPress Version 6.0
 修正相容性至 WooCommerce Version 6.5.1
+
+v1.0.221123
+修正自動物流訂單姓名欄位倒置問題
+增加中華郵政物流
 
  == Upgrade Notice ==
 

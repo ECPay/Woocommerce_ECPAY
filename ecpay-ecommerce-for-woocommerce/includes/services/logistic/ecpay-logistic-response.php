@@ -283,7 +283,8 @@ class Wooecpay_Logistic_Response
                         $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
                         $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
                         $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-                        $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' 
+                        $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+                        $shipping_method_id == 'Wooecpay_Logistic_Home_Post'
                     ){
                         
                         $RtnMsg  = sanitize_text_field($_POST['RtnMsg']);
