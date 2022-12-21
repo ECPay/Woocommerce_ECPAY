@@ -33,6 +33,9 @@ require_once(WOOECPAY_PLUGIN_DIR . '/vendor/autoload.php');
 require plugin_dir_path( __FILE__ ) . 'admin/settings/class-wooecpay-setting.php';
 require plugin_dir_path( __FILE__ ) . 'admin/order/class-wooecpay-order.php';
 
+// 載入物流共用 helper
+require plugin_dir_path( __FILE__ ) . 'includes/services/helpers/logistic/ecpay-logistic-helper.php';
+
 $plugin_main        = new Wooecpay_Setting();
 $plugin_order       = new Wooecpay_Order();
 

@@ -3,15 +3,19 @@
 use Ecpay\Sdk\Factories\Factory;
 use Ecpay\Sdk\Services\UrlService;
 use Ecpay\Sdk\Exceptions\RtnException;
-
-class Wooecpay_Order {
+use Helpers\Logistic\Wooecpay_Logistic_Helper;
+class Wooecpay_Order
+{
+    protected $logisticHelper;
 
 	public function __construct() {
 
-    if (is_admin()) {
+		if (is_admin()) {
+			//載入物流共用
+        	$this->logisticHelper = new Wooecpay_Logistic_Helper;
 
-    	// wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
-      add_action('admin_enqueue_scripts' , array( $this, 'wooecpay_register_scripts' ));
+			// wp_enqueue_style('wooecpay_barcode_css', WOOECPAY_PLUGIN_URL . 'public/css/style.css');
+			add_action('admin_enqueue_scripts' , array( $this, 'wooecpay_register_scripts' ));
 
 			if ('yes' === get_option('wooecpay_enabled_payment', 'yes')) {
 
@@ -45,12 +49,12 @@ class Wooecpay_Order {
 				if ('auto_cancel' === get_option('wooecpay_enabled_cancel_invoice_auto', 'auto_cancel')) {
 
 					add_action('woocommerce_order_status_cancelled', array( $this, 'invoice_invalid' ));
-	        add_action('woocommerce_order_status_refunded', array( $this, 'invoice_invalid' ));
+					add_action('woocommerce_order_status_refunded', array( $this, 'invoice_invalid' ));
 				}
 			}
-    }
+		}
 
-    if ('yes' === get_option('wooecpay_enabled_invoice', 'yes')) {
+    	if ('yes' === get_option('wooecpay_enabled_invoice', 'yes')) {
 			
 			// 自動開立
 			if ('auto_paid' === get_option('wooecpay_enabled_invoice_auto', 'auto_paid')) {
@@ -78,7 +82,7 @@ class Wooecpay_Order {
 	 */
 	public function add_address_meta($order) {
 		echo '<style>.order_data_column:nth-child(2) .address p:first-child {display: none;}</style>';
-		
+
 		$shipping_method_id = $order->get_items('shipping') ;
 		if (!empty($shipping_method_id)) {
 			$shipping_method_id = reset($shipping_method_id);    
@@ -160,97 +164,97 @@ class Wooecpay_Order {
    *
    * @return void
    */
-  public function check_order_status_cancel($order) {
+	public function check_order_status_cancel($order) {
 
-  	$query_trade_tag = get_post_meta( $order->get_id(), '_wooecpay_query_trade_tag', true ) ;
+		$query_trade_tag = get_post_meta( $order->get_id(), '_wooecpay_query_trade_tag', true ) ;
 
-  	if($query_trade_tag == 0){
+		if($query_trade_tag == 0){
 
-  		// 判斷訂單狀態
-	  	$order_status = $order->get_status();	
-	  	if(
-	  		$order_status == 'on-hold' ||
-	  		$order_status == 'pending'
-	  	){
+			// 判斷訂單狀態
+			$order_status = $order->get_status();	
+			if (
+				$order_status == 'on-hold' ||
+				$order_status == 'pending'
+			) {
 
-	  		// 判斷金流方式
-	  		$payment_method = get_post_meta( $order->get_id(), '_payment_method', true ) ;
-	  		if(
-	  			$payment_method == 'Wooecpay_Gateway_Credit' ||
-					$payment_method == 'Wooecpay_Gateway_Credit_Installment' ||
-					$payment_method == 'Wooecpay_Gateway_Webatm' ||
-					$payment_method == 'Wooecpay_Gateway_Atm' ||
-					$payment_method == 'Wooecpay_Gateway_Cvs' ||
-					$payment_method == 'Wooecpay_Gateway_Barcode' ||
-					$payment_method == 'Wooecpay_Gateway_Applepay'
-	  		){
+				// 判斷金流方式
+				$payment_method = get_post_meta( $order->get_id(), '_payment_method', true ) ;
+				if (
+					$payment_method == 'Wooecpay_Gateway_Credit' ||
+						$payment_method == 'Wooecpay_Gateway_Credit_Installment' ||
+						$payment_method == 'Wooecpay_Gateway_Webatm' ||
+						$payment_method == 'Wooecpay_Gateway_Atm' ||
+						$payment_method == 'Wooecpay_Gateway_Cvs' ||
+						$payment_method == 'Wooecpay_Gateway_Barcode' ||
+						$payment_method == 'Wooecpay_Gateway_Applepay'
+				) {
 
-  				// 判斷是否超過指定時間或自訂的保留時間
+					// 判斷是否超過指定時間或自訂的保留時間
 
-  				// 計算訂單建立時間是否超過指定時間
-          if (
-          	$payment_method == 'Wooecpay_Gateway_Credit' ||
-          	$payment_method == 'Wooecpay_Gateway_Credit_Installment'
-          ) {
-              $offset =  60; // 信用卡
-          } else {
-          		$offset =  30; // 非信用卡
-          }
+					// 計算訂單建立時間是否超過指定時間
+					if (
+						$payment_method == 'Wooecpay_Gateway_Credit' ||
+						$payment_method == 'Wooecpay_Gateway_Credit_Installment'
+					) {
+						$offset =  60; // 信用卡
+					} else {
+						$offset =  30; // 非信用卡
+					}
 
-          // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
-          $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); // 取得保留庫存時間
+					// 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
+					$hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); // 取得保留庫存時間
 
-          if ($hold_stock_minutes > $offset) {
-          	$offset = $hold_stock_minutes;
-          }
+					if ($hold_stock_minutes > $offset) {
+						$offset = $hold_stock_minutes;
+					}
 
-          $date_created = $order->get_date_created()->getTimestamp(); // 訂單建立時間
-          $dateCompare = strtotime('- '. $offset .' minute');
+					$date_created = $order->get_date_created()->getTimestamp(); // 訂單建立時間
+					$dateCompare = strtotime('- '. $offset .' minute');
 
-          // 反查綠界訂單記錄API
+					// 反查綠界訂單記錄API
 					if ($date_created <= $dateCompare) {
 
 						$api_payment_query_trade_info = $this->get_ecpay_payment_api_query_trade_info();
-				  	$merchant_trade_no = get_post_meta( $order->get_id(), '_wooecpay_payment_merchant_trade_no', true ) ;
+						$merchant_trade_no = get_post_meta( $order->get_id(), '_wooecpay_payment_merchant_trade_no', true ) ;
 
-				  	try {
-				  		
-					    $factory = new Factory([
+						try {
+							
+							$factory = new Factory([
 								'hashKey'   => $api_payment_query_trade_info['hashKey'],
 								'hashIv'    => $api_payment_query_trade_info['hashIv'],
-					    ]);
+							]);
 
-					    $postService = $factory->create('PostWithCmvVerifiedEncodedStrResponseService');
+							$postService = $factory->create('PostWithCmvVerifiedEncodedStrResponseService');
 
-					    $input = [
-				        'MerchantID'			=> $api_payment_query_trade_info['merchant_id'],
-				        'MerchantTradeNo' => $merchant_trade_no,
-				        'TimeStamp' 			=> time(),
-					    ];
+							$input = [
+								'MerchantID'		=> $api_payment_query_trade_info['merchant_id'],
+								'MerchantTradeNo' 	=> $merchant_trade_no,
+								'TimeStamp' 		=> time(),
+							];
 
-					    $response = $postService->post($input, $api_payment_query_trade_info['action']);
-					    // var_dump($response);
+							$response = $postService->post($input, $api_payment_query_trade_info['action']);
+							// var_dump($response);
 
-					    // 逾期交易失敗
-              if (isset($response['TradeStatus']) && $response['TradeStatus'] == 10200095) {
-                
-                // 更新訂單狀態/備註
-                $order->add_order_note('逾期訂單自動取消');
+							// 逾期交易失敗
+							if (isset($response['TradeStatus']) && $response['TradeStatus'] == 10200095) {
+								
+								// 更新訂單狀態/備註
+								$order->add_order_note('逾期訂單自動取消');
 
 								$order->update_status('cancelled');
-                $order->update_meta_data('_wooecpay_query_trade_tag', 1);
+								$order->update_meta_data('_wooecpay_query_trade_tag', 1);
 
-                $order->save();
-              }
+								$order->save();
+							}
 
 						} catch (RtnException $e) {
-					    echo '(' . $e->getCode() . ')' . $e->getMessage() . PHP_EOL;
+							echo '(' . $e->getCode() . ')' . $e->getMessage() . PHP_EOL;
 						}
 					}
-	  		}
-	  	}
+				}
+			}
 		}
-  }
+	}
 
 	/**
 	 * 訂單發票資訊顯示
@@ -260,38 +264,38 @@ class Wooecpay_Order {
 		if ($order) {
 
 			$wooecpay_invoice_carruer_type 				= get_post_meta( $order->get_id(), '_wooecpay_invoice_carruer_type', true ) ;
-			$wooecpay_invoice_type 								= get_post_meta( $order->get_id(), '_wooecpay_invoice_type', true ) ;
-			$billing_company 											= get_post_meta( $order->get_id(), '_billing_company', true ) ;
-			$wooecpay_invoice_customer_identifier = get_post_meta( $order->get_id(), '_wooecpay_invoice_customer_identifier', true ) ;
-			$wooecpay_invoice_love_code 					= get_post_meta( $order->get_id(), '_wooecpay_invoice_love_code', true ) ;
+			$wooecpay_invoice_type 						= get_post_meta( $order->get_id(), '_wooecpay_invoice_type', true ) ;
+			$billing_company 							= get_post_meta( $order->get_id(), '_billing_company', true ) ;
+			$wooecpay_invoice_customer_identifier 		= get_post_meta( $order->get_id(), '_wooecpay_invoice_customer_identifier', true ) ;
+			$wooecpay_invoice_love_code 				= get_post_meta( $order->get_id(), '_wooecpay_invoice_love_code', true ) ;
 			$wooecpay_invoice_carruer_num 				= get_post_meta( $order->get_id(), '_wooecpay_invoice_carruer_num', true ) ;
 			
-			$wooecpay_invoice_no 									= get_post_meta( $order->get_id(), '_wooecpay_invoice_no', true ) ;
-			$wooecpay_invoice_date 								= get_post_meta( $order->get_id(), '_wooecpay_invoice_date', true ) ;
+			$wooecpay_invoice_no 						= get_post_meta( $order->get_id(), '_wooecpay_invoice_no', true ) ;
+			$wooecpay_invoice_date 						= get_post_meta( $order->get_id(), '_wooecpay_invoice_date', true ) ;
 			$wooecpay_invoice_random_number 			= get_post_meta( $order->get_id(), '_wooecpay_invoice_random_number', true ) ;
 
-			$wooecpay_invoice_issue_type 					= get_post_meta( $order->get_id(), '_wooecpay_invoice_issue_type', true ) ;
-			$wooecpay_invoice_tsr 								= get_post_meta( $order->get_id(), '_wooecpay_invoice_tsr', true ) ;
-			$wooecpay_invoice_process 						= get_post_meta( $order->get_id(), '_wooecpay_invoice_process', true ) ;
+			$wooecpay_invoice_issue_type 				= get_post_meta( $order->get_id(), '_wooecpay_invoice_issue_type', true ) ;
+			$wooecpay_invoice_tsr 						= get_post_meta( $order->get_id(), '_wooecpay_invoice_tsr', true ) ;
+			$wooecpay_invoice_process 					= get_post_meta( $order->get_id(), '_wooecpay_invoice_process', true ) ;
 
 			$order_status = $order->get_status();
 
 			// 開立發票按鈕顯示判斷
 			$invoice_create_button = false ;
 
-    	if(empty($wooecpay_invoice_process) && 
-    		( $order_status == 'processing' || $order_status == 'completed')
-    	){
-    		$invoice_create_button = true ;
-    	}
+			if (empty($wooecpay_invoice_process) && 
+				( $order_status == 'processing' || $order_status == 'completed')
+			) {
+				$invoice_create_button = true ;
+			}
 
-    	// 作廢發票按鈕顯示判斷
-    	$invoice_invalid_button = false ;
-    	if(!empty($wooecpay_invoice_process) && 
-    		( $order_status == 'cancelled' || $order_status == 'refunded'))
-    	{
-    		$invoice_invalid_button = true ;
-    	}
+			// 作廢發票按鈕顯示判斷
+			$invoice_invalid_button = false ;
+			if (!empty($wooecpay_invoice_process) && 
+				( $order_status == 'cancelled' || $order_status == 'refunded'))
+			{
+				$invoice_invalid_button = true ;
+			}
 
 			// 顯示
 			$invoiceType = [
@@ -329,17 +333,17 @@ class Wooecpay_Order {
 					break;
 			}
 
-			if(isset($invoiceCarruerType[$wooecpay_invoice_carruer_type])){
+			if (isset($invoiceCarruerType[$wooecpay_invoice_carruer_type])) {
 				echo wp_kses_post('<p><strong>開立類型:</strong>'. $invoiceCarruerType[$wooecpay_invoice_carruer_type] . '</p>') ;
 			}
 
-			if(isset($invoiceType[$wooecpay_invoice_type])){
+			if (isset($invoiceType[$wooecpay_invoice_type])) {
 				echo wp_kses_post('<p><strong>發票開立:</strong>'. $invoiceType[$wooecpay_invoice_type] . '</p>') ;
 			}
 
 			switch ($wooecpay_invoice_type) {
 				case 'p':
-					if(!empty($wooecpay_invoice_carruer_num)){
+					if (!empty($wooecpay_invoice_carruer_num)) {
 						echo wp_kses_post('<p><strong>載具編號:</strong>'. $wooecpay_invoice_carruer_num . '</p>') ;
 					}
 				break;
@@ -355,14 +359,14 @@ class Wooecpay_Order {
 			}
 
 			// 開立發票按鈕顯示判斷
-    	if($invoice_create_button){
-    		echo '<input class=\'button\' type=\'button\' value=\'開立發票\' onclick=\'wooecpayCreateInvoice('. $order->get_id().');\'>';	
-    	}
+			if ($invoice_create_button) {
+				echo '<input class=\'button\' type=\'button\' value=\'開立發票\' onclick=\'wooecpayCreateInvoice('. $order->get_id().');\'>';	
+    		}
 
-    	// 作廢發票按鈕顯示判斷
-    	if($invoice_invalid_button){
-    		echo '<input class=\'button\' type=\'button\' value=\'作廢發票\' onclick=\'wooecpayInvalidInvoice('. $order->get_id().');\'>';	
-    	}
+			// 作廢發票按鈕顯示判斷
+			if ($invoice_invalid_button) {
+				echo '<input class=\'button\' type=\'button\' value=\'作廢發票\' onclick=\'wooecpayInvalidInvoice('. $order->get_id().');\'>';	
+			}
 
 			echo '</div>';
 		}
@@ -380,191 +384,190 @@ class Wooecpay_Order {
 	/**
 	 * 註冊JS
 	 */
-  public function wooecpay_register_scripts() {
-     
+	public function wooecpay_register_scripts() {
+		
 		wp_register_script(
 			'wooecpay_main',
 			WOOECPAY_PLUGIN_URL . 'public/js/wooecpay-main.js',
 			array(),
 			'1.0.0',
 			true
-	     	);
+		);
 
-   	// 載入js
-  	wp_enqueue_script('wooecpay_main');
-  }
+		// 載入js
+		wp_enqueue_script('wooecpay_main');
+	}
 
 	/**
 	 * 產生物流相關按鈕顯示
 	 */
 	public function logistic_button_display($order) {
 
-    if ($order) {
+		if ($order) {
 
-    	// 取得訂單資訊
-    	// $order_data = $order->get_data();
+			// 取得訂單資訊
+			// $order_data = $order->get_data();
 
-    	// 取得物流方式
+			// 取得物流方式
 			$shipping_method_id = $order->get_items('shipping') ;
-			
-			if($shipping_method_id) {
-			
+				
+			if ($shipping_method_id) {
+				
 				$shipping_method_id = reset($shipping_method_id);    
 				$shipping_method_id = $shipping_method_id->get_method_id() ;
 
 				$order_status = $order->get_status();
 
-      	// 地圖按鈕顯示判斷
-      	if(true){
+				// 地圖按鈕顯示判斷
+				if (true) {
 
-      		// 按鈕顯示旗標
-      		$map_button = false ;
+					// 按鈕顯示旗標
+					$map_button = false ;
 
-      		// 判斷物流方式是否允許變更門市
-	        if(
-	        	( $order_status == 'on-hold' || $order_status == 'processing') && 
-	        	(
+					// 判斷物流方式是否允許變更門市
+					if (
+						( $order_status == 'on-hold' || $order_status == 'processing') && 
+						(
 							$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
 							$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
 							$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
 							$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
-	        	)
-	        ){
+						)
+					) {
 
-	        	// 狀態判斷是否已經建立綠界物流單 AllPayLogisticsID
-	        	$ecpay_logistic_AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
+						// 狀態判斷是否已經建立綠界物流單 AllPayLogisticsID
+						$ecpay_logistic_AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
 
-	        	if(empty($ecpay_logistic_AllPayLogisticsID) ){
-	        		$map_button = true ;
-		        }
-	        }
-      	}
+						if (empty($ecpay_logistic_AllPayLogisticsID) ) {
+							$map_button = true ;
+						}
+					}
+				}
 
-      	// 物流訂單按鈕判斷
-      	if(true){
+				// 物流訂單按鈕判斷
+				if (true) {
 
-      		$logistic_order_button = true ;
+					$logistic_order_button = true ;
 
-      		// 判斷是否為綠界物流
-          if(
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
-              $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-              $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
-              $shipping_method_id == 'Wooecpay_Logistic_Home_Post'
-          ){
-          	
-          	if(
-                $shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
-                $shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
-                $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
-                $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
-            ){
-            	
-            	// 狀態判斷 _ecpay_logistic_cvs_store_id門市代號不存在
-	        		$ecpay_logistic_cvs_store_id = get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true );
+					// 判斷是否為綠界物流
+					if (
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
+						$shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
+						$shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+						$shipping_method_id == 'Wooecpay_Logistic_Home_Post'
+					) {
+					
+						if (
+							$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
+							$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
+							$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
+							$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
+						) {
+							
+							// 狀態判斷 _ecpay_logistic_cvs_store_id門市代號不存在
+							$ecpay_logistic_cvs_store_id = get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true );
 
-	        		if(empty($ecpay_logistic_cvs_store_id)){
-	        			$logistic_order_button = false ;
-	        		}
-            }
+							if (empty($ecpay_logistic_cvs_store_id)) {
+								$logistic_order_button = false ;
+							}
+						}
 
-          } else {
-          	$logistic_order_button = false ;
-          }
+					} else {
+							$logistic_order_button = false ;
+					}
 
-      		// 已經存在AllPayLogisticsID 關閉按鈕
-      		$AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
+					// 已經存在AllPayLogisticsID 關閉按鈕
+					$AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
 
-      		if(!empty($AllPayLogisticsID)){
-      			$logistic_order_button = false ;
-      		}
+					if (!empty($AllPayLogisticsID)) {
+						$logistic_order_button = false ;
+					}
 
-      		if($order_status != 'on-hold' && $order_status != 'processing'){
-      			$logistic_order_button = false ;
-      		}
-      	}
+					if ($order_status != 'on-hold' && $order_status != 'processing') {
+						$logistic_order_button = false ;
+					}
+				}
 
-      	// 列印訂單按鈕判斷
-      	if(true){
+				// 列印訂單按鈕判斷
+				if (true) {
 
-      		$logistic_print_button = false ;
+					$logistic_print_button = false ;
 
-      		// 已經存在AllPayLogisticsID 關閉按鈕
-      		$AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
+					// 已經存在AllPayLogisticsID 關閉按鈕
+					$AllPayLogisticsID = get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true );
 
-      		if(!empty($AllPayLogisticsID)){
-      			$logistic_print_button = true ;
-      		}
-      	}
+					if (!empty($AllPayLogisticsID)) {
+						$logistic_print_button = true ;
+					}
+				}
 
-        // 判斷是否為綠界物流
-        if(
-            $shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
-            $shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
-            $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
-            $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
-            $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-            $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
-            $shipping_method_id == 'Wooecpay_Logistic_Home_Post'
-        ){
-      	
-      	// 判斷是否為超商取貨
-          if(
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
-              $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
-          ){
-			echo '<div class="logistic_csv_info">';
-        	echo '<h3>超商資訊</h3>' ;
-			echo wp_kses_post('<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>') ;	
-          	echo wp_kses_post('<p><strong>超商名稱:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_name', true ) . '</p>') ;
+				// 判斷是否為綠界物流
+				if (
+					$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
+					$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
+					$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
+					$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
+					$shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
+					$shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
+					$shipping_method_id == 'Wooecpay_Logistic_Home_Post'
+				) {
+				
+					// 判斷是否為超商取貨
+					if (
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
+						$shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' 
+					) {
+						echo '<div class="logistic_csv_info">';
+						echo '<h3>超商資訊</h3>' ;
+						echo wp_kses_post('<p><strong>超商編號:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_id', true ) . '</p>') ;	
+						echo wp_kses_post('<p><strong>超商名稱:</strong>'. get_post_meta( $order->get_id(), '_ecpay_logistic_cvs_store_name', true ) . '</p>') ;
 
-          	if ('yes' === get_option('wooecpay_keep_logistic_phone', 'yes')) {
-          		echo wp_kses_post('<p><strong>收件人電話:</strong>'. get_post_meta( $order->get_id(), 'wooecpay_shipping_phone', true ) . '</p>') ;
-          	}	
-			echo '</div>' ;
-		}
+						if ('yes' === get_option('wooecpay_keep_logistic_phone', 'yes')) {
+							echo wp_kses_post('<p><strong>收件人電話:</strong>'. get_post_meta( $order->get_id(), 'wooecpay_shipping_phone', true ) . '</p>') ;
+						}	
+						echo '</div>' ;
+					}
 
-          echo '<div class="logistic_button_display">';
-        	echo '<h3>物流單資訊</h3>' ;
+					echo '<div class="logistic_button_display">';
+					echo '<h3>物流單資訊</h3>' ;
 
-        	if(true){
-        		echo wp_kses_post('<p><strong>廠商交易編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_merchant_trade_no', true ) . '</p>') ;	 
-        		echo wp_kses_post('<p><strong>綠界物流編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true ) . '</p>') ;		
-        		echo wp_kses_post('<p><strong>寄貨編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSPaymentNo', true ) . '</p>') ;		
-        		echo wp_kses_post('<p><strong>托運單號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_BookingNote', true ) . '</p>') ;	
-        	}
+					if (true) {
+						echo wp_kses_post('<p><strong>廠商交易編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_merchant_trade_no', true ) . '</p>') ;	 
+						echo wp_kses_post('<p><strong>綠界物流編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true ) . '</p>') ;		
+						echo wp_kses_post('<p><strong>寄貨編號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSPaymentNo', true ) . '</p>') ;		
+						echo wp_kses_post('<p><strong>托運單號:</strong>'. get_post_meta( $order->get_id(), '_wooecpay_logistic_BookingNote', true ) . '</p>') ;	
+					}
 
-        	// 產生地圖按鈕兒
-        	if($map_button){
-        		
-        		// 組合地圖FORM
-
-						$api_logistic_info  = $this->get_ecpay_logistic_api_info('map');
+					// 產生地圖按鈕兒
+					if ($map_button) {
+						
+						// 組合地圖FORM
+						$api_logistic_info  = $this->logisticHelper->get_ecpay_logistic_api_info('map');
 						$client_back_url    = WC()->api_request_url('wooecpay_change_logistic_map_callback', true);
-						$MerchantTradeNo    = $this->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
-						$LogisticsType   	= $this->get_logistics_sub_type($shipping_method_id) ;
+						$MerchantTradeNo    = $this->logisticHelper->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
+						$LogisticsType   	= $this->logisticHelper->get_logistics_sub_type($shipping_method_id) ;
 
-        		try {
-              $factory = new Factory([
-                  'hashKey'       => $api_logistic_info['hashKey'],
-                  'hashIv'        => $api_logistic_info['hashIv'],
-                  'hashMethod'    => 'md5',
-              ]);
-              $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
+						try {
+							$factory = new Factory([
+								'hashKey'       => $api_logistic_info['hashKey'],
+								'hashIv'        => $api_logistic_info['hashIv'],
+								'hashMethod'    => 'md5',
+							]);
+							$autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
 
-            	$inputMap = [
+							$inputMap = [
 								'MerchantID'        => $api_logistic_info['merchant_id'],
 								'MerchantTradeNo'   => $MerchantTradeNo,
 								'LogisticsType'     => $LogisticsType['type'],
 								'LogisticsSubType'  => $LogisticsType['sub_type'],
 								'IsCollection'      => 'Y',
 								'ServerReplyURL'    => $client_back_url,
-              ];
+							];
 
 							$form_map = $autoSubmitFormService->generate($inputMap, $api_logistic_info['action'], 'ecpay_map');
 
@@ -575,22 +578,22 @@ class Wooecpay_Order {
 							echo '</form>';
 							echo $form_map ;
 
-            } catch (RtnException $e) {
-              echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
-            }
+						} catch (RtnException $e) {
+							echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
+						}
+						
+						echo '<input class=\'button\' type=\'button\' onclick=\'ecpayChangeStore();\' value=\'變更門市\' />&nbsp;&nbsp;';
+					}
 
-        		echo '<input class=\'button\' type=\'button\' onclick=\'ecpayChangeStore();\' value=\'變更門市\' />&nbsp;&nbsp;';
-        	}
+					// 產生按鈕
+					if ($logistic_order_button) {
+						echo '<input class=\'button\' type=\'button\' value=\'建立物流訂單\' onclick=\'ecpayCreateLogisticsOrder('. $order->get_id().');\'>';	
+					}
 
-        	// 產生按鈕
-        	if($logistic_order_button){
-        		echo '<input class=\'button\' type=\'button\' value=\'建立物流訂單\' onclick=\'ecpayCreateLogisticsOrder('. $order->get_id().');\'>';	
-        	}
-
-        	// 列印訂單按鈕判斷
-        	if($logistic_print_button){
-        		
-						$api_logistic_info  = $this->get_ecpay_logistic_api_info('print', $shipping_method_id);
+					// 列印訂單按鈕判斷
+					if ($logistic_print_button) {
+						
+						$api_logistic_info  = $this->logisticHelper->get_ecpay_logistic_api_info('print', $shipping_method_id);
 						
 						$AllPayLogisticsID	= get_post_meta( $order->get_id(), '_wooecpay_logistic_AllPayLogisticsID', true ) ;
 						$CVSPaymentNo   		= get_post_meta( $order->get_id(), '_wooecpay_logistic_CVSPaymentNo', true )  ;
@@ -622,238 +625,43 @@ class Wooecpay_Order {
 							break;
 						}
 
-        		try {
-              
-              $factory = new Factory([
-                'hashKey'       => $api_logistic_info['hashKey'],
-                'hashIv'        => $api_logistic_info['hashIv'],
-                'hashMethod'    => 'md5',
-              ]);
-
-              $autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
-
-              $form_print =  $autoSubmitFormService->generate($inputPrint, $api_logistic_info['action'], '_Blank','ecpay_print');
-              $form_print =  str_replace('<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>', '', $form_print) ;
-              $form_print =  str_replace('</body></html>', '', $form_print) ;
-              $form_print =  str_replace('<script type="text/javascript">document.getElementById("ecpay_print").submit();</script>', '', $form_print) ;
+						try {
 						
-							echo '</form>';
-							echo $form_print ;
+							$factory = new Factory([
+								'hashKey'       => $api_logistic_info['hashKey'],
+								'hashIv'        => $api_logistic_info['hashIv'],
+								'hashMethod'    => 'md5',
+							]);
 
-            } catch (RtnException $e) {
-                echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
-            }
+							$autoSubmitFormService = $factory->create('AutoSubmitFormWithCmvService');
 
-        		echo '<input class=\'button\' type=\'button\' onclick=\'ecpayLogisticPrint();\' value=\'列印物流單\' />&nbsp;&nbsp;';
-        	}
+							$form_print =  $autoSubmitFormService->generate($inputPrint, $api_logistic_info['action'], '_Blank','ecpay_print');
+							$form_print =  str_replace('<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>', '', $form_print) ;
+							$form_print =  str_replace('</body></html>', '', $form_print) ;
+							$form_print =  str_replace('<script type="text/javascript">document.getElementById("ecpay_print").submit();</script>', '', $form_print) ;
+										
+											echo '</form>';
+											echo $form_print ;
 
-        	echo '</div>';
-        }
-     	}
-   	}
+						} catch (RtnException $e) {
+							echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
+						}
+
+						echo '<input class=\'button\' type=\'button\' onclick=\'ecpayLogisticPrint();\' value=\'列印物流單\' />&nbsp;&nbsp;';
+					}
+
+					echo '</div>';
+				}
+			}
+		}
 	}
 
 	/**
 	 * 產生物流訂單
 	 */
-	public function ajax_send_logistic_order_action()
+	public function ajax_send_logistic_order_action() 
 	{
-
-		// 產生物流訂單
-		$ajaxReturn = [
-			'code' 	=> '0000',
-			'msg'	=> '',
-		];
-
-		$order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id'])	: '' ;
-
-		if ($order = wc_get_order($order_id)){
-
-			// 取得物流方式
-			$shipping_method_id = $order->get_items('shipping') ;
-			$shipping_method_id = reset($shipping_method_id);    
-			$shipping_method_id = $shipping_method_id->get_method_id() ;
-
-			// 判斷是否為綠界物流 產生物流訂單
-      if(
-          $shipping_method_id == 'Wooecpay_Logistic_CVS_711' || 
-          $shipping_method_id == 'Wooecpay_Logistic_CVS_Family' || 
-          $shipping_method_id == 'Wooecpay_Logistic_CVS_Hilife' || 
-          $shipping_method_id == 'Wooecpay_Logistic_CVS_Okmart' || 
-          $shipping_method_id == 'Wooecpay_Logistic_Home_Tcat' ||
-          $shipping_method_id == 'Wooecpay_Logistic_Home_Ecan' ||
-          $shipping_method_id == 'Wooecpay_Logistic_Home_Post' 
-      ){
-
-      	$LogisticsType 			= $this->get_logistics_sub_type($shipping_method_id) ;
-      	$api_logistic_info 	= $this->get_ecpay_logistic_api_info('create');
-      	$MerchantTradeNo   	= $this->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
-
-      	$sender_name 				= get_option('wooecpay_logistic_sender_name') ;
-      	$sender_cellphone 	= get_option('wooecpay_logistic_sender_cellphone') ;
-      	$sender_zipcode 		= get_option('wooecpay_logistic_sender_zipcode') ;
-      	$sender_address 		= get_option('wooecpay_logistic_sender_address') ;
-
-      	$serverReplyURL  		= WC()->api_request_url('wooecpay_logistic_status_callback', true);
-
-      	// 取得訂單資訊
-  			// $order_data = $order->get_data();
-				$CVSStoreID = $order->get_meta('_ecpay_logistic_cvs_store_id') ;
-				if(!isset($CVSStoreID) || empty($CVSStoreID)){
-
-					$ajaxReturn = [
-						'code' 	=> '0003',
-						'msg'	=> '查無超商資料',
-					];
-				}
-
-				$payment_method = $order->get_payment_method() ;
-				
-				if($payment_method == 'cod'){
-					$IsCollection = 'Y';
-				} else {
-					$IsCollection = 'N';
-				}
-
-				// 綠界訂單顯示商品名稱判斷
-				$item_name_default = '網路商品一批';
-        if ('yes' === get_option('wooecpay_enabled_logistic_disp_item_name', 'yes')) {
-
-					// 取出訂單品項
-					$item_name = $this->get_item_name($order);
-
-					// 判斷是否超過長度，如果超過長度改為預設文字
-					if(strlen($item_name) > 50 ) {
-
-						$item_name = $item_name_default;
-						
-						$order->add_order_note('商品名稱超過綠界物流可允許長度強制改為:'.$item_name);
-						$order->save();
-					}
-
-					// 判斷特殊字元
-          if(preg_match('/[\^\'\[\]`!@#%\\\&*+\"<>|_]/', $item_name)){
-
-            $item_name = $item_name_default;
-
-            $order->add_order_note('商品名稱存在綠界物流不允許的特殊字元強制改為:'.$item_name);
-            $order->save();
-          }
-
-        } else {
-          $item_name = $item_name_default;
-        }
-
-        if($LogisticsType['type'] == 'HOME'){
-
-        	// 重量計算
-        	$goods_weight = get_post_meta( $order->get_id(), '_cart_weight', true ) ;
-
-        	$inputLogisticOrder = [
-		        'MerchantID'        		=> $api_logistic_info['merchant_id'],
-		        'MerchantTradeNo' 			=> $MerchantTradeNo,
-		        'MerchantTradeDate' 		=> date('Y/m/d H:i:s'),
-		        'LogisticsType' 				=> $LogisticsType['type'],
-		        'LogisticsSubType' 			=> $LogisticsType['sub_type'],
-		        'GoodsAmount' 					=> $order->get_total(),
-		        'GoodsName'							=> $item_name,
-		        'GoodsWeight' 					=> $goods_weight,
-		        'SenderName' 						=> $sender_name,
-		        'SenderCellPhone' 			=> $sender_cellphone,
-		        'SenderZipCode' 				=> $sender_zipcode,
-		        'SenderAddress' 				=> $sender_address,
-		        'ReceiverName'       		=> $order->get_shipping_last_name() . $order->get_shipping_first_name(),
-		        'ReceiverCellPhone' 		=> $order->get_billing_phone(),
-		        'ReceiverZipCode' 			=> $order->get_shipping_postcode(),
-		        'ReceiverAddress' 			=> $order->get_shipping_state().$order->get_shipping_city().$order->get_shipping_address_1().$order->get_shipping_address_2(),
-		        'Temperature' 					=> '0001',
-		        'Distance' 							=> '00',
-		        'Specification' 				=> '0001',
-		        'ScheduledPickupTime'		=> '4',
-		        'ScheduledDeliveryTime' => '4',
-		        'ServerReplyURL' 				=> $serverReplyURL,
-		    	];
-
-        } else if($LogisticsType['type'] == 'CVS'){
-
-      		$inputLogisticOrder = [
-		        'MerchantID'        		=> $api_logistic_info['merchant_id'],
-		        'MerchantTradeNo' 			=> $MerchantTradeNo,
-		        'MerchantTradeDate' 		=> date('Y/m/d H:i:s'),
-		        'LogisticsType' 				=> $LogisticsType['type'],
-		        'LogisticsSubType' 			=> $LogisticsType['sub_type'],
-		        'GoodsAmount' 					=> $order->get_total(),
-		        'GoodsName'							=> $item_name,
-		        'SenderName' 						=> $sender_name,
-		        'SenderCellPhone' 			=> $sender_cellphone,
-		        'ReceiverName'        	=> $order->get_shipping_last_name() . $order->get_shipping_first_name(),
-		        'ReceiverCellPhone' 		=> $order->get_billing_phone(),
-		        'ReceiverStoreID' 			=> $CVSStoreID,
-		        'IsCollection'					=> $IsCollection,
-		        'ServerReplyURL' 				=> $serverReplyURL,
-				  ];	
-        }
-
-				try {
-			    $factory = new Factory([
-		        'hashKey'       => $api_logistic_info['hashKey'],
-         		'hashIv'        => $api_logistic_info['hashIv'],
-		        'hashMethod' 		=> 'md5',
-			    ]);
-
-			    $postService = $factory->create('PostWithCmvEncodedStrResponseService');
-			    $response = $postService->post($inputLogisticOrder, $api_logistic_info['action']);
-
-			    if(isset($response['RtnCode']) && ( $response['RtnCode'] == 300 || $response['RtnCode'] == 2001 ) ){
-
-				    // 更新訂單
-						$order->update_meta_data( '_wooecpay_logistic_merchant_trade_no', $response['MerchantTradeNo'] ); 
-						$order->update_meta_data( '_wooecpay_logistic_RtnCode', $response['RtnCode'] ); 
-						$order->update_meta_data( '_wooecpay_logistic_RtnMsg', $response['RtnMsg'] ); 
-						$order->update_meta_data( '_wooecpay_logistic_AllPayLogisticsID', $response['1|AllPayLogisticsID'] );  
-						$order->update_meta_data( '_wooecpay_logistic_LogisticsType', $response['LogisticsType'] );
-						$order->update_meta_data( '_wooecpay_logistic_CVSPaymentNo', $response['CVSPaymentNo'] ); 
-						$order->update_meta_data( '_wooecpay_logistic_CVSValidationNo', $response['CVSValidationNo'] ); 
-						$order->update_meta_data( '_wooecpay_logistic_BookingNote', $response['BookingNote'] );  
-
-						$order->add_order_note('建立物流訂單-物流廠商交易編號:'.$response['MerchantTradeNo']. '，狀態:' . $response['RtnMsg'] . '('. $response['RtnCode'] . ')');
-						$order->save();
-
-						$ajaxReturn = [
-							'code' 	=> '9999',
-							'msg'	=> '成功',
-						];
-
-			    } else {
-			    	// add note
-			    	$order->add_order_note(print_r($response, true));
-						$order->save();
-			    }
-
-			    // var_dump($response);
-				} catch (RtnException $e) {
-			    	echo wp_kses_post( '(' . $e->getCode() . ')' . $e->getMessage() ) . PHP_EOL;
-				}
-
-      } else {
-
-      	$ajaxReturn = [
-					'code' 	=> '0002',
-					'msg'	=> '非綠界物流方式',
-				];
-      }
-
-		} else {
-
-			$ajaxReturn = [
-				'code' 	=> '0001',
-				'msg'	=> '查無訂單',
-			];
-		}
-
-		echo json_encode($ajaxReturn, true);
-
-		wp_die();
+		$this->logisticHelper->send_logistic_order_action();
 	}
 
 	/**
@@ -1362,289 +1170,6 @@ class Wooecpay_Order {
 			}
 		}
 	}
-
-	// logistic 
-  // ---------------------------------------------------
-
-  protected function get_ecpay_logistic_api_info($action = '', $shipping_method_id = '' )
-  {
-    $wooecpay_logistic_cvs_type = get_option('wooecpay_logistic_cvs_type');
-
-    $api_info = [
-      'merchant_id'   => '',
-      'hashKey'       => '',
-      'hashIv'        => '',
-      'action'        => '',
-    ] ;
-
-    if ('yes' === get_option('wooecpay_enabled_logistic_stage', 'yes')) {
-
-      if($wooecpay_logistic_cvs_type == 'C2C'){
-
-        $api_info = [
-          'merchant_id'   => '2000933',
-          'hashKey'       => 'XBERn1YOvpM9nfZc',
-          'hashIv'        => 'h1ONHk4P4yqbl5LK',
-        ] ;
-
-      } else if($wooecpay_logistic_cvs_type == 'B2C'){
-
-        $api_info = [
-          'merchant_id'   => '2000132',
-          'hashKey'       => '5294y06JbISpM5x9',
-          'hashIv'        => 'v77hoKGq4kWxNNIS',
-        ] ;
-      }
-
-    } else {
-        
-      $merchant_id = get_option('wooecpay_logistic_mid');
-      $hash_key    = get_option('wooecpay_logistic_hashkey');
-      $hash_iv     = get_option('wooecpay_logistic_hashiv');
-
-      $api_info = [
-        'merchant_id'   => $merchant_id,
-        'hashKey'       => $hash_key,
-        'hashIv'        => $hash_iv,
-      ] ;
-    }
-
-    // URL位置判斷
-    if ('yes' === get_option('wooecpay_enabled_logistic_stage', 'yes')) {
-
-      switch ($action) {
-
-      	case 'map':
-      		$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/map' ;
-      	break;
-      	
-      	case 'create':
-      		$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/Create' ;
-      	break;
-
-      	case 'print':
-
-      		if($wooecpay_logistic_cvs_type == 'C2C'){
-
-        		switch ($shipping_method_id) {
-
-        			case 'Wooecpay_Logistic_CVS_711':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/PrintUniMartC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Family':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/PrintFAMIC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Hilife':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/PrintHILIFEC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Okmart':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/Express/PrintOKMARTC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_Home_Tcat':
-        			case 'Wooecpay_Logistic_Home_Ecan':
-        			case 'Wooecpay_Logistic_Home_Post':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/helper/printTradeDocument' ;
-        			break;
-        			
-        			default:
-        				$api_info['action'] = '' ;
-        			break;
-        		}
-
-        	} else if($wooecpay_logistic_cvs_type == 'B2C'){
-
-        		switch ($shipping_method_id) {
-
-        			case 'Wooecpay_Logistic_CVS_711':
-        			case 'Wooecpay_Logistic_CVS_Family':
-        			case 'Wooecpay_Logistic_CVS_Hilife':
-        			case 'Wooecpay_Logistic_Home_Tcat':
-        			case 'Wooecpay_Logistic_Home_Ecan':
-        			case 'Wooecpay_Logistic_Home_Post':
-        				$api_info['action'] = 'https://logistics-stage.ecpay.com.tw/helper/printTradeDocument' ;
-        			break;
-        			default:
-        				$api_info['action'] = '' ;
-        			break;
-        		}
-        	}
-      		
-      	break;
-
-      	default:
-      	break;
-      }
-
-  	} else {
-
-    	switch ($action) {
-
-      	case 'map':
-      		$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/map' ;
-      	break;
-      	
-      	case 'create':
-      		$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/Create' ;
-      	break;
-
-      	case 'print':
-
-      		if($wooecpay_logistic_cvs_type == 'C2C'){
-
-        		switch ($shipping_method_id) {
-
-        			case 'Wooecpay_Logistic_CVS_711':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/PrintUniMartC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Family':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/PrintFAMIC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Hilife':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/PrintHILIFEC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_CVS_Okmart':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/Express/PrintOKMARTC2COrderInfo' ;
-        			break;
-
-        			case 'Wooecpay_Logistic_Home_Tcat':
-        			case 'Wooecpay_Logistic_Home_Ecan':
-        			case 'Wooecpay_Logistic_Home_Post':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/helper/printTradeDocument' ;
-        			break;
-        			
-        			default:
-        				$api_info['action'] = '' ;
-        			break;
-        		}
-
-        	} else if($wooecpay_logistic_cvs_type == 'B2C'){
-
-        		switch ($shipping_method_id) {
-
-        			case 'Wooecpay_Logistic_CVS_711':
-        			case 'Wooecpay_Logistic_CVS_Family':
-        			case 'Wooecpay_Logistic_CVS_Hilife':
-        			case 'Wooecpay_Logistic_Home_Tcat':
-        			case 'Wooecpay_Logistic_Home_Ecan':
-        			case 'Wooecpay_Logistic_Home_Post':
-        				$api_info['action'] = 'https://logistics.ecpay.com.tw/helper/printTradeDocument' ;
-        			break;
-        			default:
-        				$api_info['action'] = '' ;
-        			break;
-        		}
-        	}
-      		
-      	break;
-
-      	default:
-      	break;
-      }
-  	}
-
-    return $api_info;
-  }
-
-  protected function get_merchant_trade_no($order_id, $order_prefix = '')
-  {
-    $trade_no = $order_prefix . $order_id . 'SN' .(string) time() ;
-    return substr($trade_no, 0, 20);
-  }
-
-  protected function get_logistics_sub_type($shipping_method_id)
-  {
-    $wooecpay_logistic_cvs_type = get_option('wooecpay_logistic_cvs_type');
-
-    $logisticsType = [
-    	'type' 		=> '',
-    	'sub_type' 	=> '',
-    ] ;
-
-    switch ($shipping_method_id) { 
-
-      case 'Wooecpay_Logistic_CVS_711':
-
-      	$logisticsType['type'] = 'CVS' ;
-
-      	if($wooecpay_logistic_cvs_type == 'C2C'){
-        	$logisticsType['sub_type'] = 'UNIMARTC2C' ;
-        } else if($wooecpay_logistic_cvs_type == 'B2C'){
-        	$logisticsType['sub_type'] = 'UNIMART' ;
-        }
-
-      break;
-
-      case 'Wooecpay_Logistic_CVS_Family':
-          
-        $logisticsType['type'] = 'CVS' ;
-
-        if($wooecpay_logistic_cvs_type == 'C2C'){
-        	$logisticsType['sub_type'] = 'FAMIC2C' ;
-        } else if($wooecpay_logistic_cvs_type == 'B2C'){
-        	$logisticsType['sub_type'] = 'FAMI' ;
-        }
-
-      break;
-
-      case 'Wooecpay_Logistic_CVS_Hilife':
-
-        $logisticsType['type'] = 'CVS' ;
-
-        if($wooecpay_logistic_cvs_type == 'C2C'){
-        	$logisticsType['sub_type'] = 'HILIFEC2C' ;
-        } else if($wooecpay_logistic_cvs_type == 'B2C'){
-        	$logisticsType['sub_type'] = 'HILIFE' ;
-        }
-
-      break;
-
-      case 'Wooecpay_Logistic_CVS_Okmart':
-
-      	$logisticsType['type'] = 'CVS' ;
-        if($wooecpay_logistic_cvs_type == 'C2C'){
-        	$logisticsType['sub_type'] = 'OKMARTC2C' ;
-        }
-
-      break;
-
-      case 'Wooecpay_Logistic_Home_Tcat':
-      	$logisticsType['type'] = 'HOME' ;
-      	$logisticsType['sub_type'] = 'TCAT' ;
-      break;
-
-      case 'Wooecpay_Logistic_Home_Ecan':
-      	$logisticsType['type'] = 'HOME' ;
-      	$logisticsType['sub_type'] = 'ECAN' ;
-      break;
-
-      case 'Wooecpay_Logistic_Home_Post':
-      	$logisticsType['type'] = 'HOME' ;
-      	$logisticsType['sub_type'] = 'POST' ;
-      break;
-    }
-
-    return $logisticsType;
-  }
-
-	protected function get_item_name($order)
-  {
-    $item_name = '';
-
-    if ( count($order->get_items()) ) {
-      foreach ($order->get_items() as $item) {
-          $item_name .=  trim($item->get_name()) . ' ' ;
-      }
-    }
-
-    return $item_name;
-  }
 
   // invoice 
   // ---------------------------------------------------

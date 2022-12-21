@@ -711,7 +711,7 @@ msgstr "%1$s %2$s"
 
 #. Plugin Name of the plugin/theme
 msgid "ECPay Ecommerce for WooCommerce"
-msgstr "Ecpay for WooCommerce"
+msgstr "ECPay Ecommerce for WooCommerce"
 
 #. Plugin URI of the plugin/theme
 #. Author URI of the plugin/theme
