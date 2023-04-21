@@ -9,6 +9,8 @@ class Wooecpay_Setting_Main extends WC_Settings_Page {
 
 		add_action( 'woocommerce_settings_' . $this->id, array( $this, 'output' ) );
 		add_action( 'woocommerce_settings_save_' . $this->id, array( $this, 'save' ) );
+
+		add_action('admin_enqueue_scripts' , array( $this, 'wooecpay_register_scripts' ));
 	}
 
 	public function get_sections() {
@@ -63,6 +65,22 @@ class Wooecpay_Setting_Main extends WC_Settings_Page {
 		global $current_section;
 		$settings = $this->get_settings( $current_section );
 		WC_Admin_Settings::save_fields( $settings );
+	}
+
+	public function wooecpay_register_scripts() {
+		
+		wp_register_script(
+			'wooecpay_setting',
+			WOOECPAY_PLUGIN_URL . 'public/js/wooecpay-setting.js',
+			array(),
+			'1.0.0',
+			true
+		);
+
+		// 載入js
+		wp_enqueue_script('wooecpay_setting');
+		$translation_array = array('message' => __('When you disable the ECPay gateway method, the ECPay shipping method will be closed at the same time. Are you sure you want to disable the ECPay gateway method?', 'ecpay-ecommerce-for-woocommerce'));
+		wp_localize_script('wooecpay_setting', 'confirm_message', $translation_array);
 	}
 }
 

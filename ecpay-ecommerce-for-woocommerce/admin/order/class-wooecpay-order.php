@@ -99,7 +99,7 @@ class Wooecpay_Order
 		else {
 			echo '<style>.logistic_button_display {display: inline-block;}</style>';
 		}
-
+		
 		echo wp_kses_post('<p><strong>帳單姓名:<br/></strong>' . get_post_meta( $order->get_id(), '_billing_last_name', true ) . ' ' . get_post_meta( $order->get_id(), '_billing_first_name', true ) . '</p>');
 	}
 

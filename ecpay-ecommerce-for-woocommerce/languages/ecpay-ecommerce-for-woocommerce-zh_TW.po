@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
 "POT-Creation-Date: 2022-11-15 11:24+0800\n"
-"PO-Revision-Date: 2022-11-23 10:30+0800\n"
+"PO-Revision-Date: 2023-04-12 11:19+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -15,9 +15,7 @@ msgstr ""
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: ecpay-ecommerce-for-woocommerce.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
@@ -271,8 +269,7 @@ msgstr "每筆訂單的最小金額以及使用折價卷"
 
 #: includes/config/logistic/settings-logistic-base.php:45
 #: includes/config/logistic/settings-logistic-post.php:66
-msgid ""
-"Users will need to spend this amount to get free shipping (if enabled above)."
+msgid "Users will need to spend this amount to get free shipping (if enabled above)."
 msgstr "消費者可以獲得免運費的最低消費金額 (如果上面有啟用)"
 
 #: includes/config/logistic/settings-logistic-post.php:21
@@ -320,8 +317,7 @@ msgid "Auto get shipping payment no"
 msgstr "自動建立物流訂單"
 
 #: includes/config/logistic/settings.php:38
-msgid ""
-"Auto get shipping payment no when payment complete ( only for ecpay gateway )"
+msgid "Auto get shipping payment no when payment complete ( only for ecpay gateway )"
 msgstr "當付款完成後自動建立物流訂單，僅支援綠界付款方式"
 
 #: includes/config/logistic/settings.php:42
@@ -725,6 +721,16 @@ msgstr "Ecpay Plug for WooCommerce"
 #. Author of the plugin/theme
 msgid "ECPay Green World FinTech Service Co., Ltd."
 msgstr "綠界科技."
+
+#: includes/config/main/settings.php:23
+#, php-format
+msgid "Enable ECPay shipping method <br> If you want to use the cash on delivery service for your shop, you must enable the ECPay gateway method and <a href=\"%1$s\">set up the delivery payment.</a>"
+msgstr "啟用綠界物流 <br> 若要使用超商貨到付款時,須啟用綠界金流且開啟 <a href=\"%1$s\">貨到付款金流設定</a>"
+
+#: /admin/settings/class-wooecpay-setting-main.php:81
+#, php-format
+msgid "When you disable the ECPay gateway method, the ECPay shipping method will be closed at the same time. Are you sure you want to disable the ECPay gateway method?"
+msgstr "關閉綠界金流服務時，將同時關閉綠界物流服務。確定要關閉金流服務嗎?"
 
 #~ msgid "shipping fee"
 #~ msgstr "物流費用"
