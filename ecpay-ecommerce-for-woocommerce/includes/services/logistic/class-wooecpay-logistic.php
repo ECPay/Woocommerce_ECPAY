@@ -10,7 +10,7 @@ class Wooecpay_Logistic {
 		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_method' ) );
 		add_action( 'woocommerce_shipping_init', array( $this, 'load_logistic_logistic' ) );
 
-		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'gateway_disable_for_shipping_rate') );
+		add_filter( 'woocommerce_available_payment_gateways', array( $this, 'gateway_disable_for_shipping_rate'), 1 );
 
 		if ('yes' === get_option('wooecpay_keep_logistic_phone', 'yes')) {
 			add_filter('woocommerce_checkout_fields', array($this, 'wooecpay_show_logistic_fields' ), 11 ,1);		// 收件人手機
@@ -68,12 +68,25 @@ class Wooecpay_Logistic {
         return $methods;
     }
 
+	/**
+	 * wc_get_chosen_shipping_method_ids
+	 */
+	function get_chosen_shipping_method_ids() {
+		$method_ids     = array();
+		$chosen_methods = is_null(WC()->session) ? [] : WC()->session->get( 'chosen_shipping_methods', array() );
+		foreach ( $chosen_methods as $chosen_method ) {
+			$chosen_method = explode( ':', $chosen_method );
+			$method_ids[]  = current( $chosen_method );
+		}
+		return $method_ids;
+	}
+
     // 限制綠界物流僅能使用綠界金流
     function gateway_disable_for_shipping_rate( $available_gateways ) {
        
         if ( ! is_admin() ) {
 
-        	$chosen_shipping_tmp = wc_get_chosen_shipping_method_ids();
+        	$chosen_shipping_tmp = $this->get_chosen_shipping_method_ids();
         	$chosen_shipping = $chosen_shipping_tmp[0] ;
 
 			if(!empty($chosen_shipping)){
