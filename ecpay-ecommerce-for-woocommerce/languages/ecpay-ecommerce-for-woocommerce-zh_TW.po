@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
-"POT-Creation-Date: 2022-11-15 11:24+0800\n"
-"PO-Revision-Date: 2023-05-05 09:36+0800\n"
+"POT-Creation-Date: 2023-05-25 09:52+0800\n"
+"PO-Revision-Date: 2023-05-25 10:26+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -19,32 +19,32 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: admin/order/class-wooecpay-order.php:68
+#: admin/order/class-wooecpay-order.php:72
 msgid "Full address"
 msgstr "完整地址"
 
-#: admin/order/class-wooecpay-order.php:93
+#: admin/order/class-wooecpay-order.php:114
 msgid "Gateway info"
 msgstr "金流資訊"
 
-#: admin/order/class-wooecpay-order.php:95
+#: admin/order/class-wooecpay-order.php:116
 msgid "Payment Type"
 msgstr "付款方式"
 
-#: admin/order/class-wooecpay-order.php:114
+#: admin/order/class-wooecpay-order.php:135
 #: includes/templates/payment/atm.php:29
 #: includes/templates/payment_email/atm.php:27
 msgid "Bank code"
 msgstr "銀行代碼"
 
-#: admin/order/class-wooecpay-order.php:115
+#: admin/order/class-wooecpay-order.php:136
 #: includes/templates/payment_email/atm.php:35
 msgid "ATM No"
 msgstr "匯款帳號"
 
-#: admin/order/class-wooecpay-order.php:116
-#: admin/order/class-wooecpay-order.php:123
-#: admin/order/class-wooecpay-order.php:132
+#: admin/order/class-wooecpay-order.php:137
+#: admin/order/class-wooecpay-order.php:144
+#: admin/order/class-wooecpay-order.php:153
 #: includes/config/payment/settings-gateway-atm.php:46
 #: includes/config/payment/settings-gateway-barcode.php:47
 #: includes/templates/payment/atm.php:43
@@ -56,52 +56,52 @@ msgstr "匯款帳號"
 msgid "Payment deadline"
 msgstr "付款截止日"
 
-#: admin/order/class-wooecpay-order.php:122
+#: admin/order/class-wooecpay-order.php:143
 #: includes/templates/payment/cvs.php:22
 #: includes/templates/payment_email/cvs.php:21
 msgid "CVS No"
 msgstr "超商代碼"
 
-#: admin/order/class-wooecpay-order.php:129
+#: admin/order/class-wooecpay-order.php:150
 #: includes/templates/payment_email/barcode.php:21
 msgid "barcode one"
 msgstr "第一段條碼"
 
-#: admin/order/class-wooecpay-order.php:130
+#: admin/order/class-wooecpay-order.php:151
 #: includes/templates/payment_email/barcode.php:29
 msgid "barcode two"
 msgstr "第二段條碼"
 
-#: admin/order/class-wooecpay-order.php:131
+#: admin/order/class-wooecpay-order.php:152
 #: includes/templates/payment_email/barcode.php:37
 msgid "barcode three"
 msgstr "第三段條碼"
 
-#: admin/order/class-wooecpay-order.php:898
-#: admin/order/class-wooecpay-order.php:1063
+#: admin/order/class-wooecpay-order.php:726
+#: admin/order/class-wooecpay-order.php:891
 #: includes/config/logistic/settings-logistic-base.php:21
 msgid "Shipping fee"
 msgstr "物流費"
 
-#: admin/order/class-wooecpay-order.php:1244
+#: admin/order/class-wooecpay-order.php:1072
 msgid "Invalid invoice"
 msgstr "作廢發票"
 
-#: admin/settings/class-wooecpay-setting-main.php:15
+#: admin/settings/class-wooecpay-setting-main.php:17
 msgid "General settings"
 msgstr "主要設定"
 
-#: admin/settings/class-wooecpay-setting-main.php:17
+#: admin/settings/class-wooecpay-setting-main.php:19
 #: includes/config/payment/settings.php:4
 msgid "Gateway settings"
 msgstr "金流設定"
 
-#: admin/settings/class-wooecpay-setting-main.php:18
+#: admin/settings/class-wooecpay-setting-main.php:20
 #: includes/config/logistic/settings.php:4
 msgid "Shipping settings"
 msgstr "物流設定"
 
-#: admin/settings/class-wooecpay-setting-main.php:19
+#: admin/settings/class-wooecpay-setting-main.php:21
 #: includes/config/invoice/settings.php:4
 msgid "E-Invoice setting"
 msgstr "電子發票設定"
@@ -117,74 +117,76 @@ msgid "Order no prefix"
 msgstr "訂單編號前綴"
 
 #: includes/config/invoice/settings.php:12
-msgid "Only letters and numbers allowed allowed."
-msgstr "僅允許英文與數字。"
+#: includes/config/logistic/settings.php:12
+#: includes/config/payment/settings.php:12
+msgid "Only a maximum of 5-character letters and numbers are allowed."
+msgstr "僅允許最多5碼英文與數字。"
 
-#: includes/config/invoice/settings.php:16
+#: includes/config/invoice/settings.php:19
 msgid "Get mode"
 msgstr "開立發票模式"
 
-#: includes/config/invoice/settings.php:21
-#: includes/config/invoice/settings.php:31
+#: includes/config/invoice/settings.php:24
+#: includes/config/invoice/settings.php:34
 msgid "manual"
 msgstr "手動"
 
-#: includes/config/invoice/settings.php:22
+#: includes/config/invoice/settings.php:25
 msgid "auto ( when order processing )"
 msgstr "自動(當訂單狀態為處理中)"
 
-#: includes/config/invoice/settings.php:26
+#: includes/config/invoice/settings.php:29
 msgid "Invalid mode"
 msgstr "作廢發票模式"
 
-#: includes/config/invoice/settings.php:32
+#: includes/config/invoice/settings.php:35
 msgid "auto ( when order status cancelled OR refunded )"
 msgstr "自動(當訂單狀態為取消或退費)"
 
-#: includes/config/invoice/settings.php:36
+#: includes/config/invoice/settings.php:39
 msgid "Delay invoice date"
 msgstr "延期開立天數"
 
-#: includes/config/invoice/settings.php:39
-#: includes/config/invoice/settings.php:46
+#: includes/config/invoice/settings.php:42
+#: includes/config/invoice/settings.php:49
 msgid "Only numbers allowed."
 msgstr "僅允許數字。"
 
-#: includes/config/invoice/settings.php:43
+#: includes/config/invoice/settings.php:46
 msgid "Donate unit"
 msgstr "預設捐贈單位"
 
-#: includes/config/invoice/settings.php:54
-#: includes/config/logistic/settings.php:93
-#: includes/config/payment/settings.php:36
+#: includes/config/invoice/settings.php:57
+#: includes/config/logistic/settings.php:96
+#: includes/config/payment/settings.php:39
 msgid "API settings"
 msgstr "API設定"
 
-#: includes/config/invoice/settings.php:59
-#: includes/config/invoice/settings.php:61
-#: includes/config/logistic/settings.php:98
-#: includes/config/logistic/settings.php:100
+#: includes/config/invoice/settings.php:62
+#: includes/config/invoice/settings.php:64
+#: includes/config/logistic/settings.php:101
 #: includes/config/logistic/settings.php:103
-#: includes/config/payment/settings.php:41
-#: includes/config/payment/settings.php:43
+#: includes/config/logistic/settings.php:106
+#: includes/config/payment/settings.php:44
+#: includes/config/payment/settings.php:46
 msgid "ECPay sandbox"
 msgstr "啟用測試模式"
 
-#: includes/config/invoice/settings.php:67
-#: includes/config/logistic/settings.php:106
-#: includes/config/payment/settings.php:49
+#: includes/config/invoice/settings.php:70
+#: includes/config/logistic/settings.php:109
+#: includes/config/payment/settings.php:52
 msgid "MerchantID"
 msgstr "商店代號"
 
-#: includes/config/invoice/settings.php:73
-#: includes/config/logistic/settings.php:112
-#: includes/config/payment/settings.php:55
+#: includes/config/invoice/settings.php:76
+#: includes/config/logistic/settings.php:115
+#: includes/config/payment/settings.php:58
 msgid "HashKey"
 msgstr "HashKey"
 
-#: includes/config/invoice/settings.php:79
-#: includes/config/logistic/settings.php:118
-#: includes/config/payment/settings.php:61
+#: includes/config/invoice/settings.php:82
+#: includes/config/logistic/settings.php:121
+#: includes/config/payment/settings.php:64
 msgid "HashIV"
 msgstr "HashIV"
 
@@ -288,72 +290,67 @@ msgstr "物流費(10-15kg)"
 msgid "Shipping fee4"
 msgstr "物流費(15-20kg以下)"
 
-#: includes/config/logistic/settings.php:12
-#: includes/config/payment/settings.php:12
-msgid "Only letters and numbers allowed."
-msgstr "僅允許英文與數字。"
-
-#: includes/config/logistic/settings.php:16
-#: includes/config/logistic/settings.php:20
-#: includes/config/payment/settings.php:16
-#: includes/config/payment/settings.php:18
+#: includes/config/logistic/settings.php:19
+#: includes/config/logistic/settings.php:23
+#: includes/config/payment/settings.php:19
+#: includes/config/payment/settings.php:21
 msgid "Display order item name"
 msgstr "綠界訂單顯示商品名稱"
 
-#: includes/config/logistic/settings.php:24
+#: includes/config/logistic/settings.php:27
 msgid "CVS type"
 msgstr "超商取貨類型"
 
-#: includes/config/logistic/settings.php:29
+#: includes/config/logistic/settings.php:32
 msgid "C2C"
 msgstr "C2C"
 
-#: includes/config/logistic/settings.php:30
+#: includes/config/logistic/settings.php:33
 msgid "B2C"
 msgstr "B2C"
 
-#: includes/config/logistic/settings.php:34
+#: includes/config/logistic/settings.php:37
 msgid "Auto get shipping payment no"
 msgstr "自動建立物流訂單"
 
-#: includes/config/logistic/settings.php:38
+#: includes/config/logistic/settings.php:41
 msgid "Auto get shipping payment no when payment complete ( only for ecpay gateway )"
 msgstr "當付款完成後自動建立物流訂單，僅支援綠界付款方式"
 
-#: includes/config/logistic/settings.php:42
+#: includes/config/logistic/settings.php:45
 msgid "Sender name"
 msgstr "寄件人姓名"
 
-#: includes/config/logistic/settings.php:45
+#: includes/config/logistic/settings.php:48
 msgid "Name length between 1 to 10 letter"
 msgstr "僅允許1至10字數"
 
-#: includes/config/logistic/settings.php:49
+#: includes/config/logistic/settings.php:52
 msgid "Sender phone"
 msgstr "寄件人電話"
 
-#: includes/config/logistic/settings.php:52
+#: includes/config/logistic/settings.php:55
 msgid "Phone format (0x)xxxxxxx#xx"
 msgstr "電話格式 (0x)xxxxxxx#xx"
 
-#: includes/config/logistic/settings.php:60
+#: includes/config/logistic/settings.php:63
 msgid "Sender cellphone"
 msgstr "寄件人手機"
 
-#: includes/config/logistic/settings.php:63
+#: includes/config/logistic/settings.php:66
 msgid "Cellphone format 09xxxxxxxx"
 msgstr "手機格式  09xxxxxxxx"
 
-#: includes/config/logistic/settings.php:71
+#: includes/config/logistic/settings.php:74
 msgid "Sender zipcode"
 msgstr "寄件人郵遞區號"
 
-#: includes/config/logistic/settings.php:76
+#: includes/config/logistic/settings.php:79
 msgid "Sender address"
 msgstr "寄件人地址"
 
-#: includes/config/logistic/settings.php:81
-#: includes/config/logistic/settings.php:85
+#: includes/config/logistic/settings.php:84
+#: includes/config/logistic/settings.php:88
 msgid "Keep shipping phone"
 msgstr "永遠顯示收件人行動電話"
 
@@ -365,11 +362,11 @@ msgstr "綠界設定"
 msgid "Enable ECPay gateway method"
 msgstr "啟用綠界金流"
 
-#: includes/config/main/settings.php:20 includes/config/main/settings.php:22
+#: includes/config/main/settings.php:19
 msgid "Enable ECPay shipping method"
 msgstr "啟用綠界物流"
 
-#: includes/config/main/settings.php:29 includes/config/main/settings.php:31
+#: includes/config/main/settings.php:28 includes/config/main/settings.php:30
 msgid "Enable ECPay invoice method"
 msgstr "啟用綠界電子發票"
 
@@ -478,11 +475,11 @@ msgstr "付款截止 (分)"
 msgid "CVS allowable payment deadline from 1 minute to 30 days."
 msgstr "超商代碼允許的繳費期限為 1分鐘到 30 天。"
 
-#: includes/config/payment/settings.php:24
+#: includes/config/payment/settings.php:27
 msgid "Show payment info in email"
 msgstr "信件內付款資訊"
 
-#: includes/config/payment/settings.php:26
+#: includes/config/payment/settings.php:29
 msgid "Enabled payment disp email"
 msgstr "保留訂單的信件顯示付款資訊"
 
@@ -571,7 +568,7 @@ msgid "Ecpay Payment Merchant Trade No %s"
 msgstr "綠界金流特店交易編號 %s"
 
 #: includes/services/logistic/ecpay-logistic-response.php:225
-#: includes/services/payment/woocommerce-gateway-cod.php:130
+#: includes/services/payment/woocommerce-gateway-cod.php:135
 #, php-format
 msgid "Change store %1$s (%2$s)"
 msgstr "變更門市 %1$s (%2$s)"
@@ -613,7 +610,7 @@ msgstr "超商條碼繳費期限超過限制，調整為預設值。"
 msgid "%1$s maximum amount more then normal maximum (%2$d)."
 msgstr "%1$s 最大訂購金額超過標準的限制 (%2$d)。"
 
-#: includes/services/payment/ecpay-gateway-barcode.php:85
+#: includes/services/payment/ecpay-gateway-barcode.php:82
 msgid "Pay via ECPay BARCODE"
 msgstr "透過綠界條碼付款"
 
@@ -634,15 +631,15 @@ msgstr "透過綠界信用卡付款"
 msgid "CVS payment deadline out of range. Set as default value."
 msgstr "超商代碼繳費期限超過限制，調整為預設值。"
 
-#: includes/services/payment/ecpay-gateway-cvs.php:83
+#: includes/services/payment/ecpay-gateway-cvs.php:78
 msgid "Pay via ECPay CVS"
 msgstr "透過綠界超商代碼付款"
 
-#: includes/services/payment/ecpay-gateway-response.php:53
+#: includes/services/payment/ecpay-gateway-response.php:59
 msgid "Payment completed"
 msgstr "付款完成"
 
-#: includes/services/payment/ecpay-gateway-response.php:132
+#: includes/services/payment/ecpay-gateway-response.php:138
 msgid "Payment failed within paid order"
 msgstr "已付款的訂單收到付款失敗訊息"
 
@@ -722,12 +719,12 @@ msgstr "Ecpay Plug for WooCommerce"
 msgid "ECPay Green World FinTech Service Co., Ltd."
 msgstr "綠界科技."
 
-#: includes/config/main/settings.php:23
+#: includes/config/main/settings.php:21
 #, php-format
 msgid "Enable ECPay shipping method <br> If you want to use the cash on delivery service for your shop, you must enable the ECPay gateway method and <a href=\"%1$s\">set up the delivery payment.</a>"
 msgstr "啟用綠界物流 <br> 若要使用超商貨到付款時,須啟用綠界金流且開啟 <a href=\"%1$s\">貨到付款金流設定</a>"
 
-#: /admin/settings/class-wooecpay-setting-main.php:81
+#: admin/settings/class-wooecpay-setting-main.php:82
 #, php-format
 msgid "When you disable the ECPay gateway method, the ECPay shipping method will be closed at the same time. Are you sure you want to disable the ECPay gateway method?"
 msgstr "關閉綠界金流服務時，將同時關閉綠界物流服務。確定要關閉金流服務嗎?"

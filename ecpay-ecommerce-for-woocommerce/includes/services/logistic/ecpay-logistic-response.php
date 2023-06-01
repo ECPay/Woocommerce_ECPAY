@@ -359,7 +359,7 @@ class Wooecpay_Logistic_Response
 
     protected function generate_trade_no($order_id, $order_prefix = '')
     {
-        $trade_no = $order_prefix . $order_id . 'SN' .(string) time() ;
+        $trade_no = $order_prefix . substr(str_pad($order_id, 8, '0', STR_PAD_LEFT), 0, 8) . 'SN' . substr(hash('sha256', (string) time()), -5) ;
         return substr($trade_no, 0, 20);
     }
 

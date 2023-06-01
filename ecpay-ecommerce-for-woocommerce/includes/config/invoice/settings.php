@@ -9,8 +9,11 @@ return [
         'title' => __('Order no prefix', 'ecpay-ecommerce-for-woocommerce'),
         'id' => 'wooecpay_invoice_prefix',
         'type' => 'text',
-        'desc' => __('Only letters and numbers allowed allowed.', 'ecpay-ecommerce-for-woocommerce'),
-        'desc_tip' => true
+        'desc' => __('Only a maximum of 5-character letters and numbers are allowed.', 'ecpay-ecommerce-for-woocommerce'),
+        'desc_tip' => true,
+        'custom_attributes' => [
+            'pattern' => '^[a-zA-Z0-9]{0,5}$',
+        ]
     ],
     [
         'name'     => __( 'Get mode', 'ecpay-ecommerce-for-woocommerce' ),

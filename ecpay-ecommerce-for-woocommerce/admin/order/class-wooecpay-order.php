@@ -1274,7 +1274,7 @@ class Wooecpay_Order
 
 	protected function get_relate_number($order_id, $order_prefix = '')
   {
-    $relate_no = $order_prefix . $order_id . 'SN' .(string) time() ;
+    $relate_no = $order_prefix . substr(str_pad($order_id, 8, '0', STR_PAD_LEFT), 0, 8) . 'SN' . substr(hash('sha256', (string) time()), -5) ;
     return substr($relate_no, 0, 20);
   }  
 

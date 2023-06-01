@@ -63,9 +63,6 @@ class Wooecpay_Gateway_Barcode extends Wooecpay_Gateway_Base
             $total = $this->get_order_total();
 
             if ($total > 0) {
-                if ($total < 30) {
-                    return false;
-                }
                 if ($this->min_amount > 0 and $total < $this->min_amount) {
                     return false;
                 }
