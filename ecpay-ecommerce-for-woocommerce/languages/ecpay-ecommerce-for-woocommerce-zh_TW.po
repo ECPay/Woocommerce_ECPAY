@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
 "POT-Creation-Date: 2023-05-25 09:52+0800\n"
-"PO-Revision-Date: 2023-05-25 10:26+0800\n"
+"PO-Revision-Date: 2023-10-31 09:49+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -532,6 +532,10 @@ msgstr "請確認輸入的手機條碼載具是否正確，或選擇其他載具
 msgid "Ecpay CVS 7-11"
 msgstr "綠界物流 超商取貨 7-ELEVEN"
 
+#: includes/services/logistic/ecpay-logistic-cvs-711-outside.php:12
+msgid "Ecpay CVS 7-11 Outside"
+msgstr "綠界物流 超商取貨 7-ELEVEN 離島"
+
 #: includes/services/logistic/ecpay-logistic-cvs-family.php:9
 msgid "Ecpay CVS Family"
 msgstr "綠界物流 超商取貨 全家便利店"
@@ -555,6 +559,10 @@ msgstr "綠界物流 宅配 中華郵政"
 #: includes/services/logistic/ecpay-logistic-home-tcat.php:9
 msgid "Ecpay Home Tcat"
 msgstr "綠界物流 宅配 黑貓"
+
+#: includes/services/logistic/ecpay-logistic-home-tcat-outside.php:9
+msgid "Ecpay Home Tcat Outside"
+msgstr "綠界物流 宅配 黑貓 離島"
 
 #: includes/services/logistic/ecpay-logistic-response.php:79
 #, php-format
@@ -728,6 +736,34 @@ msgstr "啟用綠界物流 <br> 若要使用超商貨到付款時,須啟用綠�
 #, php-format
 msgid "When you disable the ECPay gateway method, the ECPay shipping method will be closed at the same time. Are you sure you want to disable the ECPay gateway method?"
 msgstr "關閉綠界金流服務時，將同時關閉綠界物流服務。確定要關閉金流服務嗎?"
+
+#: admin/order/class-wooecpay-order.php:400
+msgid "The order update failed as the selected store does not match the chosen shipping method (Outlying Island/Main Island)."
+msgstr "訂單更新失敗，選擇門市地點與運送方式不符(離島/本島)。"
+
+#: admin/order/class-wooecpay-order.php:400
+msgid "Order Save Error"
+msgstr "訂單更新失敗"
+
+#: includes/services/logistic/class-wooecpay-logistic.php:177
+msgid "The selected shipping method does not match the shipping address. Please choose again."
+msgstr "選擇運送方式與宅配地點不符，請重新選擇。"
+
+#: includes/services/payment/woocommerce-gateway-cod.php:158
+msgid "The selected store does not match the chosen shipping method (Outlying Island/Main Island). Please select a different store or cancel the transaction and place a new order."
+msgstr "選擇門市地點與運送方式不符(離島/本島)，請重新選擇門市或取消交易重新下單。"
+
+#: includes/services/payment/woocommerce-gateway-cod.php:215
+msgid "The selected store does not match the chosen shipping method (Outlying Island/Main Island)."
+msgstr "選擇門市地點與運送方式不符(離島/本島)。"
+
+#: includes/config/logistic/settings.php:96
+msgid "Notice：<br>1. The option will only appear in the 「Shipping Method」 after activation.<br>2. If 「Ecpay CVS 7-11」 outlying islands shipping is not enabled, there will be no distinction between outlying island and main island shipments; shipping settings will be shared.<br>3. If 「Ecpay CVS 7-11」 outlying islands shipping is enabled, after selecting a store, it will verify if the chosen store aligns with the selected shipping method.<br>4. If 「Ecpay Home Tcat」 outlying islands shipping is not enabled, there will be no distinction between outlying island and main island shipments; shipping settings will be shared.<br>5. If 「Ecpay Home Tcat」 outlying islands shipping is enabled, it will verify before checkout whether the shipping destination matches the selected shipping method."
+msgstr "離島物流注意事項：<br>1. 啟用後才會在「運送方式」出現選項<br>2. 若未啟用「綠界物流 超商取貨 7-ELEVEN」離島物流，則不分本島離島，共用物流設定<br>3. 若啟用「綠界物流 超商取貨 7-ELEVEN」離島物流，選擇門市後會檢查所選門市是否與所選物流方式相符<br>4. 若未啟用「綠界物流 宅配 黑貓」離島物流，則不分本島離島，共用物流設定<br>5. 若啟用「綠界物流 宅配 黑貓」離島物流，結帳前會檢查運送地點是否與所選物流方式相符"
+
+#: includes/config/logistic/settings.php:91
+msgid "Enable ECPay outlying islands shipping"
+msgstr "啟用離島物流"
 
 #~ msgid "shipping fee"
 #~ msgstr "物流費用"

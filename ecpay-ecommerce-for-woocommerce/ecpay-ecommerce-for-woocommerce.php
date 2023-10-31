@@ -1,12 +1,12 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Green World FinTech Service Co., Ltd. (https://www.ecpay.com.tw)
- * @version 1.0.2305230
+ * @version 1.0.2306280
  *
  * Plugin Name: ECPay Ecommerce for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
  * Description: Ecpay Plug for WooCommerce
- * Version: 1.0.2305230
+ * Version: 1.0.2306280
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
@@ -20,13 +20,13 @@
 defined( 'ABSPATH' ) or exit;
 
 // 相關常數定義
-define( 'WOOECPAY_VERSION', '1.0.2305230' );
+define( 'WOOECPAY_VERSION', '1.0.2306280' );
 define( 'WOOECPAY_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WOOECPAY_PLUGIN_INCLUDE_DIR', WOOECPAY_PLUGIN_DIR.'includes' );
 
-// 
+//
 require_once(WOOECPAY_PLUGIN_DIR . '/vendor/autoload.php');
 
 // 相關載入程序
@@ -41,17 +41,17 @@ $plugin_order       = new Wooecpay_Order();
 
 if ('yes' === get_option('wooecpay_enabled_payment', 'yes')) {
     require plugin_dir_path( __FILE__ ) . 'includes/services/payment/class-wooecpay-gateway.php';
-    $plugin_payment     = new Wooecpay_Gateway();  
+    $plugin_payment     = new Wooecpay_Gateway();
 }
 
 if ('yes' === get_option('wooecpay_enabled_logistic', 'yes')) {
     require plugin_dir_path( __FILE__ ) . 'includes/services/logistic/class-wooecpay-logistic.php';
-    $plugin_logistic    = new Wooecpay_Logistic();  
+    $plugin_logistic    = new Wooecpay_Logistic();
 }
 
 if ('yes' === get_option('wooecpay_enabled_invoice', 'yes')) {
     require plugin_dir_path( __FILE__ ) . 'includes/services/invoice/class-wooecpay-invoice.php';
-    $plugin_invoice     = new Wooecpay_invoice();  
+    $plugin_invoice     = new Wooecpay_invoice();
 }
 
 
