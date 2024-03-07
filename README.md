@@ -6,7 +6,7 @@
 
 
 
-* 綠界科技外掛套件，提供合作特店賣家以及個人賣家會員使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
+* 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
 
 
 目錄
@@ -26,34 +26,30 @@
 -----------------
 | Wordpress  | WooCommerce | PHP |
 | :---------: | :----------: | :----------: |
-| 6.0 | 6.5.1 | 7.4 |
+| 6.4.2 | 8.4.0 | 8.2 |
 
 
 安裝
 -----------------
-#### 方法一:Wordpress 市集網址
-- 建議透過 Wordpress 市集直接下載安裝
-https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
+#### 解壓縮套件檔
+將下載的套件檔解壓縮，解壓縮完成後中會有一份壓縮檔「ecpay-ecommerce-for-woocommerce.zip」，用來上傳的外掛模組。
 
-#### 方法二：透過GITHUB下載套件檔
-- 將下載的套件檔解壓縮，解壓縮完成後中會有一份壓縮檔「ecpay-ecommerce-for-woocommerce.zip」，用來上傳的外掛模組。
+#### 上傳模組
+`購物車後台` -> `外掛(Plugins)` -> `安裝外掛(Add New)` -> `上傳外掛(Upload Plugin)` -> `選擇檔案(選擇壓縮檔「wooecpay.zip」)`-> `立即安裝(Install Now)`。
 
--  上傳模組
-    - `購物車後台` -> `外掛(Plugins)` -> `安裝外掛(Add New)` -> `上傳外掛(Upload Plugin)` -> `選擇檔案(選擇壓縮檔「wooecpay.zip」)`-> `立即安裝(Install Now)`。
-
-- 啟用模組
-  - 安裝完成後，畫面會顯示是否安裝成功，若安裝成功會出現`啟用外掛(Active Plugin)`的按鈕，按下`啟用外掛(Active Plugin)`後即可開始使用綠界模組。
+#### 啟用模組
+安裝完成後，畫面會顯示是否安裝成功，若安裝成功會出現`啟用外掛(Active Plugin)`的按鈕，按下`啟用外掛(Active Plugin)`後即可開始使用綠界模組。
 
 設定與功能項目
 -----------------
 
 #### 參數設定
-- 設定路徑
-  - `購物車後台` -> `WooCommerce` -> `設定(Settings)`，點選綠界科技分頁。
+##### 設定路徑
+- `購物車後台` -> `WooCommerce` -> `設定(Settings)`，點選綠界科技分頁。
 
-#### 主要設定
+##### 主要設定
 - 您可在此勾選需要啟用的綠界服務。
-#### 金流設定
+##### 金流設定
 - 您可在此設定金流相關參數。
     - 訂單編號前綴
     - 綠界訂單顯示商品名稱
@@ -62,7 +58,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
     - 金鑰(Hash Key)
     - 向量(Hash IV)
 
-#### 物流設定
+##### 物流設定
 - 您可在此設定物流相關參數。
     - 訂單編號前綴
     - 自動建立物流訂單
@@ -71,6 +67,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
     - 寄件人手機
     - 寄件人郵遞區號
     - 寄件人地址
+    - 啟用離島物流
     - 啟用測試模式
     - 商店代號(Merchant ID)
     - 金鑰(Hash Key)
@@ -78,7 +75,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 
 - 您需要至 `運送方式` -> `運送區域`-> `編輯` -> `新增運送方式` ，加入要提供的綠界物流種類，並可進入個別物流種類中編輯運費、免運以及啟用門檻。
 
-#### 電子發票設定
+##### 電子發票設定
 - 您可在此設定電子發票相關參數。
     - 訂單編號前綴
     - 開立發票模式
@@ -89,7 +86,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
     - 商店代號(Merchant ID)
     - 金鑰(Hash Key)
     - 向量(Hash IV)
-#### 注意事項
+##### 注意事項
 - 如需超商取貨付款功能，請至 - `購物車後台` -> `WooCommerce` -> `設定(Settings)` -> `付款` -> `貨到付款` -> `啟用運送方式` ，加入超商取貨付款的物流種類。
 
 #### 後台訂單
@@ -109,7 +106,7 @@ https://tw.wordpress.org/plugins/ecpay-ecommerce-for-woocommerce/
 附錄
 -----------------
 
-### 測試串接參數
+#### 測試串接參數
 
 |  | 特店編號(MerchantID) | HashKey | HashIV |
 | -------- | -------- | -------- | -------- |

@@ -2,14 +2,17 @@
 
 class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
 {
+    protected $payment_type;
+    protected $min_amount;
+    protected $number_of_periods;
 
     public function __construct()
     {
         $this->id                   = 'Wooecpay_Gateway_Credit_Installment';
         $this->payment_type         = 'Credit';
-        $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
+        $this->icon                 = plugins_url('images/icon.png', dirname(dirname(__FILE__)));
         $this->has_fields           = true;
-        $this->method_title         = '綠界信用卡(分期)';
+        $this->method_title         = __('ECPay Credit Installment', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界信用卡(分期)付款';
 
         $this->title                = $this->get_option('title');
@@ -33,12 +36,10 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
     public function is_available()
     {
         if ('yes' == $this->enabled && WC()->cart) {
-
             if (empty($this->number_of_periods)) {
                 return false;
             }
             $total = $this->get_order_total();
-
             if ($total > 0) {
                 if ($this->min_amount > 0 && $total < $this->min_amount) {
                     return false;
@@ -52,26 +53,22 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
     public function payment_fields()
     {
         parent::payment_fields();
-
         $total = $this->get_order_total();
 
         echo '<p>' . _x('Number of periods', 'Checkout info', 'ecpay-ecommerce-for-woocommerce');
         echo '<select name="ecpay_number_of_periods">';
-        
+
         foreach ($this->number_of_periods as $number_of_periods) {
-
             // 圓夢分期有2W的限制
-            if($number_of_periods == 30){
-
-                if($total >= 20000){
+            if ($number_of_periods == 30) {
+                if ($total >= 20000) {
                     echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
                 }
-
-            } else {
+            } 
+            else {
                 echo '<option value="' . esc_attr($number_of_periods) . '">' . wp_kses_post($number_of_periods) . '</option>';
             }
         }
-
         echo '</select>';
     }
 

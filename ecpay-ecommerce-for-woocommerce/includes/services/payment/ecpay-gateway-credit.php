@@ -2,6 +2,8 @@
 
 class Wooecpay_Gateway_Credit extends Wooecpay_Gateway_Base
 {
+    protected $payment_type;
+    protected $min_amount;
 
     public function __construct()
     {
@@ -9,7 +11,7 @@ class Wooecpay_Gateway_Credit extends Wooecpay_Gateway_Base
         $this->payment_type         = 'Credit';
         $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
         $this->has_fields           = false;
-        $this->method_title         = '綠界信用卡';
+        $this->method_title         = __('ECPay Credit', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界信用卡付款';
 
         $this->title                = $this->get_option('title');

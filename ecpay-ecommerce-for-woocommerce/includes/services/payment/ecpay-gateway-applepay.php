@@ -2,6 +2,8 @@
 
 class Wooecpay_Gateway_Applepay extends Wooecpay_Gateway_Base
 {
+    protected $payment_type;
+    protected $min_amount;
 
     public function __construct()
     {
@@ -9,7 +11,7 @@ class Wooecpay_Gateway_Applepay extends Wooecpay_Gateway_Base
         $this->payment_type         = 'ApplePay';
         $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
         $this->has_fields           = false;
-        $this->method_title         = '綠界ApplePay';
+        $this->method_title         = __('ECPay ApplePay', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界ApplePay付款';
 
         $this->title                = $this->get_option('title');
@@ -44,8 +46,8 @@ class Wooecpay_Gateway_Applepay extends Wooecpay_Gateway_Base
         return parent::is_available();
     }
 
-    public function process_payment($order_id){
-       
+    public function process_payment($order_id) 
+    {
         $order = wc_get_order($order_id);
         $order->add_order_note(__('Pay via ECPay Applepay', 'ecpay-ecommerce-for-woocommerce'));
         wc_maybe_reduce_stock_levels($order_id);

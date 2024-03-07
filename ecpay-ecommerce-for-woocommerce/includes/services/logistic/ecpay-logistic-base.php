@@ -7,7 +7,11 @@ use Ecpay\Sdk\Exceptions\RtnException;
 
 class Wooecpay_Logistic_Base extends WC_Shipping_Method
 {
-     public function __construct()
+    protected $min_amount;
+    protected $cost;
+    protected $cost_requires;
+
+    public function __construct()
     {
         $this->init_settings(); // This is part of the settings API. Loads settings you previously init.
 

@@ -1,11 +1,9 @@
 // (物流)變更門市-後台訂單頁
 function ecpayChangeStore() {
     var changeStore = document.getElementById('ecpay-form');
-    console.log('testsetse');
-    console.log(changeStore);
+
     map = window.open('','ecpay_map',config='height=790px,width=1020px');
 
-    console.log(map)
     if (map) {
         changeStore.submit();
     }
@@ -70,5 +68,43 @@ function wooecpayInvalidInvoice(order_id) {
         window.location.reload();
 
         jQuery.unblockUI()
+    });
+}
+
+// (金流)標示綠界重複付款訂單已處理
+function wooecpayDuplicatePaymentComplete(order_id, merchant_trade_no_list) {
+
+    query = {
+        action: 'duplicate_payment_complete',
+        order_id: order_id,
+        merchant_trade_no_list: merchant_trade_no_list
+    };
+
+    jQuery.blockUI({ message: null });
+
+    jQuery.post(ajaxurl, query, function(response) {
+
+        var response_info = jQuery.parseJSON(response);
+        window.location.reload();
+
+        jQuery.unblockUI()
+    });
+}
+
+// (工具)清理 Log
+function wooecpayClearEcpayDebugLog() {
+
+    query = {
+        action: 'clear_ecpay_debug_log'
+    };
+
+    jQuery.post(ajaxurl, query, function(response) {
+        //
+    })
+    .success (function() {
+        alert('Log 已清空!');
+    })
+    .error (function () {
+        console.log('清理Log失敗')
     });
 }

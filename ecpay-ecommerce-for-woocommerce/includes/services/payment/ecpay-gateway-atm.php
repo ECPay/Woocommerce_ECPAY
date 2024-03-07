@@ -2,18 +2,21 @@
 
 class Wooecpay_Gateway_Atm extends Wooecpay_Gateway_Base
 {
-
+    protected $payment_type;
+    protected $expire_date;
+    protected $min_amount;
+    
     public function __construct()
     {
         $this->id                   = 'Wooecpay_Gateway_Atm';
         $this->payment_type         = 'ATM';
-        $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
+        $this->icon                 = plugins_url('images/icon.png', dirname(dirname(__FILE__)));
         $this->has_fields           = false;
-        $this->method_title         = '綠界ATM櫃員機';
+        $this->method_title         = __('ECPay ATM', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界ATM櫃員機付款';
 
-        $this->title                = $this->get_option( 'title' );
-        $this->description          = $this->get_option( 'description' );
+        $this->title                = $this->get_option('title');
+        $this->description          = $this->get_option('description');
         $this->expire_date          = (int) $this->get_option('expire_date', 3);
         $this->min_amount           = (int) $this->get_option('min_amount', 0);
         $this->max_amount           = (int) $this->get_option('max_amount', 0);
@@ -40,7 +43,7 @@ class Wooecpay_Gateway_Atm extends Wooecpay_Gateway_Base
         // 付款時間判斷
         $_POST['woocommerce_' . $this->id . '_expire_date'] = (int) $_POST['woocommerce_' . $this->id . '_expire_date'];
 
-        if ( $_POST['woocommerce_' . $this->id . '_expire_date'] < 1 || $_POST['woocommerce_' . $this->id . '_expire_date'] > 60) {
+        if ($_POST['woocommerce_' . $this->id . '_expire_date'] < 1 || $_POST['woocommerce_' . $this->id . '_expire_date'] > 60) {
             $_POST['woocommerce_' . $this->id . '_expire_date'] = 3;
             WC_Admin_Settings::add_error(sprintf(__('%s ATM payment deadline out of range. Set as default value.', 'ecpay-ecommerce-for-woocommerce'), $this->method_title));
         }
@@ -52,15 +55,11 @@ class Wooecpay_Gateway_Atm extends Wooecpay_Gateway_Base
     public function is_available()
     {
         if ('yes' == $this->enabled && WC()->cart) {
-
             $total = $this->get_order_total();
-
             if ($total > 0) {
-
                 if ($this->min_amount > 0 && $total < $this->min_amount) {
                     return false;
                 }
-
                 if ($this->max_amount > 0 && $total > $this->max_amount) {
                     return false;
                 }

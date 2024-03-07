@@ -99,7 +99,7 @@ return [
             'Wooecpay_Logistic_Home_Tcat' => __('Ecpay Home Tcat', 'ecpay-ecommerce-for-woocommerce'),
         ],
         'custom_attributes' => [
-            'data-placeholder' => __('Ecpay shipping methods ', 'ecpay-ecommerce-for-woocommerce'),
+            'data-placeholder' => __('Ecpay shipping methods', 'ecpay-ecommerce-for-woocommerce'),
         ],
     ],
 
@@ -117,7 +117,7 @@ return [
         'type'     => 'checkbox',
         'desc'     => __( 'ECPay sandbox', 'ecpay-ecommerce-for-woocommerce'),
         'id'       => 'wooecpay_enabled_logistic_stage',
-        'default'  => 'no',
+        'default'  => 'yes',
         'desc' => __('ECPay sandbox', 'ecpay-ecommerce-for-woocommerce')
     ],
     [

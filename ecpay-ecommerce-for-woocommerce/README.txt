@@ -3,21 +3,24 @@ Contributors: ecpaytechsupport
 Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.0
-Requires PHP: 7.4
-Stable tag: 1.0.2306280
+Requires PHP: 8.2
+Stable tag: 1.1.2312190
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Frequently Asked Questions ==
 = 系統需求 =
 
-- PHP version 7.4
+- PHP version 8.1
 - MySQL version 5.7 or greater
 
 = 其它問題 =
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2312190
+支援 HPOS
 
 v1.0.22007080
 修正相容性至 WordPress Version 6.0
@@ -37,7 +40,23 @@ v1.0.2306280
 修正稅金啟用發票開立失敗問題
 新增黑貓、7-11離島物流設定
 
- == Upgrade Notice ==
+v1.0.2309210
+調整建立綠界金流訂單及綠界物流訂單，帶入綠界的時間參數(MerchantTradeDate)，改用 WordPress function date_i18n() 取得時間
+
+v1.0.2309210
+調整API URL符合永久連結設定
+
+v1.0.2310050
+新增定期定額付款方式
+
+v1.1.2311240
+修正相容性至 WordPress Version 6.3.1
+修正相容性至 WooCommerce Version 8.1.1
+新增歐付寶TWQR行動支付付款方式
+新增無卡分期付款方式
+綠界服務優化設定
+
+== Upgrade Notice ==
 
 Upgrade Notice 請使用https://github.com/ECPay/Woocommerce_ECPAY
 
@@ -53,7 +72,7 @@ Upgrade Notice 請使用https://github.com/ECPay/Woocommerce_ECPAY
 
 == Description ==
 
-* 綠界科技外掛套件，提供合作特店以及個人會員使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
+* 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
 
 
 目錄

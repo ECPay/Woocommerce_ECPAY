@@ -2,6 +2,9 @@
 
 class Wooecpay_Gateway_Cvs extends Wooecpay_Gateway_Base
 {
+    protected $payment_type;
+    protected $expire_date;
+    protected $min_amount;
 
     public function __construct()
     {
@@ -9,7 +12,7 @@ class Wooecpay_Gateway_Cvs extends Wooecpay_Gateway_Base
         $this->payment_type         = 'CVS';
         $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
         $this->has_fields           = false;
-        $this->method_title         = '綠界超商代碼';
+        $this->method_title         = __('ECPay Cvs', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界超商代碼付款';
 
         $this->title                = $this->get_option('title');

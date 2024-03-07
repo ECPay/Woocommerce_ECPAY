@@ -33,7 +33,7 @@ return [
         ]
     ],
     'max_amount' => [
-        'title' => __('Maximum order amount', 'ecpay-ecommerce-for-woocommerce'),
+        'title' => __('A maximum order amount', 'ecpay-ecommerce-for-woocommerce'),
         'type' => 'number',
         'default' => 0,
         'placeholder' => 0,
