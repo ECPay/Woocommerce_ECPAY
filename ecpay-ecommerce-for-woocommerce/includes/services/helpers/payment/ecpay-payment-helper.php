@@ -469,7 +469,7 @@ class Wooecpay_Payment_Helper
         $merchant_trade_no_list = [];
 
 		// 取得訂單付款方式
-		$payment_method = $order->get_meta('_payment_method', true);
+		$payment_method = $order->get_payment_method();
 
         // 取得重複付款訂單的綠界金流特店交易編號
         $merchant_trade_no_list = $this->get_duplicate_payment_orders_merchant_trade_no($order->get_id());

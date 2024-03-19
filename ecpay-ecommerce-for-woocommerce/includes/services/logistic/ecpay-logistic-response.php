@@ -51,7 +51,7 @@ class Wooecpay_Logistic_Response {
                             if (!$is_valid) {
                                 $confirm_msg         = __('The selected store does not match the chosen shipping method (Outlying Island/Main Island). Please select a different store or cancel the transaction and place a new order.', 'ecpay-ecommerce-for-woocommerce');
                                 $encryption_order_id = $this->logisticHelper->encrypt_order_id($order_id);
-                                $url                 = WC()->api_request_url('wooecpay_logistic_redirect_map', true) . '&id=' . $encryption_order_id;
+                                $url                 = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_redirect_map', true)) . 'id=' . $encryption_order_id;
 
                                 // 提示訊息
                                 echo '<script>';

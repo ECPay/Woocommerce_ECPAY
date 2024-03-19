@@ -105,53 +105,52 @@ class Wooecpay_Order {
             echo '<style>.logistic_button_display {display: inline-block;}</style>';
         }
 
-        echo wp_kses_post('<p><strong>帳單姓名:<br/></strong>' . $order->get_meta('_billing_last_name', true) . ' ' . $order->get_meta('_billing_first_name', true) . '</p>');
+        echo wp_kses_post('<p><strong>帳單姓名:<br/></strong>' . $order->get_billing_last_name() . ' ' . $order->get_billing_first_name() . '</p>');
     }
 
     /**
      * 訂單金流資訊回傳
      */
     public function add_payment_info($order) {
-
-        $payment_method = $order->get_meta('_payment_method', true);
+        $payment_method = $order->get_payment_method();
 
         echo '<p>&nbsp;</p>';
         echo '<h3>' . __('Gateway info', 'ecpay-ecommerce-for-woocommerce') . '</h3>';
 
-        echo wp_kses_post('<p><strong>' . __('Payment Type', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_payment_method_title', true) . '</p>');
+        echo wp_kses_post('<p><strong>' . __('Payment Type', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_payment_method_title() . '</p>');
 
         switch ($payment_method) {
-        case 'Wooecpay_Gateway_Credit':
-            echo wp_kses_post('<p><strong>信用卡前六碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card6no', true) . '</p>');
-            echo wp_kses_post('<p><strong>信用卡後四碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card4no', true) . '</p>');
-            break;
-        case 'Wooecpay_Gateway_Credit_Installment':
-            echo wp_kses_post('<p><strong>期數:&nbsp;</strong>' . $order->get_meta('_ecpay_payment_number_of_periods', true) . '數</p>');
-            break;
-        case 'Wooecpay_Gateway_Atm':
-            echo wp_kses_post('<p><strong>' . __('Bank code', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_BankCode', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('ATM No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_vAccount', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_ExpireDate', true) . '</p>');
-            break;
-        case 'Wooecpay_Gateway_Cvs':
-            echo wp_kses_post('<p><strong>' . __('CVS No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_cvs_PaymentNo', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_cvs_ExpireDate', true) . '</p>');
-            break;
-        case 'Wooecpay_Gateway_Barcode':
-            echo wp_kses_post('<p><strong>' . __('barcode one', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode1', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('barcode two', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode2', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('barcode three', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode3', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_ExpireDate', true) . '</p>');
-            break;
-        case 'Wooecpay_Gateway_Twqr':
-            echo wp_kses_post('<p><strong>' . __('TWQR trade no', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_twqr_trad_no', true) . '</p>');
-            break;
-        case 'Wooecpay_Gateway_Bnpl':
-            echo wp_kses_post('<p><strong>' . __('BNPL Trade No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLTradeNo', true) . '</p>');
-            echo wp_kses_post('<p><strong>' . __('BNPL Installment', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLInstallment', true) . '</p>');
-            break;
-        default:
-            break;
+            case 'Wooecpay_Gateway_Credit':
+                echo wp_kses_post('<p><strong>信用卡前六碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card6no', true) . '</p>');
+                echo wp_kses_post('<p><strong>信用卡後四碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card4no', true) . '</p>');
+                break;
+            case 'Wooecpay_Gateway_Credit_Installment':
+                echo wp_kses_post('<p><strong>期數:&nbsp;</strong>' . $order->get_meta('_ecpay_payment_number_of_periods', true) . '數</p>');
+                break;
+            case 'Wooecpay_Gateway_Atm':
+                echo wp_kses_post('<p><strong>' . __('Bank code', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_BankCode', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('ATM No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_vAccount', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_atm_ExpireDate', true) . '</p>');
+                break;
+            case 'Wooecpay_Gateway_Cvs':
+                echo wp_kses_post('<p><strong>' . __('CVS No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_cvs_PaymentNo', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_cvs_ExpireDate', true) . '</p>');
+                break;
+            case 'Wooecpay_Gateway_Barcode':
+                echo wp_kses_post('<p><strong>' . __('barcode one', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode1', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('barcode two', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode2', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('barcode three', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_Barcode3', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('Payment deadline', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_barcode_ExpireDate', true) . '</p>');
+                break;
+            case 'Wooecpay_Gateway_Twqr':
+                echo wp_kses_post('<p><strong>' . __('TWQR trade no', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_twqr_trad_no', true) . '</p>');
+                break;
+            case 'Wooecpay_Gateway_Bnpl':
+                echo wp_kses_post('<p><strong>' . __('BNPL Trade No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLTradeNo', true) . '</p>');
+                echo wp_kses_post('<p><strong>' . __('BNPL Installment', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLInstallment', true) . '</p>');
+                break;
+            default:
+                break;
         }
     }
 
@@ -173,7 +172,7 @@ class Wooecpay_Order {
             ) {
 
                 // 判斷金流方式
-                $payment_method = $order->get_meta('_payment_method', true);
+                $payment_method = $order->get_payment_method();
 
                 if (
                     $payment_method == 'Wooecpay_Gateway_Credit' ||
@@ -363,11 +362,12 @@ class Wooecpay_Order {
      * 複寫聯絡電話至收件人電話
      */
     public function order_update_sync_shipping_phone($post_id) {
+        if ($order = wc_get_order($post_id)) {
+            $shipping_phone = (!empty($order->get_shipping_phone())) ?: $order->get_billing_phone();
 
-        $shipping_phone = $order->get_meta('_shipping_phone', true);
-
-        $order->update_meta_data('wooecpay_shipping_phone', $shipping_phone);
-        $order->save();
+            $order->update_meta_data('wooecpay_shipping_phone', $shipping_phone);
+            $order->save();
+        }
     }
 
     public function ecpay_validate_logistic_fields($post_id, $data) {

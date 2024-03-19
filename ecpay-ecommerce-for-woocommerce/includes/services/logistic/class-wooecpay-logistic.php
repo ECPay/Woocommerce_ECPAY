@@ -178,21 +178,23 @@ class Wooecpay_Logistic {
         $chosen_shipping = $this->get_chosen_shipping_method_ids();
         $chosen_shipping = (empty($chosen_shipping)) ? '' : $chosen_shipping[0];
 
-        // 收件人姓名檢查
-        $error_message = $this->logisticHelper->validate_shipping_field('name', $data['shipping_last_name'] . $data['shipping_first_name']);
-        if ($error_message != '') {
-            $errors->add('validation', $error_message);
-        }
+        if (WC()->cart->needs_shipping() && WC()->cart->show_shipping() && $this->logisticHelper->is_ecpay_logistics($chosen_shipping)) {
+            // 收件人姓名檢查
+            $error_message = $this->logisticHelper->validate_shipping_field('name', $data['shipping_last_name'] . $data['shipping_first_name']);
+            if ($error_message != '') {
+                $errors->add('validation', $error_message);
+            }
 
-        // 驗證收件人電話
-        $error_message = $this->logisticHelper->validate_shipping_field('phone', $data['billing_phone']);
-        if ($error_message != '') {
-            $errors->add('validation', $error_message);
-        }
+            // 驗證收件人電話
+            $error_message = $this->logisticHelper->validate_shipping_field('phone', $data['billing_phone']);
+            if ($error_message != '') {
+                $errors->add('validation', $error_message);
+            }
 
-        // 黑貓宅配離島檢查
-        if (in_array($chosen_shipping, ['Wooecpay_Logistic_Home_Tcat', 'Wooecpay_Logistic_Home_Tcat_Outside']) && in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
-            $this->wooecpay_check_logistic_home_fields($data, $errors, $chosen_shipping);
+            // 黑貓宅配離島檢查
+            if (in_array($chosen_shipping, ['Wooecpay_Logistic_Home_Tcat', 'Wooecpay_Logistic_Home_Tcat_Outside']) && in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
+                $this->wooecpay_check_logistic_home_fields($data, $errors, $chosen_shipping);
+            }
         }
     }
 

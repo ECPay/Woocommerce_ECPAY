@@ -4,7 +4,7 @@ Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, 
 Requires at least: 6.0
 Tested up to: 6.0
 Requires PHP: 8.2
-Stable tag: 1.1.2312190
+Stable tag: 1.1.2403150
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2403150
+修正貨到付款使用永久連結結帳失敗問題
+修正虛擬商品結帳失敗問題
 
 v1.1.2312190
 支援 HPOS

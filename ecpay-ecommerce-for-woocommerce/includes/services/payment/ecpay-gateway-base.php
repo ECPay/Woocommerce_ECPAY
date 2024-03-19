@@ -42,7 +42,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                 $shippping_tag      = true;
             }
 
-            ecpay_log('物流方式-' . $shipping_method_id, 'A00002', $order_id);
+            ecpay_log('物流方式-' . print_r($shipping_method_id, true), 'A00002', $order_id);
 
             if ($shippping_tag && $this->logisticHelper->is_ecpay_cvs_logistics($shipping_method_id)) {
 

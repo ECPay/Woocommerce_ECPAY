@@ -29,18 +29,20 @@ class Wooecpay_Gateway_Cod extends Wooecpay_Gateway_Base {
         // 付款方式
         $payment_method = $orderInfo->get_payment_method();
 
-        // 物流方式
-        $shipping_method_id = $orderInfo->get_items('shipping');
-        $shipping_method_id = reset($shipping_method_id);
-        $shipping_method_id = $shipping_method_id->get_method_id();
-
         if ($payment_method == 'cod') {
+
+            // 物流方式
+            $shipping_method_id = $orderInfo->get_items('shipping');
+            $shipping_method_id = reset($shipping_method_id);
+            $shipping_method_id = $shipping_method_id ? $shipping_method_id->get_method_id() : '';
+
             // 紀錄訂單付款資訊進 DB
             $this->paymentHelper->insert_ecpay_orders_payment_status($orderInfo->get_id(), $payment_method, '', 1);
 
             if ($this->logisticHelper->is_ecpay_logistics($shipping_method_id)) {
                 $encryption_order_id  = $this->logisticHelper->encrypt_order_id($orderInfo->get_id());
-                $redirect_cvs_map_url = WC()->api_request_url('wooecpay_logistic_redirect_map_preprocessor', true) . '&id=' . $encryption_order_id;
+                $redirect_cvs_map_url = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_redirect_map_preprocessor', true)) . 'id=' . $encryption_order_id;
+
                 return $redirect_cvs_map_url;
             }
         }
@@ -75,7 +77,7 @@ class Wooecpay_Gateway_Cod extends Wooecpay_Gateway_Base {
             $shippping_tag &&
             $this->logisticHelper->is_ecpay_cvs_logistics($shipping_method_id)
         ) {
-            $client_back_url   = WC()->api_request_url('wooecpay_logistic_map_response', true) . '&id=' . $id;
+            $client_back_url   = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_map_response', true)) . 'id=' . $id;
             $api_logistic_info = $this->logisticHelper->get_ecpay_logistic_api_info('map');
             $MerchantTradeNo   = $this->logisticHelper->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
             $LogisticsType     = $this->logisticHelper->get_logistics_sub_type($shipping_method_id);
@@ -205,8 +207,8 @@ class Wooecpay_Gateway_Cod extends Wooecpay_Gateway_Base {
                     // 重導地圖API
                     $confirm_msg = __('The selected store does not match the chosen shipping method (Outlying Island/Main Island). Please select a different store or cancel the transaction and place a new order.', 'ecpay-ecommerce-for-woocommerce');
 
-                    $redirect_cvs_map_url = WC()->api_request_url('wooecpay_logistic_redirect_map_preprocessor', true) . '&id=' . $id;
-                    $canceled_url         = WC()->api_request_url('wooecpay_logistic_cancel_order_cod', true) . '&id=' . $id;
+                    $redirect_cvs_map_url = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_redirect_map_preprocessor', true)) . 'id=' . $id;
+                    $canceled_url = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_cancel_order_cod', true)) . 'id=' . $id;
 
                     // 提示訊息
                     echo '<script> ';
@@ -228,7 +230,7 @@ class Wooecpay_Gateway_Cod extends Wooecpay_Gateway_Base {
         // 物流方式
         $shipping_method_id = $order->get_items('shipping');
         $shipping_method_id = reset($shipping_method_id);
-        $shipping_method_id = $shipping_method_id->get_method_id();
+        $shipping_method_id = $shipping_method_id ? $shipping_method_id->get_method_id() : '';
 
         if ($this->logisticHelper->is_ecpay_cvs_logistics($shipping_method_id)) {
             $order_status = 'pending';

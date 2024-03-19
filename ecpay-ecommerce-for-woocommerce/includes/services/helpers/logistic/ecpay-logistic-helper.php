@@ -554,6 +554,12 @@ class Wooecpay_Logistic_Helper {
         ];
     }
 
+    public function get_permalink($url) {
+        // 產生符合永久連結格式的API URL
+        $symbol = (strpos($url, '?') === false) ? '?' : '&';
+        return $url . $symbol;
+    }
+
     public function generate_ecpay_map_form($shipping_method_id, $order_id) {
         $api_logistic_info = $this->get_ecpay_logistic_api_info('map');
         $client_back_url   = WC()->api_request_url('wooecpay_change_logistic_map_callback', true);

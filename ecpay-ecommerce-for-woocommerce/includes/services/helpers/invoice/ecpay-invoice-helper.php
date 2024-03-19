@@ -463,7 +463,7 @@ class Wooecpay_Invoice_Helper {
             $wooecpay_invoice_dalay_date = (int) $wooecpay_invoice_dalay_date;
 
             // 取得付款方式，判斷是否紀錄發票備註
-            $payment_method = $order->get_meta('_payment_method', true);
+            $payment_method = $order->get_payment_method();
 
             if (empty($wooecpay_invoice_dalay_date)) {
                 // 立即開立
