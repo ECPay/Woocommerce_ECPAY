@@ -6,6 +6,7 @@ use Ecpay\Sdk\Response\VerifiedArrayResponse;
 use Helpers\Logistic\Wooecpay_Logistic_Helper;
 use Helpers\Payment\Wooecpay_Payment_Helper;
 
+#[AllowDynamicProoerties]
 class Wooecpay_Gateway_Response {
     protected $logisticHelper;
     protected $paymentHelper;

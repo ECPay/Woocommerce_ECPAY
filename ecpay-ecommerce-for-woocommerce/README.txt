@@ -2,22 +2,27 @@
 Contributors: ecpaytechsupport
 Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
-Tested up to: 6.0
+Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2403150
+Stable tag: 1.1.2406060
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Frequently Asked Questions ==
 = 系統需求 =
 
-- PHP version 8.1
+- PHP version 8.2
 - MySQL version 5.7 or greater
 
 = 其它問題 =
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2406060
+測試相容性至 WordPress Version 6.5.3
+修正因 PHP8.2 棄用動態變數及參數初始值造成的錯誤
+修正離島物流預設值型態錯誤造成的問題
 
 v1.1.2403150
 修正貨到付款使用永久連結結帳失敗問題
@@ -26,39 +31,39 @@ v1.1.2403150
 v1.1.2312190
 支援 HPOS
 
-v1.0.22007080
-修正相容性至 WordPress Version 6.0
-修正相容性至 WooCommerce Version 6.5.1
-
-v1.0.221123
-修正自動物流訂單姓名欄位倒置問題
-增加中華郵政物流
-
-v1.0.2304120
-綠界服務優化設定
-
-v1.0.2305230
-修正前綴詞長度設定過長會造成訂單重覆問題
-
-v1.0.2306280
-修正稅金啟用發票開立失敗問題
-新增黑貓、7-11離島物流設定
-
-v1.0.2309210
-調整建立綠界金流訂單及綠界物流訂單，帶入綠界的時間參數(MerchantTradeDate)，改用 WordPress function date_i18n() 取得時間
-
-v1.0.2309210
-調整API URL符合永久連結設定
-
-v1.0.2310050
-新增定期定額付款方式
-
 v1.1.2311240
 修正相容性至 WordPress Version 6.3.1
 修正相容性至 WooCommerce Version 8.1.1
 新增歐付寶TWQR行動支付付款方式
 新增無卡分期付款方式
 綠界服務優化設定
+
+v1.0.2310050
+新增定期定額付款方式
+
+v1.0.2309210
+調整API URL符合永久連結設定
+
+v1.0.2308160
+調整建立綠界金流訂單及綠界物流訂單，帶入綠界的時間參數(MerchantTradeDate)，改用 WordPress function date_i18n() 取得時間
+
+v1.0.2306280
+修正稅金啟用發票開立失敗問題
+新增黑貓、7-11離島物流設定
+
+v1.0.2305230
+修正前綴詞長度設定過長會造成訂單重覆問題
+
+v1.0.2304120
+綠界服務優化設定
+
+v1.0.221123
+修正自動物流訂單姓名欄位倒置問題
+增加中華郵政物流
+
+v1.0.22007080
+修正相容性至 WordPress Version 6.0
+修正相容性至 WooCommerce Version 6.5.1
 
 == Upgrade Notice ==
 

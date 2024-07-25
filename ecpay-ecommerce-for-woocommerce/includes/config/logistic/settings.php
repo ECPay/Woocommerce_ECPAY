@@ -92,7 +92,7 @@ return [
         'id' => 'wooecpay_enabled_logistic_outside',
         'type' => 'multiselect',
         'class' => 'wc-enhanced-select',
-        'default' => '',
+        'default' => [],
         'desc' => __('Notice：<br>1. The option will only appear in the 「Shipping Method」 after activation.<br>2. If 「Ecpay CVS 7-11」 outlying islands shipping is not enabled, there will be no distinction between outlying island and main island shipments; shipping settings will be shared.<br>3. If 「Ecpay CVS 7-11」 outlying islands shipping is enabled, after selecting a store, it will verify if the chosen store aligns with the selected shipping method.<br>4. If 「Ecpay Home Tcat」 outlying islands shipping is not enabled, there will be no distinction between outlying island and main island shipments; shipping settings will be shared.<br>5. If 「Ecpay Home Tcat」 outlying islands shipping is enabled, it will verify before checkout whether the shipping destination matches the selected shipping method.', 'ecpay-ecommerce-for-woocommerce'),
         'options' => [
             'Wooecpay_Logistic_CVS_711'   => __('Ecpay CVS 7-11', 'ecpay-ecommerce-for-woocommerce'),
