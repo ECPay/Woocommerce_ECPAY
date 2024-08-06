@@ -1,0 +1,40 @@
+{
+  "name": "ecpay-ecommerce-for-woocommerce",
+  "version": "1.1.2404080",
+  "description": "ecpay-ecommerce-for-woocommerce",
+  "main": "build/index.js",
+  "keywords": [
+    "ecommerce",
+    "e-commerce",
+    "store",
+    "sales",
+    "sell",
+    "shop",
+    "cart",
+    "checkout",
+    "payment",
+    "ecpay"
+  ],
+  "author": "ECPay",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build": "wp-scripts build",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "packages-update": "wp-scripts packages-update",
+    "plugin-zip": "wp-scripts plugin-zip",
+    "start": "wp-scripts start"
+  },
+  "devDependencies": {
+      "@woocommerce/block-library": "^2.3.0",
+      "@woocommerce/dependency-extraction-webpack-plugin": "^2.2.0",
+      "@woocommerce/eslint-plugin": "^2.2.0",
+      "@wordpress/blocks": "^12.6.0",
+      "@wordpress/scripts": "^26.0.0",
+      "@wordpress/components": "^23.8.0"
+  },
+  "dependencies": {
+      "classnames": "2.3.1"
+  }
+}

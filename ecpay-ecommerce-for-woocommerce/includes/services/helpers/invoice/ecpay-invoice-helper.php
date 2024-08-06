@@ -183,22 +183,22 @@ class Wooecpay_Invoice_Helper {
     }
 
     /**
-     * 結帳過程欄位檢查
+     * 結帳過程欄位檢查(傳統結帳)
      *
      * @param  array  $fields
      * @param  array  $switch
      */
     public function check_invoice_fields($fields, $switch) {
         // 發票開立方式
-        if (isset($fields['wooecpay_invoice_type'])) {
-            $wooecpay_invoice_type = sanitize_text_field($fields['wooecpay_invoice_type']);
+        if (isset($fields['invoice_type'])) {
+            $wooecpay_invoice_type = sanitize_text_field($fields['invoice_type']);
 
             switch ($wooecpay_invoice_type) {
             case self::INVOICE_TYPE_COMPANY:
                 // 公司
-                $wooecpay_invoice_customer_identifier = sanitize_text_field($fields['wooecpay_invoice_customer_identifier']);
-                $wooecpay_invoice_customer_company    = sanitize_text_field($fields['wooecpay_invoice_customer_company']);
-                $wooecpay_invoice_carruer_type        = sanitize_text_field($fields['wooecpay_invoice_carruer_type']);
+                $wooecpay_invoice_customer_identifier = sanitize_text_field($fields['invoice_customer_identifier']);
+                $wooecpay_invoice_customer_company    = sanitize_text_field($fields['invoice_customer_company']);
+                $wooecpay_invoice_carruer_type        = sanitize_text_field($fields['invoice_carruer_type']);
 
                 $response = $this->check_customer_identifier($wooecpay_invoice_customer_identifier, $wooecpay_invoice_carruer_type, $wooecpay_invoice_customer_company);
 
@@ -208,7 +208,7 @@ class Wooecpay_Invoice_Helper {
                 break;
             case self::INVOICE_TYPE_DONATE:
                 // 捐贈
-                $wooecpay_invoice_love_code = sanitize_text_field($fields['wooecpay_invoice_love_code']);
+                $wooecpay_invoice_love_code = sanitize_text_field($fields['invoice_love_code']);
 
                 $response = $this->check_love_code($wooecpay_invoice_love_code, $switch['billing_love_code_api_check']);
 
@@ -220,9 +220,9 @@ class Wooecpay_Invoice_Helper {
         }
 
         // 載具類別
-        if (isset($fields['wooecpay_invoice_carruer_type'])) {
-            $wooecpay_invoice_carruer_type = sanitize_text_field($fields['wooecpay_invoice_carruer_type']);
-            $wooecpay_invoice_carruer_num  = sanitize_text_field($fields['wooecpay_invoice_carruer_num']);
+        if (isset($fields['invoice_carruer_type'])) {
+            $wooecpay_invoice_carruer_type = sanitize_text_field($fields['invoice_carruer_type']);
+            $wooecpay_invoice_carruer_num  = sanitize_text_field($fields['invoice_carruer_num']);
 
             switch ($wooecpay_invoice_carruer_type) {
             case self::INVOICE_CARRUER_TYPE_NATURAL_PERSON_ID:
@@ -241,6 +241,75 @@ class Wooecpay_Invoice_Helper {
                 break;
             }
         }
+    }
+
+    /**
+     * 結帳過程欄位檢查(Woocommerce Block結帳)
+     *
+     * @param  array  $data
+     * @param  array  $switch
+     */
+    public function check_block_invoice_fields($data, $switch) {
+        $result = [
+            'code' => '1',
+            'error_msg' => '',
+        ];
+        $error_msg = '';
+
+        // 發票開立方式
+        if (isset($data['invoice_type'])) {
+            $invoice_type = sanitize_text_field($data['invoice_type']);
+
+            switch ($invoice_type) {
+            case self::INVOICE_TYPE_COMPANY:
+                // 公司
+                $invoice_customer_identifier = sanitize_text_field($data['invoice_customer_identifier']);
+                $invoice_customer_company    = sanitize_text_field($data['invoice_customer_company']);
+                $invoice_carruer_type        = sanitize_text_field($data['invoice_carruer_type']);
+
+                $response = $this->check_customer_identifier($invoice_customer_identifier, $invoice_carruer_type, $invoice_customer_company);
+
+                
+                if ($response['code'] !== '1') $error_msg = $error_msg . $response['msg'] . '<br>';
+                break;
+            case self::INVOICE_TYPE_DONATE:
+                // 捐贈
+                $invoice_love_code = sanitize_text_field($data['invoice_love_code']);
+
+                $response = $this->check_love_code($invoice_love_code, $switch['billing_love_code_api_check']);
+
+                if ($response['code'] !== '1') $error_msg = $error_msg . $response['msg'] . '<br>';
+                break;
+            }
+        }
+
+        // 載具類別
+        if (isset($data['invoice_carruer_type'])) {
+            $invoice_carruer_type = sanitize_text_field($data['invoice_carruer_type']);
+            $invoice_carruer_num  = sanitize_text_field($data['invoice_carruer_num']);
+
+            switch ($invoice_carruer_type) {
+            case self::INVOICE_CARRUER_TYPE_NATURAL_PERSON_ID:
+                // 自然人憑證驗證
+                $response = $this->check_citizen_digital_certificate($invoice_carruer_num);
+                if ($response['code'] !== '1') $error_msg = $error_msg . $response['msg'] . '<br>';
+                break;
+            case self::INVOICE_CARRUER_TYPE_MOBILE_BARCODE:
+                // 手機載具驗證
+                $response = $this->check_phone_barcode($invoice_carruer_num, $switch['billing_carruer_num_api_check']);
+                if ($response['code'] !== '1') $error_msg = $error_msg . $response['msg'] . '<br>';
+                break;
+            }
+        }
+
+        if ($error_msg !== '') {
+            $result = [
+                'code' => '0',
+                'error_msg' => $error_msg,
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -569,13 +638,15 @@ class Wooecpay_Invoice_Helper {
                             $data['CustomerName'] = $company;
                         }
                         switch ($wooecpay_invoice_carruer_type) {
-                        case self::INVOICE_CARRUER_TYPE_CLOUD:
-                            $data['CarrierType'] = self::INVOICE_CARRUER_TYPE_CLOUD;
-                            break;
-                        case self::INVOICE_CARRUER_TYPE_MOBILE_BARCODE:
-                            $data['CarrierType'] = self::INVOICE_CARRUER_TYPE_MOBILE_BARCODE;
-                            $data['CarrierNum']  = $order->get_meta('_wooecpay_invoice_carruer_num', true);
-                            break;
+                            case self::INVOICE_CARRUER_TYPE_CLOUD:
+                                $data['Print'] = '0';
+                                $data['CarrierType'] = self::INVOICE_CARRUER_TYPE_CLOUD;
+                                break;
+                            case self::INVOICE_CARRUER_TYPE_MOBILE_BARCODE:
+                                $data['Print'] = '0';
+                                $data['CarrierType'] = self::INVOICE_CARRUER_TYPE_MOBILE_BARCODE;
+                                $data['CarrierNum']  = $order->get_meta('_wooecpay_invoice_carruer_num', true);
+                                break;
                         }
                         break;
                     case self::INVOICE_TYPE_DONATE:

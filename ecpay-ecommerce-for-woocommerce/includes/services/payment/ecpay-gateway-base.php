@@ -104,8 +104,13 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                 $order->update_meta_data('_wooecpay_payment_merchant_trade_no', $merchant_trade_no); //MerchantTradeNo
                 $order->update_meta_data('_wooecpay_query_trade_tag', 0);
 
-                $order->add_order_note(sprintf(__('Ecpay Payment Merchant Trade No %s', 'ecpay-ecommerce-for-woocommerce'), $merchant_trade_no));
-
+                // 防止 hook 重複執行導致訂單歷程重複寫入
+                if (!get_transient('wooecpay_receipt_page_executed_' . $order_id)) {
+                    $order->add_order_note(sprintf(__('Ecpay Payment Merchant Trade No %s', 'ecpay-ecommerce-for-woocommerce'), $merchant_trade_no));
+                    set_transient('wooecpay_receipt_page_executed_' . $order_id, true, 3600);
+                }
+                else delete_transient('wooecpay_receipt_page_executed_' . $order_id);
+                
                 $order->save();
 
                 // 紀錄訂單付款資訊進 DB
@@ -173,6 +178,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                 }
 
                 WC()->cart->empty_cart();
+                WC()->session->set('store_api_draft_order', 0);
             }
         }
     }

@@ -1,27 +1,28 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Green World FinTech Service Co., Ltd. (https://www.ecpay.com.tw)
- * @version 1.1.2406060
+ * @version 1.1.2407100
  *
  * Plugin Name: ECPay Ecommerce for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
  * Description: Ecpay Plug for WooCommerce
- * Version: 1.1.2406060
+ * Version: 1.1.2407100
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /languages
  * WC requires at least: 8
- * WC tested up to: 8.4.0
+ * WC tested up to: 8.8.0
  */
 
 // 相關檢查
 defined('ABSPATH') or exit;
 
 // 相關常數定義
-define('WOOECPAY_VERSION', '1.1.2406060');
+define('WOOECPAY_VERSION', '1.1.2407100');
 define('REQUIREMENT_WOOCOMMERCE_VERSION', '8.3.0');
+define('WOOECPAY_PLUGIN_NAME', 'ecpay-ecommerce-for-woocommerce');
 define('WOOECPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WOOECPAY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WOOECPAY_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -52,6 +53,7 @@ require_once WOOECPAY_PLUGIN_DIR . 'includes/services/database/ecpay-db-process.
 register_activation_hook(__FILE__, array('Wooecpay_Db_Process', 'ecpay_db_process'));
 add_action('upgrader_process_complete', array('Wooecpay_Db_Process', 'ecpay_db_process'));
 add_action('woocommerce_loaded', array('Wooecpay_Db_Process', 'ecpay_db_process'));
+add_action('plugins_loaded', 'update_db_fields');
 
 // Woocommerce版本判斷
 add_action('admin_notices',
@@ -67,14 +69,37 @@ add_action('admin_notices',
     }
 );
 
-// 高效能宣告
 add_action('before_woocommerce_init',
     function () {
         if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+            // 高效能宣告
             \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
+            // Woocmmerce Payment Block
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
         }
     }
 );
+
+// 更新 DB option
+function update_db_fields() {
+    // 定期定額
+    $dca_settings = get_option('woocommerce_Wooecpay_Gateway_Dca_settings', []);
+    if (count($dca_settings) > 0) {
+        // 判斷資料庫若沒有定期定額資訊，增加預設值
+        if (!isset($dca_settings['dca_periodType'])) $dca_settings['dca_periodType'] = 'Y';
+        if (!isset($dca_settings['dca_frequency'])) $dca_settings['dca_frequency'] = 1;
+        if (!isset($dca_settings['dca_execTimes'])) $dca_settings['dca_execTimes'] = 2;
+        update_option('woocommerce_Wooecpay_Gateway_Dca_settings', $dca_settings);
+    }
+
+    // 離島物流調整預設值為空陣列
+    $logistic_outside = get_option('wooecpay_enabled_logistic_outside', []);
+    if ($logistic_outside == '') {
+        update_option('wooecpay_enabled_logistic_outside', []);
+    }
+    
+}
+
 
 // 載入 log 功能
 require WOOECPAY_PLUGIN_DIR . 'includes/services/helpers/logger/ecpay-logger.php';
@@ -101,6 +126,8 @@ if ('yes' === get_option('wooecpay_enabled_logistic', 'no')) {
 }
 
 if ('yes' === get_option('wooecpay_enabled_invoice', 'no')) {
+    // WoocommerceBlock 發票前端
+    require_once plugin_dir_path(__FILE__) . 'includes/services/invoice/checkout-blocks-initialize.php';
     require plugin_dir_path(__FILE__) . 'includes/services/invoice/class-wooecpay-invoice.php';
     $plugin_invoice = new Wooecpay_invoice();
 }

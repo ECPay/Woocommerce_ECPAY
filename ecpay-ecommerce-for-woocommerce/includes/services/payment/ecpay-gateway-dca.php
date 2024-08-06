@@ -42,11 +42,16 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
 
         add_action('admin_enqueue_scripts' , array($this, 'wooecpay_register_scripts'));
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
-        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'save_dca_details'));
     }
 
     public function process_admin_options()
     {
+        $validateResult = $this->validate_dca_fields();
+        if (!$validateResult) {
+            return false;
+        }
+
+        $this->save_dca_details();
         parent::process_admin_options();
     }
 
@@ -65,6 +70,24 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
                     return false;
                 }
             }
+
+            // 未設定定期定額選項時，不開放此付款方式
+            if (function_exists('is_checkout') && is_checkout()) {
+                if (has_block('woocommerce/checkout')) {
+                    // 新版 WooCommerce Blocks
+                    $dca_settings = get_option('woocommerce_Wooecpay_Gateway_Dca_settings', []);
+                    if (!isset($dca_settings['dca_periodType']) || !isset($dca_settings['dca_frequency']) || !isset($dca_settings['dca_execTimes'])) {
+                        return false;
+                    }
+                }
+                else {
+                    // 舊版傳統結帳
+                    if (count(get_option('woocommerce_ecpay_dca', [])) == 0) {
+                        return false;
+                    }
+                }
+            }
+            
         }
 
         return parent::is_available();
@@ -88,7 +111,7 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
     }
 
     /**
-     * 前台 - 結帳定期定額付款選項
+     * 前台 - 結帳定期定額付款選項 (舊版)
      *
      * @param  array $data
      * @return void
@@ -107,7 +130,6 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
         // Html
         $szHtml  = '';
         $szHtml .= '<select id="ecpay_dca_payment" name="ecpay_dca_payment">';
-        $szHtml .= '<option>------</option>';
 
         // 避免初始預設欄位為空
         if (count($ecpay_dca_options) > 0) {
@@ -135,7 +157,7 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
     }
 
     /**
-     * 前台 - 整理定期定額付款選項option格式
+     * 前台 - 整理定期定額付款選項option格式 (舊版)
      *
      * @param  string $value
      * @param  string $data
@@ -152,7 +174,7 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
     }
 
     /**
-     * 後台 - 載入定期定額JS後產生後台設定表格
+     * 後台 - 載入定期定額JS後產生後台設定表格 (舊版)
      *
      * @return void
      */
@@ -291,9 +313,47 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
                     'execTimes'  => sanitize_text_field($execTimes[$i]),
                 );
             }
+
+            update_option('woocommerce_ecpay_dca', $ecpayDcaOptions);
+        }
+    }
+
+    public function validate_dca_fields() {
+        $errorMsg = "";
+        switch ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_periodType']) {
+            case 'Y':
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_frequency'] != '1') {
+                    $errorMsg .= __('When the periodType field is set to year, the execution frequency field can only be set to 1.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] < '1' || $_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] > '9') {
+                    $errorMsg .= __('When the periodType field is set to year, The execTimes field can only be between 1 and 9.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                break;
+            case 'M':
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_frequency'] < '1' || $_POST['woocommerce_Wooecpay_Gateway_Dca_dca_frequency'] > '12') {
+                    $errorMsg .= __('When the periodType field is set to month, The frequency field can only be between 1 and 12.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] < '1' || $_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] > '99') {
+                    $errorMsg .= __('When the periodType field is set to month, The execTimes field can only be between 1 and 99.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                break;
+            case 'D':
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_frequency'] < '1' || $_POST['woocommerce_Wooecpay_Gateway_Dca_dca_frequency'] > '365') {
+                    $errorMsg .= __('When the periodType field is set to day, The frequency field can only be between 1 and 365.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                if ($_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] < '1' || $_POST['woocommerce_Wooecpay_Gateway_Dca_dca_execTimes'] > '999') {
+                    $errorMsg .= __('When the periodType field is set to day, The execTimes field can only be between 1 and 999.', 'ecpay-ecommerce-for-woocommerce');
+                }
+                break;
+                        
         }
 
-        update_option('woocommerce_ecpay_dca', $ecpayDcaOptions);
+        if ($errorMsg != "") {
+            WC_Admin_Settings::add_error($errorMsg);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -320,9 +380,20 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
         $order = wc_get_order($order_id);
         $order->add_order_note(__('Pay via ECPay DCA', 'ecpay-ecommerce-for-woocommerce'));
 
-        if (isset($_POST['ecpay_dca_payment'])) {
+        if (!isset($_POST['ecpay_dca_payment'])) {
+            // 新版 Woocommerce Block
+            $dca_settings = get_option('woocommerce_Wooecpay_Gateway_Dca_settings', []);
+            if (count($dca_settings) > 0 && (isset($dca_settings['dca_periodType']) && isset($dca_settings['dca_frequency']) && isset($dca_settings['dca_execTimes']))) {
+                $order->update_meta_data('_ecpay_payment_dca_periodtype', $dca_settings['dca_periodType']);
+                $order->update_meta_data('_ecpay_payment_dca_frequency', $dca_settings['dca_frequency']);
+                $order->update_meta_data('_ecpay_payment_dca_exectimes', $dca_settings['dca_execTimes']);
+            }
+        }
+        else {
+            // 舊版傳統結帳
             $order->update_meta_data('_ecpay_payment_dca', $_POST['ecpay_dca_payment']);
         }
+        
         $order->save();
 
         return array(

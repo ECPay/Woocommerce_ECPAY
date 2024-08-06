@@ -24,7 +24,10 @@ class Wooecpay_Logistic {
             add_action('woocommerce_checkout_create_order', array($this, 'wooecpay_save_logistic_fields'), 11, 2);
         }
 
+        // 儲存重量欄位資訊(傳統結帳)   
         add_action('woocommerce_checkout_update_order_meta', array($this, 'save_weight_order'));
+        // 儲存重量欄位資訊(Woocommcer Block結帳) 
+        add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'save_weight_order'));
 
         add_action('woocommerce_after_checkout_validation', array($this, 'validate_checkout_shipping_field'), 10, 2);
     }

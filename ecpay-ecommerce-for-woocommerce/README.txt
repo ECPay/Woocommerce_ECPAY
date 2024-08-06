@@ -4,7 +4,7 @@ Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, 
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2406060
+Stable tag: 1.1.2407100
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,8 +19,17 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+v1.1.2407100
+新增發票索取紙本選項開關
+
+v1.1.2406190
+支援 WooCommerce Blocks 結帳區塊
+調整定期定額付款方式預設選項問題
+調整定期定額付款方式後台設定方式
+
 v1.1.2406060
 測試相容性至 WordPress Version 6.5.3
+測試相容性至 WooCommerce Version 8.8.0
 修正因 PHP8.2 棄用動態變數及參數初始值造成的錯誤
 修正離島物流預設值型態錯誤造成的問題
 
@@ -82,9 +91,7 @@ Upgrade Notice 請使用https://github.com/ECPay/Woocommerce_ECPAY
 == Description ==
 
 * 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
-* 金流支援付款方式：信用卡一次付清、信用卡分期付款、信用卡定期定額、Apple Pay、電子支付TWQR、無卡分期BNPL、ATM銀行轉帳、CVS 超商代碼、Barcode 超商條碼等。
-* 物流支援運送方式：提供7-ELEVEN、全家、萊爾富、OK等四大超商大宗寄倉及店到店物流服務，黑猫與郵局宅配物流服務等。
-* 電子發票支援方式：提供B2C電子發票線上開立服務機制。
+
 
 目錄
 -----------------

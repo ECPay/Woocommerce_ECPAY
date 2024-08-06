@@ -8,6 +8,7 @@ class Wooecpay_Gateway {
 
         add_filter('woocommerce_payment_gateways', array($this, 'add_method'));
         add_action('woocommerce_loaded', array($this, 'load_payment_gateway'));
+        add_action( 'woocommerce_blocks_loaded', array($this, 'load_payment_gateway_block'));
 
         // Email發送內容
         if (get_option('wooecpay_enabled_payment_disp_email') == 'yes') {
@@ -57,6 +58,31 @@ class Wooecpay_Gateway {
         $methods[] = 'Wooecpay_Gateway_Bnpl';
 
         return $methods;
+    }
+
+    /**
+     * 宣告付款方式支援 Woocommerce Block
+     */
+    public function load_payment_gateway_block() {
+        if (class_exists('Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType')) {
+            require_once WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/payment/class-wooecpay-gateway-block.php';
+        
+            add_action(
+                'woocommerce_blocks_payment_method_type_registration',
+                function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Credit'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Credit_Installment'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Webatm'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Atm'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Cvs'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Barcode'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Applepay'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Dca'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Twqr'));
+                    $payment_method_registry->register(new Wooecpay_Gateway_Block('Wooecpay_Gateway_Bnpl'));
+                }
+            );
+        }
     }
 
     // EMAIL 顯示付款資訊樣板

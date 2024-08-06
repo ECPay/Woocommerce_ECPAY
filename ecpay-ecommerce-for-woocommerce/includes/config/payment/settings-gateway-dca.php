@@ -43,6 +43,43 @@ return [
             'step' => 1
         ]
     ],
+    'dca_periodType' => [
+        'title' => __('Dca payment periodType', 'ecpay-ecommerce-for-woocommerce'),
+        'id' => 'wooecpay_dca_periodtype',
+        'type' => 'select',
+        'default' => 'Y',
+        'placeholder' => 0,
+        'description' => __('Support woocommerce checkout blocks', 'ecpay-ecommerce-for-woocommerce'),
+        'options' => [
+            'Y' => __('Year', 'ecpay-ecommerce-for-woocommerce'),
+            'M' => __('Month', 'ecpay-ecommerce-for-woocommerce'),
+            'D' => __('Day', 'ecpay-ecommerce-for-woocommerce'),
+        ]
+    ],
+    'dca_frequency' => [
+        'title' => __('Dca payment frequency', 'ecpay-ecommerce-for-woocommerce'),
+        'id' => 'wooecpay_dca_frequency',
+        'type' => 'number',
+        'default' => 1,
+        'placeholder' => 0,
+        'description' => __('Support woocommerce checkout blocks', 'ecpay-ecommerce-for-woocommerce'),
+        'custom_attributes' => [
+            'min' => 1,
+            'step' => 1
+        ]
+    ],
+    'dca_execTimes' => [
+        'title' => __('Dca payment execTimes', 'ecpay-ecommerce-for-woocommerce'),
+        'id' => 'wooecpay_dca_exectimes',
+        'type' => 'number',
+        'default' => 1,
+        'placeholder' => 0,
+        'description' => __('Support woocommerce checkout blocks', 'ecpay-ecommerce-for-woocommerce'),
+        'custom_attributes' => [
+            'min' => 1,
+            'step' => 1
+        ]
+    ],
     'ecpay_dca' => [
         'title' => __('DCA', 'ecpay-ecommerce-for-woocommerce'),
         'type' => 'ecpay_dca',

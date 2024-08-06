@@ -50,6 +50,16 @@ return [
         'desc_tip' => true
     ],
     [
+        'name'     => __( 'Invoice carruer papper option', 'ecpay-ecommerce-for-woocommerce' ),
+        'type'     => 'select',
+        'id'       => 'wooecpay_invoice_carruer_papper',
+        'default'  => 'enable',
+        'options' => [
+            'enable' => __( 'enable', 'ecpay-ecommerce-for-woocommerce' ),
+            'disable' => __( 'disable', 'ecpay-ecommerce-for-woocommerce' ),
+        ]
+    ],
+    [
         'type' => 'sectionend',
     ],
 

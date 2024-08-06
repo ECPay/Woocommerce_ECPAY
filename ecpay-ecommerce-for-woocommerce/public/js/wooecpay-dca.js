@@ -1,3 +1,4 @@
+// 舊版 table js
 jQuery(function() {
     jQuery('#ecpay_dca').on('click', 'a.add', function() {
         var size = jQuery('#ecpay_dca').find('tbody .account').length;
@@ -79,10 +80,10 @@ var fields = {
     process: function() {
         if (fields.check(fields.get()) > 0) {
             document.getElementById('fieldsNotification').style = 'color: #ff0000;';
-            document.querySelector('input[name="save"]').disabled = true;
+            jQuery('input[name="save"]').prop('disabled', true);
         } else {
             document.getElementById('fieldsNotification').style = 'display: none;';
-            document.querySelector('input[name="save"]').disabled = false;
+            jQuery('input[name="save"]').prop('disabled', false);
         }
     }
 }
@@ -100,3 +101,77 @@ var validateFields = {
         return ((field > 1) && ((maxExecTimes + 1) > field));
     }
 };
+
+// 新版 js
+jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_periodType').change(function() {
+    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_frequency').val(1)
+    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_execTimes').val(1)
+})
+
+// 監聽執行頻率 keyup
+jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_frequency').keyup(function() {
+    setMaxValue('frequency');
+})
+// 監聽執行頻率 change
+jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_frequency').change(function() {
+    setMaxValue('frequency');
+})
+
+// 監聽執行頻率 keyup
+jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_execTimes').keyup(function() {
+    setMaxValue('execTimes');
+})
+// 監聽執行頻率 change
+jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_execTimes').change(function() {
+    setMaxValue('execTimes');
+})
+
+// 設置最大值
+function setMaxValue(type) {
+    var periodType = jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_periodType').val();
+    if (type == 'frequency') {
+        var currentVal = jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val();
+        switch (periodType) {
+            case 'Y':
+                // 當 periodType 為 Y，執行頻率只可為 1
+                jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(1);
+                break;
+            case 'M':
+                // 當 periodType 為 M，執行頻率介於 1-12
+                if (currentVal > 12) {
+                    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(12);
+                }
+                break;
+            case 'D':
+                // 當 periodType 為 D，執行頻率介於 1-365
+                if (currentVal > 365) {
+                    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(365);
+                }
+                break;
+        }
+    }
+    else if (type == 'execTimes') {
+        var currentVal = jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val();
+        switch (periodType) {
+            case 'Y':
+                // 當 periodType 為 Y，執行次數最高為 9
+                if (currentVal > 9) {
+                    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(9);
+                }
+                break;
+            case 'M':
+                // 當 periodType 為 M，執行次數最高為 99
+                if (currentVal > 99) {
+                    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(99);
+                }
+                break;
+            case 'D':
+                // 當 periodType 為 D，執行次數最高為 999
+                if (currentVal > 999) {
+                    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_' + type).val(999);
+                }
+                break;
+        }
+    }
+    
+}
