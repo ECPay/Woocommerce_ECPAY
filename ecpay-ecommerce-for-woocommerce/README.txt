@@ -1,6 +1,6 @@
 === ecpay-ecommerce-for-woocommerce ===
 Contributors: ecpaytechsupport
-Tags: ecommerce, e-commerce, store, sales, sell, shop, cart, checkout, payment, ecpay
+Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
@@ -89,6 +89,10 @@ Upgrade Notice 請使用https://github.com/ECPay/Woocommerce_ECPAY
 </p>
 
 == Description ==
+
+* 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
+
+== Short Description ==
 
 * 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
 
