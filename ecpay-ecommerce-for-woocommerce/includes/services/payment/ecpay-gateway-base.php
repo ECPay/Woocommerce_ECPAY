@@ -47,10 +47,10 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
             if ($shippping_tag && $this->logisticHelper->is_ecpay_cvs_logistics($shipping_method_id)) {
 
                 // 執行地圖選擇
-
                 // 不存在則走向地圖API
                 $api_logistic_info = $this->logisticHelper->get_ecpay_logistic_api_info('map');
-                $client_back_url   = WC()->api_request_url('wooecpay_logistic_map_callback', true);
+                $client_back_url   = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_map_callback', true)) . 'has_block=' . json_encode(has_block('woocommerce/checkout'));
+                
                 $MerchantTradeNo   = $this->logisticHelper->get_merchant_trade_no($order->get_id(), get_option('wooecpay_logistic_order_prefix'));
                 $LogisticsType     = $this->logisticHelper->get_logistics_sub_type($shipping_method_id);
 
@@ -110,7 +110,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                     set_transient('wooecpay_receipt_page_executed_' . $order_id, true, 3600);
                 }
                 else delete_transient('wooecpay_receipt_page_executed_' . $order_id);
-                
+
                 $order->save();
 
                 // 紀錄訂單付款資訊進 DB
@@ -168,7 +168,6 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                     ecpay_log('轉導 AIO 付款頁 ' . print_r($input, true), 'A00004', $order_id);
 
                     $generateForm = $autoSubmitFormService->generate($input, $api_payment_info['action']);
-                    // $generateForm = str_replace('document.getElementById("ecpay-form").submit();', '', $generateForm) ;
 
                     echo $generateForm;
 
@@ -178,8 +177,8 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                 }
 
                 WC()->cart->empty_cart();
-                WC()->session->set('store_api_draft_order', 0);
             }
+            WC()->session->set('store_api_draft_order', 0);
         }
     }
 

@@ -112,15 +112,15 @@ class Wooecpay_Payment_Helper
         return $item_name;
     }
 
-    public function add_type_info($input, $order)
+    public function add_type_info($input, $order, $has_block = 'true')
     {
         $payment_type = $this->get_ChoosePayment($order->get_payment_method());
 
         switch ($payment_type) {
             case 'Credit':
                 // 信用卡分期
-                if (function_exists('is_checkout') && is_checkout()) {
-                    if (has_block('woocommerce/checkout')) {
+                if (function_exists('is_checkout')) {
+                    if ($has_block == 'true') {
                         // (Woocommerce Blocks)信用卡分期
                         if ($order->get_payment_method() == 'Wooecpay_Gateway_Credit_Installment') {
                             $installmentDatas = get_option('woocommerce_Wooecpay_Gateway_Credit_Installment_settings', []);

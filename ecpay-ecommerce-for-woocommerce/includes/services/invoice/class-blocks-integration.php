@@ -59,8 +59,8 @@ class Blocks_Integration_Invoice_Dev implements IntegrationInterface {
 	 * @return void
 	 */
 	public function register_block_editor_scripts() {
-		$script_url        = plugins_url(WOOECPAY_PLUGIN_NAME . '/build/index.js');
-		$script_asset_path = plugins_url(WOOECPAY_PLUGIN_NAME . '/build/index.asset.php');
+		$script_url        = WOOECPAY_PLUGIN_URL . 'build/index.js';
+		$script_asset_path = WOOECPAY_PLUGIN_URL . 'build/index.asset.php';
 
 		$script_asset      = file_exists($script_asset_path)
 			? require $script_asset_path
@@ -84,8 +84,8 @@ class Blocks_Integration_Invoice_Dev implements IntegrationInterface {
 	 * @return void
 	 */
 	public function register_block_frontend_scripts() {
-		$script_url        = plugins_url('/' . WOOECPAY_PLUGIN_NAME . '/build/checkout-block-frontend.js');
-		$script_asset_path = WP_PLUGIN_DIR . '/'. WOOECPAY_PLUGIN_NAME . '/build/checkout-block-frontend.asset.php';
+		$script_url        = WOOECPAY_PLUGIN_URL . 'build/checkout-block-frontend.js';
+		$script_asset_path = WOOECPAY_PLUGIN_DIR . 'build/checkout-block-frontend.asset.php';
 		
 		$script_asset = file_exists($script_asset_path)
 			? require $script_asset_path

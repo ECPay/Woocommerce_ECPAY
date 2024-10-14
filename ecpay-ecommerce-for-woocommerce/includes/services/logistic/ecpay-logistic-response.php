@@ -158,7 +158,7 @@ class Wooecpay_Logistic_Response {
                         'NeedExtraPaidInfo' => 'Y',
                     ];
 
-                    $input = $this->paymentHelper->add_type_info($input, $order);
+                    $input = $this->paymentHelper->add_type_info($input, $order, $_GET['has_block']);
 
                     switch (get_locale()) {
                     case 'zh_HK':

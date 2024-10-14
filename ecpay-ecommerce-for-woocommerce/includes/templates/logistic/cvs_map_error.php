@@ -74,7 +74,7 @@
 
 
     <!-- JS -->
-    <script src='<?php echo WOOECPAY_PLUGIN_URL . "public/js/cvs_map_error/libs/jquery.min.js" ?>'></script>
+    <script src='<?php echo WOOECPAY_PLUGIN_URL . "public/js/cvs_map_error/libs/jquery.min.js?v=3.7.1" ?>'></script>
     <script src='<?php echo WOOECPAY_PLUGIN_URL . "public/js/cvs_map_error/app/actions.js" ?>'></script>
 
     <!--lottie 動態圖檔-->

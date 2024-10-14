@@ -4,7 +4,7 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2407100
+Stable tag: 1.1.2409301
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,18 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2409301
+修正 woocommerce blocks 造成定期定額金流錯誤
+
+v1.1.2409260
+升級 jQuery 到 3.7.1
+
+v1.1.2409250
+修正前端JS路徑錯誤問題
+修正定期定額無法結帳
+修正中華郵政無法建立訂單
+修正 woocommerce blocks 區塊結帳造成訂單建立錯誤問題
 
 v1.1.2407100
 新增發票索取紙本選項開關

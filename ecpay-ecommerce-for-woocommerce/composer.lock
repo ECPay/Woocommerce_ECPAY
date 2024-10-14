@@ -1,9 +1,14 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "0de64f21c3b8fc2d70dcf8c7ac9c92ce",
     "packages": [
         {
             "name": "ecpay/sdk",
             "version": "1.3.2408190",
-            "version_normalized": "1.3.2408190.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ECPay/SDK_PHP.git",
@@ -22,9 +27,7 @@
                 "fzaninotto/faker": "1.9.x-dev",
                 "phpunit/phpunit": "^5.0 || ^6.0 || ^7.0 || ^8.0"
             },
-            "time": "2024-09-20T01:24:04+00:00",
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Ecpay\\Sdk\\": "src/"
@@ -39,9 +42,16 @@
                 "issues": "https://github.com/ECPay/SDK_PHP/issues",
                 "source": "https://github.com/ECPay/SDK_PHP/tree/1.3.2408190"
             },
-            "install-path": "../ecpay/sdk"
+            "time": "2024-09-20T01:24:04+00:00"
         }
     ],
-    "dev": true,
-    "dev-package-names": []
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
