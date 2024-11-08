@@ -141,7 +141,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                         'NeedExtraPaidInfo' => 'Y',
                     ];
 
-                    $input = $this->paymentHelper->add_type_info($input, $order);
+                    $input = $this->paymentHelper->add_type_info($input, $order, has_block('woocommerce/checkout'));
 
                     switch (get_locale()) {
                     case 'zh_HK':
