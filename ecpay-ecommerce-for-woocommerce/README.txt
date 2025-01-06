@@ -4,7 +4,7 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2411060
+Stable tag: 1.1.2412310
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,21 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2412310
+修正定期定額模擬付款錯誤
+修正定期定額新舊版模組相容性問題
+
+v1.1.2412200
+修正定期定額金額參數回傳造成的錯誤
+修正定期定額無法自動建立週期訂單的錯誤
+
+v1.1.2412120
+定期定額後台設定介面增加結帳畫面說明文字
+定期定額後台設定調整執行頻率下限值
+
+v1.1.2411110
+定期定額後台設定介面優化
 
 v1.1.2411060
 修正傳統短代碼造成定期定額金流錯誤

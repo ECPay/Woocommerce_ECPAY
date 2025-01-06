@@ -43,6 +43,23 @@ return [
             'step' => 1
         ]
     ],
+    'dca_woo_blocks_line' => [
+        'title' => '<hr>',
+        'type'  => 'title',
+        'id'    => 'wooecpay_dca_woo_blocks_line',
+    ],
+    'dca_woo_blocks_caption' => [
+        'title' => '',
+        'type'  => 'title',
+        'description' => __('There are two section fields for DCA settings: WooCommerce Blocks and Woocommerce Shortcode. Please fill out the section that matches your current page configuration. If you are uncertain about which page configuration you are using, input the identical setting in both sections.', 'ecpay-ecommerce-for-woocommerce'),
+        'id'    => 'dca_woo_blocks_caption',
+    ],
+    'dca_woo_blocks_title' => [
+        'title' => __('DCA (Support Woocommerce Blocks)', 'ecpay-ecommerce-for-woocommerce'),
+        'description' => __('The following settings support the WooCommerce Blocks checkout page and do not support the use of the traditional shortcode-based checkout. Please configure carefully', 'ecpay-ecommerce-for-woocommerce'),
+        'type'  => 'title',
+        'id'    => 'wooecpay_dca_woo_blocks_title',
+    ],
     'dca_periodType' => [
         'title' => __('Dca payment periodType', 'ecpay-ecommerce-for-woocommerce'),
         'id' => 'wooecpay_dca_periodtype',
@@ -72,13 +89,24 @@ return [
         'title' => __('Dca payment execTimes', 'ecpay-ecommerce-for-woocommerce'),
         'id' => 'wooecpay_dca_exectimes',
         'type' => 'number',
-        'default' => 1,
+        'default' => 2,
         'placeholder' => 0,
         'description' => __('Support woocommerce checkout blocks', 'ecpay-ecommerce-for-woocommerce'),
         'custom_attributes' => [
-            'min' => 1,
+            'min' => 2,
             'step' => 1
         ]
+    ],
+    'ecpay_dca_line' => [
+        'title' => '<hr>',
+        'type'  => 'title',
+        'id'    => 'ecpay_dca_line',
+    ],
+    'ecpay_dca_title' => [
+        'title' => __('DCA (Support Woocommerce Shortcode)', 'ecpay-ecommerce-for-woocommerce'),
+        'description' => __('The following settings support the traditional shortcode-based checkout page and do not support the use of the WooCommerce Blocks checkout. Please configure carefully', 'ecpay-ecommerce-for-woocommerce'),
+        'type'  => 'title',
+        'id'    => 'ecpay_dca_title',
     ],
     'ecpay_dca' => [
         'title' => __('DCA', 'ecpay-ecommerce-for-woocommerce'),

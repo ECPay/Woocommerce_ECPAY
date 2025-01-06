@@ -105,7 +105,7 @@ var validateFields = {
 // 新版 js
 jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_periodType').change(function() {
     jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_frequency').val(1)
-    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_execTimes').val(1)
+    jQuery('#woocommerce_Wooecpay_Gateway_Dca_dca_execTimes').val(2)
 })
 
 // 監聽執行頻率 keyup
