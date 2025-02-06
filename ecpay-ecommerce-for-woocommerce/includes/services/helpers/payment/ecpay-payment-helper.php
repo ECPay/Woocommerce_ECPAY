@@ -147,7 +147,7 @@ class Wooecpay_Payment_Helper
                             $dca_exectimes = $order->get_meta('_ecpay_payment_dca_exectimes');
 
                             if (in_array($dca_periodtype, ['Y', 'M', 'D']) && trim($dca_frequency) !== '' && trim($dca_exectimes) !== '') {
-                                $input['PeriodType'] = $dca_periodtype;     
+                                $input['PeriodType'] = $dca_periodtype;
                                 $input['Frequency'] = (int)$dca_frequency;
                                 $input['ExecTimes'] = (int)$dca_exectimes;
                                 $input['PeriodAmount'] = $input['TotalAmount'];
@@ -456,16 +456,124 @@ class Wooecpay_Payment_Helper
 
         // 模擬付款不更新付款狀態
         if (isset($info['SimulatePaid']) && $info['SimulatePaid'] == 0) {
-            $wpdb->get_results(
-                $wpdb->prepare(
-                    "UPDATE $table_name
-                    SET payment_status = %d, updated_at = CURRENT_TIMESTAMP
-                    WHERE order_id = %d AND merchant_trade_no = %s AND is_completed_duplicate = 0",
-                    $info['RtnCode'],
-                    $order_id,
-                    $info['MerchantTradeNo'],
-                )
+            $sql = $wpdb->prepare(
+                "UPDATE $table_name
+                SET
+                payment_status = %d,
+                MerchantID = %s,
+                MerchantTradeNo = %s,
+                StoreID = %s,
+                RtnCode = %d,
+                RtnMsg = %s,
+                TradeNo = %s,
+                TradeAmt = %d,
+                PaymentDate = %s,
+                PaymentType = %s,
+                PaymentTypeChargeFee = %d,
+                PlatformID = %s,
+                TradeDate = %s,
+                SimulatePaid = %d,
+                CustomField1 = %s,
+                CustomField2 = %s,
+                CustomField3 = %s,
+                CustomField4 = %s,
+                CheckMacValue = %s,
+                eci = %d,
+                card4no = %s,
+                card6no = %s,
+                process_date = %s,
+                auth_code = %s,
+                stage = %d,
+                stast = %d,
+                red_dan = %d,
+                red_de_amt = %d,
+                red_ok_amt = %d,
+                red_yet = %d,
+                gwsr = %d,
+                PeriodType = %s,
+                Frequency = %d,
+                ExecTimes = %d,
+                amount = %d,
+                ProcessDate = %s,
+                AuthCode = %s,
+                FirstAuthAmount = %d,
+                TotalSuccessTimes = %d,
+                BankCode = %s,
+                vAccount = %s,
+                ATMAccNo = %s,
+                ATMAccBank = %s,
+                WebATMBankName = %s,
+                WebATMAccNo = %s,
+                WebATMAccBank = %s,
+                PaymentNo = %s,
+                ExpireDate = %s,
+                Barcode1 = %s,
+                Barcode2 = %s,
+                Barcode3 = %s,
+                BNPLTradeNo = %s,
+                BNPLInstallment = %s,
+                TWQRTradeNo = %s,
+                updated_at = CURRENT_TIMESTAMP
+                WHERE order_id = %d AND merchant_trade_no = %s AND is_completed_duplicate = 0",
+                $info['RtnCode'],
+                $info['MerchantID'],
+                $info['MerchantTradeNo'],
+                $info['StoreID'] ?? null,
+                $info['RtnCode'],
+                $info['RtnMsg'] ?? null,
+                $info['TradeNo'] ?? null,
+                $info['TradeAmt'] ?? null,
+                $info['PaymentDate'] ?? null,
+                $info['PaymentType'] ?? null,
+                $info['PaymentTypeChargeFee'] ?? null,
+                $info['PlatformID'] ?? null,
+                $info['TradeDate'] ?? null,
+                $info['SimulatePaid'] ?? null,
+                $info['CustomField1'] ?? null,
+                $info['CustomField2'] ?? null,
+                $info['CustomField3'] ?? null,
+                $info['CustomField4'] ?? null,
+                $info['CheckMacValue'] ?? null,
+                $info['eci'] ?? null,
+                $info['card4no'] ?? null,
+                $info['card6no'] ?? null,
+                $info['process_date'] ?? null,
+                $info['auth_code'] ?? null,
+                $info['stage'] ?? null,
+                $info['stast'] ?? null,
+                $info['red_dan'] ?? null,
+                $info['red_de_amt'] ?? null,
+                $info['red_ok_amt'] ?? null,
+                $info['red_yet'] ?? null,
+                $info['gwsr'] ?? null,
+                $info['PeriodType'] ?? null,
+                $info['Frequency'] ?? null,
+                $info['ExecTimes'] ?? null,
+                $info['amount'] ?? null,
+                $info['ProcessDate'] ?? null,
+                $info['AuthCode'] ?? null,
+                $info['FirstAuthAmount'] ?? null,
+                $info['TotalSuccessTimes'] ?? null,
+                $info['BankCode'] ?? null,
+                $info['vAccount'] ?? null,
+                $info['ATMAccNo'] ?? null,
+                $info['ATMAccBank'] ?? null,
+                $info['WebATMBankName'] ?? null,
+                $info['WebATMAccNo'] ?? null,
+                $info['WebATMAccBank'] ?? null,
+                $info['PaymentNo'] ?? null,
+                $info['ExpireDate'] ?? null,
+                $info['Barcode1'] ?? null,
+                $info['Barcode2'] ?? null,
+                $info['Barcode3'] ?? null,
+                $info['BNPLTradeNo'] ?? null,
+                $info['BNPLInstallment'] ?? null,
+                $info['TWQRTradeNo'] ?? null,
+                $order_id,
+                $info['MerchantTradeNo']
             );
+
+            $wpdb->query($sql);
         }
     }
 
@@ -532,4 +640,66 @@ class Wooecpay_Payment_Helper
             'merchant_trade_no'  => $merchant_trade_no_list
         ];
 	}
+
+    /**
+     * 檢查定期定額付款資訊 TotalSuccessTimes 是否重複付款
+     */
+    public function check_dca_max_total_success_times($merchant_trade_no)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'ecpay_orders_payment_status';
+
+        // 查詢綠界資料表中是否有該 MerchantTradeNo 紀錄
+        $total_success_times = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT TotalSuccessTimes
+                FROM $table_name
+                WHERE MerchantTradeNo = %s AND PaymentType = %s
+                ORDER BY TotalSuccessTimes DESC
+                LIMIT 1",
+                $merchant_trade_no,
+                'Wooecpay_Gateway_Dca'
+            )
+        );
+
+        if ($total_success_times) return $total_success_times;
+        else {
+            // 尋找 wp_post 資料表中舊版訂單 note
+            $post_id = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT post_id
+                    FROM {$wpdb->postmeta}
+                    WHERE meta_key = '_wooecpay_payment_merchant_trade_no'
+                    AND meta_value = %s",
+                    $merchant_trade_no
+                )
+            );
+
+            if ($post_id) {
+                // 查詢相關備註
+                $comments = $wpdb->get_results(
+                    $wpdb->prepare(
+                        "SELECT comment_content
+                        FROM {$wpdb->comments}
+                        WHERE comment_post_ID = %d
+                          AND comment_type = 'order_note'",
+                        $post_id
+                    )
+                );
+
+                // 包含 "定期定額付款第N次繳費成功" 的備註
+                $max_n = 0;
+                foreach ($comments as $comment) {
+                    if (preg_match('/定期定額付款第(\d+)次繳費成功/', $comment->comment_content, $matches)) {
+                        $n = (int)$matches[1];
+                        if ($n > $max_n) {
+                            $max_n = $n;
+                        }
+                    }
+                }
+                return $max_n;
+            }
+        }
+        return 0;
+    }
 }

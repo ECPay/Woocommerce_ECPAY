@@ -95,7 +95,8 @@ function wooecpayDuplicatePaymentComplete(order_id, merchant_trade_no_list) {
 function wooecpayClearEcpayDebugLog() {
 
     query = {
-        action: 'clear_ecpay_debug_log'
+        action: 'clear_ecpay_debug_log',
+        security: wooecpay_ajax.nonce
     };
 
     jQuery.post(ajaxurl, query, function(response) {

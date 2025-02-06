@@ -4,7 +4,7 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2412310
+Stable tag: 1.1.2502030
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,12 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2502030
+安全性修正
+
+v1.1.2501080
+優化接收付款結果資訊
 
 v1.1.2412310
 修正定期定額模擬付款錯誤
@@ -144,7 +150,7 @@ Upgrade Notice 請使用https://github.com/ECPay/Woocommerce_ECPAY
 -----------------
 | Wordpress  | WooCommerce | PHP |
 | :---------: | :----------: | :----------: |
-| 6.0 | 6.5.1 | 7.4 |
+| 6.5.3 | 8.8.0 | 8.2 |
 
 
 安裝

@@ -7,13 +7,15 @@ use Helpers\Logger\Wooecpay_Logger;
 use Helpers\Logistic\Wooecpay_Logistic_Helper;
 use Helpers\Payment\Wooecpay_Payment_Helper;
 
-class Wooecpay_Order {
+class Wooecpay_Order
+{
     protected $loggerHelper;
     protected $logisticHelper;
     protected $paymentHelper;
     protected $invoiceHelper;
 
-    public function __construct() {
+    public function __construct()
+    {
         // 載入共用
         $this->loggerHelper   = new Wooecpay_Logger;
         $this->logisticHelper = new Wooecpay_Logistic_Helper;
@@ -21,56 +23,56 @@ class Wooecpay_Order {
         $this->invoiceHelper  = new Wooecpay_Invoice_Helper;
 
         if (is_admin()) {
-            add_action('admin_enqueue_scripts', array($this, 'wooecpay_register_scripts'));
+            add_action('admin_enqueue_scripts', [$this, 'wooecpay_register_scripts']);
 
             if ('yes' === get_option('wooecpay_enabled_payment', 'yes')) {
-                add_action('woocommerce_admin_billing_fields', array($this, 'custom_order_meta'), 10, 1);
-                add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'add_address_meta'), 10, 1);
+                add_action('woocommerce_admin_billing_fields', [$this, 'custom_order_meta'], 10, 1);
+                add_action('woocommerce_admin_order_data_after_billing_address', [$this, 'add_address_meta'], 10, 1);
 
-                add_action('woocommerce_admin_order_data_after_order_details', array($this, 'add_payment_info'), 10, 1);
-                add_action('woocommerce_admin_order_data_after_order_details', array($this, 'check_order_status_cancel'));
-                add_action('woocommerce_admin_order_data_after_order_details', array($this, 'check_order_is_duplicate_payment'));
+                add_action('woocommerce_admin_order_data_after_order_details', [$this, 'add_payment_info'], 10, 1);
+                add_action('woocommerce_admin_order_data_after_order_details', [$this, 'check_order_status_cancel']);
+                add_action('woocommerce_admin_order_data_after_order_details', [$this, 'check_order_is_duplicate_payment']);
 
-                add_action('manage_shop_order_posts_custom_column', array($this, 'custom_orders_list_column_content'), 20, 2);
+                add_action('manage_shop_order_posts_custom_column', [$this, 'custom_orders_list_column_content'], 20, 2);
 
-                add_action('wp_ajax_duplicate_payment_complete', array($this, 'ajax_duplicate_payment_complete'));
+                add_action('wp_ajax_duplicate_payment_complete', [$this, 'ajax_duplicate_payment_complete']);
             }
 
             if ('yes' === get_option('wooecpay_enabled_logistic', 'yes')) {
-                add_action('woocommerce_admin_order_data_after_shipping_address', array($this, 'logistic_button_display'));
-                add_action('wp_ajax_send_logistic_order_action', array($this, 'ajax_send_logistic_order_action'));
+                add_action('woocommerce_admin_order_data_after_shipping_address', [$this, 'logistic_button_display']);
+                add_action('wp_ajax_send_logistic_order_action', [$this, 'ajax_send_logistic_order_action']);
 
-                add_action('woocommerce_process_shop_order_meta', array($this, 'order_update_sync_shipping_phone'), 60);
+                add_action('woocommerce_process_shop_order_meta', [$this, 'order_update_sync_shipping_phone'], 60);
 
                 if (in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
-                    add_action('pre_post_update', array($this, 'ecpay_validate_logistic_fields'), 10, 2);
+                    add_action('pre_post_update', [$this, 'ecpay_validate_logistic_fields'], 10, 2);
                 }
             }
 
             if ('yes' === get_option('wooecpay_enabled_invoice', 'yes')) {
-                add_action('woocommerce_admin_order_data_after_billing_address', array($this, 'add_invoice_meta'), 11, 1);
+                add_action('woocommerce_admin_order_data_after_billing_address', [$this, 'add_invoice_meta'], 11, 1);
 
                 // 手動開立
-                add_action('wp_ajax_send_invoice_create', array($this, 'ajax_send_invoice_create'));
+                add_action('wp_ajax_send_invoice_create', [$this, 'ajax_send_invoice_create']);
 
                 // 手動作廢
-                add_action('wp_ajax_send_invoice_invalid', array($this, 'ajax_send_invoice_invalid'));
+                add_action('wp_ajax_send_invoice_invalid', [$this, 'ajax_send_invoice_invalid']);
 
                 // 自動作廢
                 if ('auto_cancel' === get_option('wooecpay_enabled_cancel_invoice_auto', 'manual')) {
-                    add_action('woocommerce_order_status_cancelled', array($this, 'auto_invoice_invalid'));
-                    add_action('woocommerce_order_status_refunded', array($this, 'auto_invoice_invalid'));
+                    add_action('woocommerce_order_status_cancelled', [$this, 'auto_invoice_invalid']);
+                    add_action('woocommerce_order_status_refunded', [$this, 'auto_invoice_invalid']);
                 }
             }
 
             // 清理 Log
-            add_action('wp_ajax_clear_ecpay_debug_log', array($this, 'ajax_clear_ecpay_debug_log'));
+            add_action('wp_ajax_clear_ecpay_debug_log', [$this, 'ajax_clear_ecpay_debug_log']);
         }
 
         if ('yes' === get_option('wooecpay_enabled_invoice', 'yes')) {
             // 自動開立
             if ('auto_paid' === get_option('wooecpay_enabled_invoice_auto', 'manual')) {
-                add_action('woocommerce_order_status_processing', array($this, 'auto_invoice_create'));
+                add_action('woocommerce_order_status_processing', [$this, 'auto_invoice_create']);
             }
         }
     }
@@ -78,12 +80,13 @@ class Wooecpay_Order {
     /**
      * 訂單頁面新增完整地址
      */
-    public function custom_order_meta($fields) {
-        $fields['full-address'] = array(
+    public function custom_order_meta($fields)
+    {
+        $fields['full-address'] = [
             'label'         => __('Full address', 'ecpay-ecommerce-for-woocommerce'),
             'show'          => true,
             'wrapper_class' => 'form-field-wide full-address',
-        );
+        ];
 
         return $fields;
     }
@@ -91,11 +94,12 @@ class Wooecpay_Order {
     /**
      * 訂單頁面姓名欄位格式調整
      */
-    public function add_address_meta($order) {
+    public function add_address_meta($order)
+    {
         echo '<style>.order_data_column:nth-child(2) .address p:first-child {display: none;}</style>';
 
         $shipping_method_id = $order->get_items('shipping');
-        if (!empty($shipping_method_id)) {
+        if (! empty($shipping_method_id)) {
             $shipping_method_id = reset($shipping_method_id);
             $shipping_method_id = $shipping_method_id->get_method_id();
         }
@@ -111,7 +115,8 @@ class Wooecpay_Order {
     /**
      * 訂單金流資訊回傳
      */
-    public function add_payment_info($order) {
+    public function add_payment_info($order)
+    {
         $payment_method = $order->get_payment_method();
 
         echo '<p>&nbsp;</p>';
@@ -121,6 +126,7 @@ class Wooecpay_Order {
 
         switch ($payment_method) {
             case 'Wooecpay_Gateway_Credit':
+            case 'Wooecpay_Gateway_Dca':
                 echo wp_kses_post('<p><strong>信用卡前六碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card6no', true) . '</p>');
                 echo wp_kses_post('<p><strong>信用卡後四碼:&nbsp;</strong>' . $order->get_meta('_ecpay_card4no', true) . '</p>');
                 break;
@@ -159,7 +165,8 @@ class Wooecpay_Order {
      *
      * @return void
      */
-    public function check_order_status_cancel($order) {
+    public function check_order_status_cancel($order)
+    {
 
         $query_trade_tag = $order->get_meta('_wooecpay_query_trade_tag', true);
 
@@ -198,7 +205,7 @@ class Wooecpay_Order {
                         $offset = 30; // 非信用卡
                     }
 
-                    // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
+                                                                                                                                                  // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
                     $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); // 取得保留庫存時間
 
                     if ($hold_stock_minutes > $offset) {
@@ -254,7 +261,8 @@ class Wooecpay_Order {
     /**
      * 訂單發票資訊顯示
      */
-    public function add_invoice_meta($order) {
+    public function add_invoice_meta($order)
+    {
 
         if ($order) {
 
@@ -286,7 +294,7 @@ class Wooecpay_Order {
 
             // 作廢發票按鈕顯示判斷
             $invoice_invalid_button = false;
-            if (!empty($wooecpay_invoice_process) &&
+            if (! empty($wooecpay_invoice_process) &&
                 ($order_status == 'cancelled' || $order_status == 'refunded')
             ) {
                 $invoice_invalid_button = true;
@@ -300,18 +308,18 @@ class Wooecpay_Order {
             echo wp_kses_post('<p><strong>隨機碼:</strong>' . $wooecpay_invoice_random_number . '</p>');
 
             switch ($wooecpay_invoice_issue_type) {
-            case '1':
-                $wooecpay_invoice_issue_type_dsp = '一般開立發票';
-                echo wp_kses_post('<p><strong>開立方式:</strong>' . $wooecpay_invoice_issue_type_dsp . '</p>');
-                break;
+                case '1':
+                    $wooecpay_invoice_issue_type_dsp = '一般開立發票';
+                    echo wp_kses_post('<p><strong>開立方式:</strong>' . $wooecpay_invoice_issue_type_dsp . '</p>');
+                    break;
 
-            case '2':
-                $wooecpay_invoice_issue_type_dsp = '延遲開立發票';
-                echo wp_kses_post('<p><strong>開立方式:</strong>' . $wooecpay_invoice_issue_type_dsp . '</p>');
-                echo wp_kses_post('<p><strong>交易單號:</strong>' . $wooecpay_invoice_tsr . '</p>');
-                break;
-            default:
-                break;
+                case '2':
+                    $wooecpay_invoice_issue_type_dsp = '延遲開立發票';
+                    echo wp_kses_post('<p><strong>開立方式:</strong>' . $wooecpay_invoice_issue_type_dsp . '</p>');
+                    echo wp_kses_post('<p><strong>交易單號:</strong>' . $wooecpay_invoice_tsr . '</p>');
+                    break;
+                default:
+                    break;
             }
 
             if (isset($this->invoiceHelper->invoiceCarruerType[$wooecpay_invoice_carruer_type])) {
@@ -323,25 +331,25 @@ class Wooecpay_Order {
             }
 
             switch ($wooecpay_invoice_type) {
-            case Wooecpay_Invoice_Helper::INVOICE_TYPE_PERSONAL:
-                if (!empty($wooecpay_invoice_carruer_num)) {
-                    echo wp_kses_post('<p><strong>載具編號:</strong>' . $wooecpay_invoice_carruer_num . '</p>');
-                }
-                break;
+                case Wooecpay_Invoice_Helper::INVOICE_TYPE_PERSONAL:
+                    if (! empty($wooecpay_invoice_carruer_num)) {
+                        echo wp_kses_post('<p><strong>載具編號:</strong>' . $wooecpay_invoice_carruer_num . '</p>');
+                    }
+                    break;
 
-            case Wooecpay_Invoice_Helper::INVOICE_TYPE_COMPANY:
-                echo wp_kses_post('<p><strong>公司行號:</strong>' . $wooecpay_invoice_customer_company . '</p>');
-                echo wp_kses_post('<p><strong>統一編號:</strong>' . $wooecpay_invoice_customer_identifier . '</p>');
+                case Wooecpay_Invoice_Helper::INVOICE_TYPE_COMPANY:
+                    echo wp_kses_post('<p><strong>公司行號:</strong>' . $wooecpay_invoice_customer_company . '</p>');
+                    echo wp_kses_post('<p><strong>統一編號:</strong>' . $wooecpay_invoice_customer_identifier . '</p>');
 
-                // 公司發票存入載具
-                if (isset($this->invoiceHelper->invoiceCarruerType[$wooecpay_invoice_carruer_type]) && $this->invoiceHelper->invoiceCarruerType[$wooecpay_invoice_carruer_type] == '手機條碼') {
-                    echo wp_kses_post('<p><strong>載具編號:</strong>' . $wooecpay_invoice_carruer_num . '</p>');
-                }
-                break;
+                    // 公司發票存入載具
+                    if (isset($this->invoiceHelper->invoiceCarruerType[$wooecpay_invoice_carruer_type]) && $this->invoiceHelper->invoiceCarruerType[$wooecpay_invoice_carruer_type] == '手機條碼') {
+                        echo wp_kses_post('<p><strong>載具編號:</strong>' . $wooecpay_invoice_carruer_num . '</p>');
+                    }
+                    break;
 
-            case Wooecpay_Invoice_Helper::INVOICE_TYPE_DONATE:
-                echo wp_kses_post('<p><strong>愛心碼:</strong>' . $wooecpay_invoice_love_code . '</p>');
-                break;
+                case Wooecpay_Invoice_Helper::INVOICE_TYPE_DONATE:
+                    echo wp_kses_post('<p><strong>愛心碼:</strong>' . $wooecpay_invoice_love_code . '</p>');
+                    break;
             }
 
             // 開立發票按鈕顯示判斷
@@ -361,16 +369,18 @@ class Wooecpay_Order {
     /**
      * 複寫聯絡電話至收件人電話
      */
-    public function order_update_sync_shipping_phone($post_id) {
+    public function order_update_sync_shipping_phone($post_id)
+    {
         if ($order = wc_get_order($post_id)) {
-            $shipping_phone = (!empty($order->get_shipping_phone())) ?: $order->get_billing_phone();
+            $shipping_phone = (! empty($order->get_shipping_phone())) ?: $order->get_billing_phone();
 
             $order->update_meta_data('wooecpay_shipping_phone', $shipping_phone);
             $order->save();
         }
     }
 
-    public function ecpay_validate_logistic_fields($post_id, $data) {
+    public function ecpay_validate_logistic_fields($post_id, $data)
+    {
 
         if ($order = wc_get_order($post_id)) {
 
@@ -386,9 +396,9 @@ class Wooecpay_Order {
             if (in_array($shipping_method_id, ['Wooecpay_Logistic_Home_Tcat', 'Wooecpay_Logistic_Home_Tcat_Outside'])) {
                 // 比對運送方式與地址
                 $result = $this->logisticHelper->is_available_state_home_tcat($shipping_method_id, $shipping_state);
-                if (!$result) {
+                if (! $result) {
                     // 比對失敗，中斷執行程序不更新訂單
-                    wp_die(__('The order update failed as the selected store does not match the chosen shipping method (Outlying Island/Main Island).', 'ecpay-ecommerce-for-woocommerce'), __('Order Save Error', 'ecpay-ecommerce-for-woocommerce'), array('response' => 400));
+                    wp_die(__('The order update failed as the selected store does not match the chosen shipping method (Outlying Island/Main Island).', 'ecpay-ecommerce-for-woocommerce'), __('Order Save Error', 'ecpay-ecommerce-for-woocommerce'), ['response' => 400]);
                 }
             }
         }
@@ -397,23 +407,30 @@ class Wooecpay_Order {
     /**
      * 註冊JS
      */
-    public function wooecpay_register_scripts() {
+    public function wooecpay_register_scripts()
+    {
         wp_register_script(
             'wooecpay_main',
             WOOECPAY_PLUGIN_URL . 'public/js/wooecpay-main.js',
-            array(),
+            [],
             '1.0.2',
             true
         );
 
         // 載入js
         wp_enqueue_script('wooecpay_main');
+
+        // 傳遞 AJAX URL 和 Nonce
+        wp_localize_script('wooecpay_main', 'wooecpay_ajax', [
+            'nonce' => wp_create_nonce('ecpay_clear_log_nonce'), // 產生 Nonce
+        ]);
     }
 
     /**
      * 產生物流相關按鈕顯示
      */
-    public function logistic_button_display($order) {
+    public function logistic_button_display($order)
+    {
         if ($order) {
 
             // 取得物流方式
@@ -466,7 +483,7 @@ class Wooecpay_Order {
                     // 已經存在AllPayLogisticsID 關閉按鈕
                     $AllPayLogisticsID = $order->get_meta('_wooecpay_logistic_AllPayLogisticsID', true);
 
-                    if (!empty($AllPayLogisticsID)) {
+                    if (! empty($AllPayLogisticsID)) {
                         $logistic_order_button = false;
                     }
 
@@ -482,7 +499,7 @@ class Wooecpay_Order {
                     // 已經存在AllPayLogisticsID 關閉按鈕
                     $AllPayLogisticsID = $order->get_meta('_wooecpay_logistic_AllPayLogisticsID', true);
 
-                    if (!empty($AllPayLogisticsID)) {
+                    if (! empty($AllPayLogisticsID)) {
                         $logistic_print_button = true;
                     }
                 }
@@ -544,26 +561,26 @@ class Wooecpay_Order {
 
                         switch ($shipping_method_id) {
 
-                        case 'Wooecpay_Logistic_CVS_711':
-                        case 'Wooecpay_Logistic_CVS_711_Outside':
-                            $inputPrint['CVSPaymentNo']    = $CVSPaymentNo;
-                            $inputPrint['CVSValidationNo'] = $CVSValidationNo;
-                            break;
+                            case 'Wooecpay_Logistic_CVS_711':
+                            case 'Wooecpay_Logistic_CVS_711_Outside':
+                                $inputPrint['CVSPaymentNo']    = $CVSPaymentNo;
+                                $inputPrint['CVSValidationNo'] = $CVSValidationNo;
+                                break;
 
-                        case 'Wooecpay_Logistic_CVS_Family':
-                        case 'Wooecpay_Logistic_CVS_Hilife':
-                        case 'Wooecpay_Logistic_CVS_Okmart':
-                            $inputPrint['CVSPaymentNo'] = $CVSPaymentNo;
-                            break;
+                            case 'Wooecpay_Logistic_CVS_Family':
+                            case 'Wooecpay_Logistic_CVS_Hilife':
+                            case 'Wooecpay_Logistic_CVS_Okmart':
+                                $inputPrint['CVSPaymentNo'] = $CVSPaymentNo;
+                                break;
 
-                        case 'Wooecpay_Logistic_Home_Tcat':
-                        case 'Wooecpay_Logistic_Home_Tcat_Outside':
-                        case 'Wooecpay_Logistic_Home_Ecan':
-                        case 'Wooecpay_Logistic_Home_Post':
-                            break;
+                            case 'Wooecpay_Logistic_Home_Tcat':
+                            case 'Wooecpay_Logistic_Home_Tcat_Outside':
+                            case 'Wooecpay_Logistic_Home_Ecan':
+                            case 'Wooecpay_Logistic_Home_Post':
+                                break;
 
-                        default:
-                            break;
+                            default:
+                                break;
                         }
 
                         try {
@@ -599,7 +616,8 @@ class Wooecpay_Order {
     /**
      * 產生物流訂單
      */
-    public function ajax_send_logistic_order_action() {
+    public function ajax_send_logistic_order_action()
+    {
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
         ecpay_log('手動產生物流訂單', 'B00008', $order_id);
 
@@ -609,7 +627,8 @@ class Wooecpay_Order {
     /**
      * 手動開立發票
      */
-    public function ajax_send_invoice_create() {
+    public function ajax_send_invoice_create()
+    {
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
 
         if ($order = wc_get_order($order_id)) {
@@ -621,7 +640,8 @@ class Wooecpay_Order {
     /**
      * 自動開立發票
      */
-    public function auto_invoice_create($order_id) {
+    public function auto_invoice_create($order_id)
+    {
         if ($order = wc_get_order($order_id)) {
             ecpay_log('自動開立發票', 'C00002', $order_id);
             $this->invoiceHelper->invoice_create($order);
@@ -632,7 +652,8 @@ class Wooecpay_Order {
     /**
      * 手動作廢發票
      */
-    public function ajax_send_invoice_invalid() {
+    public function ajax_send_invoice_invalid()
+    {
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
 
         if ($order = wc_get_order($order_id)) {
@@ -644,7 +665,8 @@ class Wooecpay_Order {
     /**
      * 自動作廢發票
      */
-    public function auto_invoice_invalid($order_id) {
+    public function auto_invoice_invalid($order_id)
+    {
         if ($order = wc_get_order($order_id)) {
             ecpay_log('自動作廢發票', 'C00004', $order_id);
             $this->invoiceHelper->invoice_invalid($order);
@@ -655,25 +677,27 @@ class Wooecpay_Order {
     /**
      * 調整後台訂單列表頁欄位內容
      */
-    public function custom_orders_list_column_content($column, $post_id) {
+    public function custom_orders_list_column_content($column, $post_id)
+    {
         switch ($column) {
-        case 'order_number':
-            if ($order = wc_get_order($post_id)) {
-                // 檢查訂單是否可能有綠界訂單重複付款情形
-                $is_duplicate_payment = $this->paymentHelper->check_order_is_duplicate_payment($order);
-                if ($is_duplicate_payment['code'] === 1) {
-                    // 顯示 Waring 小圖示
-                    echo wp_kses_post('&nbsp;<span class="dashicons dashicons-warning" style="color: red;"></span>');
+            case 'order_number':
+                if ($order = wc_get_order($post_id)) {
+                    // 檢查訂單是否可能有綠界訂單重複付款情形
+                    $is_duplicate_payment = $this->paymentHelper->check_order_is_duplicate_payment($order);
+                    if ($is_duplicate_payment['code'] === 1) {
+                        // 顯示 Waring 小圖示
+                        echo wp_kses_post('&nbsp;<span class="dashicons dashicons-warning" style="color: red;"></span>');
+                    }
                 }
-            }
-            break;
+                break;
         }
     }
 
     /**
      * 檢查訂單是否重複付款
      */
-    public function check_order_is_duplicate_payment($order) {
+    public function check_order_is_duplicate_payment($order)
+    {
         $is_duplicate_payment = $this->paymentHelper->check_order_is_duplicate_payment($order);
 
         // 顯示提示訊息
@@ -683,7 +707,7 @@ class Wooecpay_Order {
 
             // 移除空值
             $merchant_trade_no_list = array_filter($is_duplicate_payment['merchant_trade_no'], function ($value, $key) {
-                return !is_null($value) && $value !== '';
+                return ! is_null($value) && $value !== '';
             }, ARRAY_FILTER_USE_BOTH);
 
             foreach ($merchant_trade_no_list as $merchant_trade_no) {
@@ -697,7 +721,8 @@ class Wooecpay_Order {
     /**
      * 綠界訂單重複付款提示標示為已處理
      */
-    public function ajax_duplicate_payment_complete() {
+    public function ajax_duplicate_payment_complete()
+    {
         if ($order = wc_get_order($_POST['order_id'])) {
             $result = $this->paymentHelper->update_order_ecpay_orders_payment_status_complete($_POST['order_id']);
 
@@ -716,9 +741,22 @@ class Wooecpay_Order {
     /**
      * 清理 Log
      */
-    public function ajax_clear_ecpay_debug_log() {
+    public function ajax_clear_ecpay_debug_log()
+    {
 
-        $this->loggerHelper->clear_log();
+        // 檢查 nonce 來防止 CSRF 攻擊
+        check_ajax_referer('ecpay_clear_log_nonce', 'security');
+
+        // 檢查使用者權限，確保只有管理員可以執行
+        if (! current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+            return;
+
+        } else {
+
+            // 執行清除日誌的操作
+            $this->loggerHelper->clear_log();
+        }
 
         wp_die();
     }

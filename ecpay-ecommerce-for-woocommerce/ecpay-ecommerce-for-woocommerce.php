@@ -1,12 +1,12 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Green World FinTech Service Co., Ltd. (https://www.ecpay.com.tw)
- * @version 1.1.2412310
+ * @version 1.1.2502030
  *
  * Plugin Name: ECPay Ecommerce for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
  * Description: Ecpay Plug for WooCommerce
- * Version: 1.1.2412310
+ * Version: 1.1.2502030
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
@@ -20,7 +20,7 @@
 defined('ABSPATH') or exit;
 
 // 相關常數定義
-define('WOOECPAY_VERSION', '1.1.2412310');
+define('WOOECPAY_VERSION', '1.1.2502030');
 define('REQUIREMENT_WOOCOMMERCE_VERSION', '8.3.0');
 define('WOOECPAY_PLUGIN_NAME', 'ecpay-ecommerce-for-woocommerce');
 define('WOOECPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -50,15 +50,15 @@ require plugin_dir_path(__FILE__) . 'includes/services/helpers/invoice/ecpay-inv
 // upgrader_process_complete: 更新外掛時觸發
 // plugins_loaded: 用於版本檢查，以防 upgrader_process_complete 抓到舊版本程式的問題
 require_once WOOECPAY_PLUGIN_DIR . 'includes/services/database/ecpay-db-process.php';
-register_activation_hook(__FILE__, array('Wooecpay_Db_Process', 'ecpay_db_process'));
-add_action('upgrader_process_complete', array('Wooecpay_Db_Process', 'ecpay_db_process'));
-add_action('woocommerce_loaded', array('Wooecpay_Db_Process', 'ecpay_db_process'));
+register_activation_hook(__FILE__, ['Wooecpay_Db_Process', 'ecpay_db_process']);
+add_action('upgrader_process_complete', ['Wooecpay_Db_Process', 'ecpay_db_process']);
+add_action('woocommerce_loaded', ['Wooecpay_Db_Process', 'ecpay_db_process']);
 add_action('plugins_loaded', 'update_db_fields');
 
 // Woocommerce版本判斷
 add_action('admin_notices',
     function () {
-        if (!defined('WC_VERSION') || version_compare(WC_VERSION, REQUIREMENT_WOOCOMMERCE_VERSION, '<')) {
+        if (! defined('WC_VERSION') || version_compare(WC_VERSION, REQUIREMENT_WOOCOMMERCE_VERSION, '<')) {
             $notice = sprintf(
                 __('<strong>%1$s</strong> is inactive. It require WooCommerce version %2$s or newer.', 'ecpay-ecommerce-for-woocommerce'),
                 __('ECPay Ecommerce for WooCommerce', 'ecpay-ecommerce-for-woocommerce'),
@@ -81,14 +81,24 @@ add_action('before_woocommerce_init',
 );
 
 // 更新 DB option
-function update_db_fields() {
+function update_db_fields()
+{
     // 定期定額
     $dca_settings = get_option('woocommerce_Wooecpay_Gateway_Dca_settings', []);
     if (count($dca_settings) > 0) {
         // 判斷資料庫若沒有定期定額資訊，增加預設值
-        if (!isset($dca_settings['dca_periodType'])) $dca_settings['dca_periodType'] = 'Y';
-        if (!isset($dca_settings['dca_frequency'])) $dca_settings['dca_frequency'] = 1;
-        if (!isset($dca_settings['dca_execTimes'])) $dca_settings['dca_execTimes'] = 2;
+        if (! isset($dca_settings['dca_periodType'])) {
+            $dca_settings['dca_periodType'] = 'Y';
+        }
+
+        if (! isset($dca_settings['dca_frequency'])) {
+            $dca_settings['dca_frequency'] = 1;
+        }
+
+        if (! isset($dca_settings['dca_execTimes'])) {
+            $dca_settings['dca_execTimes'] = 2;
+        }
+
         update_option('woocommerce_Wooecpay_Gateway_Dca_settings', $dca_settings);
     }
 
@@ -100,14 +110,15 @@ function update_db_fields() {
 
 }
 
-
 // 載入 log 功能
 require WOOECPAY_PLUGIN_DIR . 'includes/services/helpers/logger/ecpay-logger.php';
-function ecpay_log($content, $code = '', $order_id = '') {
+function ecpay_log($content, $code = '', $order_id = '')
+{
     $logger = new Helpers\Logger\Wooecpay_Logger;
     return $logger->log($content, $code, $order_id);
 }
-function ecpay_log_replace_symbol($type, $data) {
+function ecpay_log_replace_symbol($type, $data)
+{
     $logger = new Helpers\Logger\Wooecpay_Logger;
     return $logger->replace_symbol($type, $data);
 }
