@@ -654,7 +654,7 @@ class Wooecpay_Payment_Helper
             $wpdb->prepare(
                 "SELECT TotalSuccessTimes
                 FROM $table_name
-                WHERE MerchantTradeNo = %s AND PaymentType = %s
+                WHERE MerchantTradeNo = %s AND payment_method = %s
                 ORDER BY TotalSuccessTimes DESC
                 LIMIT 1",
                 $merchant_trade_no,

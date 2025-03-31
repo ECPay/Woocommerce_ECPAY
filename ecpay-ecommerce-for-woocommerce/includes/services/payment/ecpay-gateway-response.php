@@ -62,6 +62,10 @@ class Wooecpay_Gateway_Response
                 // 金額比對
                 if ($TradeAmt == $order_total) {
 
+                    // 計算定期定額付款結果回傳交易成功最大次數
+                    $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
+                    ecpay_log('綠界定期定額付款結果回傳計算最大次數: ' . $maxSuccessTimes);
+
                     // 更新訂單付款結果
                     $this->paymentHelper->update_order_ecpay_orders_payment_status($order_id, $info);
 
@@ -80,22 +84,28 @@ class Wooecpay_Gateway_Response
                             } else {
                                 // 定期定額付款回傳
                                 if ($info['PeriodType'] == 'Y' || $info['PeriodType'] == 'M' || $info['PeriodType'] == 'D') {
-                                    // 確認定期定額訂單最後交易成功次數
-                                    $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
-                                    if ($maxSuccessTimes == 1 && $info['TotalSuccessTimes'] == 1) {
-                                        // 第一次
-                                        $order->update_meta_data('_ecpay_dca_response_type', 'master');
-                                    }
-                                    elseif ($maxSuccessTimes == 0) {
-                                        ecpay_log('綠界定期定額訂單查無訂單', 'A00031', $order_id);
+
+                                    // 確認訂單狀態存在
+                                    $is_exist = $this->paymentHelper->is_ecpay_orders_payment_status_exist($order_id, $info['MerchantTradeNo']);
+
+                                    if ($is_exist) {
+                                        // 確認定期定額訂單最後交易成功次數
+                                        if ($maxSuccessTimes == 0 && $info['TotalSuccessTimes'] == 1) {
+                                            // 第一次
+                                            $order->update_meta_data('_ecpay_dca_response_type', 'master');
+                                            ecpay_log('綠界定期定額訂單第一次付款結果回傳(Master)', 'A00030', $order_id);
+                                        }
+                                        else {
+                                            // 非第一次
+                                            if ($maxSuccessTimes < $info['TotalSuccessTimes']) {
+                                                ecpay_log('綠界定期定額訂單非第一次付款結果回傳', 'A00032', $order_id);
+                                                $order = $this->create_cda_new_order($info, $order_id);
+                                            }
+                                            else ecpay_log('綠界定期定額訂單重複接收付款結果', 'A00033', $order_id);
+                                        }
                                     }
                                     else {
-                                        // 非第一次
-                                        if ($maxSuccessTimes < $info['TotalSuccessTimes']) {
-                                            ecpay_log('綠界定期定額訂單非第一次付款結果回傳', 'A00032', $order_id);
-                                            $order = $this->create_cda_new_order($info, $order_id);
-                                        }
-                                        else ecpay_log('綠界定期定額訂單重複接收付款結果', 'A00033', $order_id);
+                                        ecpay_log('綠界定期定額訂單查無訂單', 'A00031', $order_id);
                                     }
                                 }
 
@@ -218,6 +228,7 @@ class Wooecpay_Gateway_Response
     // 自動建立定期定額訂單
     public function create_cda_new_order($info, $order_id)
     {
+        // TODO: 帶 successTimes
         // 原始訂單
         $source_order = wc_get_order($order_id);
         if (! $source_order) {
@@ -345,6 +356,7 @@ class Wooecpay_Gateway_Response
                 if ($TradeAmt == $order_total) {
 
                     // 更新訂單付款結果
+                    $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
                     $this->paymentHelper->update_order_ecpay_orders_payment_status($order_id, $info);
 
                     // 判斷狀態
@@ -362,23 +374,28 @@ class Wooecpay_Gateway_Response
                             } else {
                                 // 定期定額付款回傳(非第一次)
                                 if ($info['PeriodType'] == 'Y' || $info['PeriodType'] == 'M' || $info['PeriodType'] == 'D') {
-                                    // 確認定期定額訂單最後交易成功次數
-                                    $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
-                                    if ($maxSuccessTimes == 1 && $info['TotalSuccessTimes'] == 1) {
-                                        // 第一次
-                                        $order->update_meta_data('_ecpay_dca_response_type', 'master');
-                                        ecpay_log('綠界定期定額訂單第一次付款結果回傳(舊版Master)', 'A00030', $order_id);
-                                    }
-                                    elseif ($maxSuccessTimes == 0) {
-                                        ecpay_log('綠界定期定額訂單查無舊版訂單(舊版)', 'A00031', $order_id);
+
+                                    // 確認訂單狀態存在
+                                    $is_exist = $this->paymentHelper->is_ecpay_orders_payment_status_exist($order_id, $info['MerchantTradeNo']);
+
+                                    if ($is_exist) {
+                                        // 確認定期定額訂單最後交易成功次數
+                                        if ($maxSuccessTimes == 0 && $info['TotalSuccessTimes'] == 1) {
+                                            // 第一次
+                                            $order->update_meta_data('_ecpay_dca_response_type', 'master');
+                                            ecpay_log('綠界定期定額訂單第一次付款結果回傳(舊版Master)', 'A00030', $order_id);
+                                        }
+                                        else {
+                                            // 非第一次
+                                            if ($maxSuccessTimes < $info['TotalSuccessTimes']) {
+                                                ecpay_log('綠界定期定額訂單非第一次付款結果回傳(舊版)', 'A00032', $order_id);
+                                                $order = $this->create_cda_new_order($info, $order_id);
+                                            }
+                                            else ecpay_log('綠界定期定額訂單重複接收付款結果(舊版)', 'A00033', $order_id);
+                                        }
                                     }
                                     else {
-                                        // 非第一次
-                                        if ($maxSuccessTimes < $info['TotalSuccessTimes']) {
-                                            ecpay_log('綠界定期定額訂單非第一次付款結果回傳(舊版)', 'A00032', $order_id);
-                                            $order = $this->create_cda_new_order($info, $order_id);
-                                        }
-                                        else ecpay_log('綠界定期定額訂單重複接收付款結果(舊版)', 'A00033', $order_id);
+                                        ecpay_log('綠界定期定額訂單查無舊版訂單(舊版)', 'A00031', $order_id);
                                     }
                                 }
 
