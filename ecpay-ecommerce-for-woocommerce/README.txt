@@ -4,7 +4,7 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2504020
+Stable tag: 1.1.2504220
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2504220
+增加判斷裝置於結帳介面是否可以使用ApplePay
 
 v1.1.2504020
 修正定期定額新舊版模組相容性問題
