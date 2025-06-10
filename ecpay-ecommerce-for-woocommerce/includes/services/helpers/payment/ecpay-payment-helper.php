@@ -263,6 +263,9 @@ class Wooecpay_Payment_Helper
             case 'Wooecpay_Gateway_Bnpl':
                 $choose_payment = 'BNPL';
                 break;
+            case 'Wooecpay_Gateway_Weixin':
+                $choose_payment = 'WeiXin';
+                break;
         }
 
         return $choose_payment;
@@ -594,7 +597,8 @@ class Wooecpay_Payment_Helper
 			'Wooecpay_Gateway_Applepay',
 			'Wooecpay_Gateway_Dca',
 			'Wooecpay_Gateway_Twqr',
-			'Wooecpay_Gateway_Bnpl'
+			'Wooecpay_Gateway_Bnpl',
+			'Wooecpay_Gateway_Weixin',
         ];
     }
 

@@ -180,21 +180,10 @@ class Wooecpay_Order
 
                 // 判斷金流方式
                 $payment_method = $order->get_payment_method();
+                $ecpay_payment = ['Wooecpay_Gateway_Credit', 'Wooecpay_Gateway_Credit_Installment', 'Wooecpay_Gateway_Webatm', 'Wooecpay_Gateway_Atm', 'Wooecpay_Gateway_Cvs', 'Wooecpay_Gateway_Barcode', 'Wooecpay_Gateway_Applepay', 'Wooecpay_Gateway_Dca', 'Wooecpay_Gateway_Twqr', 'Wooecpay_Gateway_Weixin'];
 
-                if (
-                    $payment_method == 'Wooecpay_Gateway_Credit' ||
-                    $payment_method == 'Wooecpay_Gateway_Credit_Installment' ||
-                    $payment_method == 'Wooecpay_Gateway_Webatm' ||
-                    $payment_method == 'Wooecpay_Gateway_Atm' ||
-                    $payment_method == 'Wooecpay_Gateway_Cvs' ||
-                    $payment_method == 'Wooecpay_Gateway_Barcode' ||
-                    $payment_method == 'Wooecpay_Gateway_Applepay' ||
-                    $payment_method == 'Wooecpay_Gateway_Dca' ||
-                    $payment_method == 'Wooecpay_Gateway_Twqr' ||
-                    $payment_method == 'Wooecpay_Gateway_Bnpl'
-                ) {
+                if (in_array($payment_method, $ecpay_payment)) {
                     // 判斷是否超過指定時間或自訂的保留時間
-
                     // 計算訂單建立時間是否超過指定時間
                     if (
                         $payment_method == 'Wooecpay_Gateway_Credit' ||
@@ -205,8 +194,9 @@ class Wooecpay_Order
                         $offset = 30; // 非信用卡
                     }
 
-                                                                                                                                                  // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
-                    $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); // 取得保留庫存時間
+                    // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
+                    // 取得保留庫存時間
+                    $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); 
 
                     if ($hold_stock_minutes > $offset) {
                         $offset = $hold_stock_minutes;

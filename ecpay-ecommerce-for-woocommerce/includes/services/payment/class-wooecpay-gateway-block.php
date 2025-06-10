@@ -53,6 +53,9 @@ class Wooecpay_Gateway_Block extends AbstractPaymentMethodType {
             case 'Wooecpay_Gateway_Dca':
                 $js_url = WOOECPAY_PLUGIN_URL . 'public/js/blocks/dca-checkout.js';
                 break;
+            case 'Wooecpay_Gateway_Weixin':
+                $js_url = WOOECPAY_PLUGIN_URL . 'public/js/blocks/weixin-checkout.js';
+                break;
         }
 
         wp_register_script(

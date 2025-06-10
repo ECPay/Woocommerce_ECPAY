@@ -1,24 +1,24 @@
 <?php
 
-class Wooecpay_Gateway_Credit extends Wooecpay_Gateway_Base
+class Wooecpay_Gateway_Weixin extends Wooecpay_Gateway_Base
 {
     protected $payment_type;
     protected $min_amount;
 
     public function __construct()
     {
-        $this->id                   = 'Wooecpay_Gateway_Credit';
-        $this->payment_type         = 'Credit';
+        $this->id                   = 'Wooecpay_Gateway_Weixin';
+        $this->payment_type         = 'WeiXin';
         $this->icon                 = plugins_url('images/icon.png', dirname(dirname( __FILE__ )) );
         $this->has_fields           = false;
-        $this->method_title         = __('ECPay Credit', 'ecpay-ecommerce-for-woocommerce');
-        $this->method_description   = '使用綠界信用卡付款';
+        $this->method_title         = __('ECPay WeiXin', 'ecpay-ecommerce-for-woocommerce');
+        $this->method_description   = '使用綠界WeiXin付款';
 
-        $this->title                = __('ECPay Credit', 'ecpay-ecommerce-for-woocommerce');
+        $this->title                = __('ECPay WeiXin', 'ecpay-ecommerce-for-woocommerce');
         $this->description          = $this->get_option('description');
         $this->min_amount           = (int) $this->get_option('min_amount', 0);
 
-        $this->form_fields          = include WOOECPAY_PLUGIN_INCLUDE_DIR . '/config/payment/settings-gateway-credit.php' ;
+        $this->form_fields          = include WOOECPAY_PLUGIN_INCLUDE_DIR . '/config/payment/settings-gateway-weixin.php' ;
         $this->init_settings();
 
         parent::__construct();
@@ -46,10 +46,10 @@ class Wooecpay_Gateway_Credit extends Wooecpay_Gateway_Base
         return parent::is_available();
     }
 
-    public function process_payment($order_id){
-       
+    public function process_payment($order_id) 
+    {
         $order = wc_get_order($order_id);
-        $order->add_order_note(__('Pay via ECPay Credit', 'ecpay-ecommerce-for-woocommerce'));
+        $order->add_order_note(__('Pay via ECPay WeiXin', 'ecpay-ecommerce-for-woocommerce'));
         wc_maybe_reduce_stock_levels($order_id);
         wc_release_stock_for_order($order);
 

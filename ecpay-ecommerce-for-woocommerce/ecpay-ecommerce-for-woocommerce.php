@@ -1,17 +1,18 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Green World FinTech Service Co., Ltd. (https://www.ecpay.com.tw)
- * @version 1.1.2504220
+ * @version 1.1.2506040
  *
  * Plugin Name: ECPay Ecommerce for WooCommerce
  * Plugin URI: https://www.ecpay.com.tw
  * Description: Ecpay Plug for WooCommerce
- * Version: 1.1.2504220
+ * Version: 1.1.2506040
  * Author: ECPay Green World FinTech Service Co., Ltd.
  * Author URI: https://www.ecpay.com.tw
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /languages
+ * Text Domain: ecpay-ecommerce-for-woocommerce
  * WC requires at least: 8
  * WC tested up to: 8.8.0
  */
@@ -20,7 +21,7 @@
 defined('ABSPATH') or exit;
 
 // 相關常數定義
-define('WOOECPAY_VERSION', '1.1.2504220');
+define('WOOECPAY_VERSION', '1.1.2506040');
 define('REQUIREMENT_WOOCOMMERCE_VERSION', '8.3.0');
 define('WOOECPAY_PLUGIN_NAME', 'ecpay-ecommerce-for-woocommerce');
 define('WOOECPAY_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -28,6 +29,12 @@ define('WOOECPAY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WOOECPAY_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('WOOECPAY_PLUGIN_INCLUDE_DIR', WOOECPAY_PLUGIN_DIR . 'includes');
 define('WOOECPAY_PLUGIN_LOG_DIR', WOOECPAY_PLUGIN_DIR . 'logs');
+
+// 載入語系文件
+add_action('plugins_loaded', 'wooecpay_load_textdomain');
+function wooecpay_load_textdomain() {
+    load_plugin_textdomain('ecpay-ecommerce-for-woocommerce', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+}
 
 //
 require_once WOOECPAY_PLUGIN_DIR . '/vendor/autoload.php';

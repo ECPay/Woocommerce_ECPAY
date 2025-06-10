@@ -24,6 +24,9 @@ class Blocks_Integration_Invoice_Dev implements IntegrationInterface {
 	public function initialize() {
 		$this->register_block_frontend_scripts();
 		$this->register_block_editor_scripts();
+		add_action('wp_enqueue_scripts', array($this, 'set_script_translations'), 100);
+		add_action('admin_enqueue_scripts', array($this, 'set_script_translations'), 100);
+		add_action('enqueue_block_editor_assets', array($this, 'set_script_translations'), 100);
 	}
 
 	/**
@@ -51,6 +54,33 @@ class Blocks_Integration_Invoice_Dev implements IntegrationInterface {
 	 */
 	public function get_script_data() {
 		return array();
+	}
+
+	/**
+	 * Set script translations for the blocks.
+	 *
+	 * @return void
+	 */
+	public function set_script_translations() {
+		if (function_exists('wp_set_script_translations')) {
+			// 設置前端 block 翻譯
+			if (wp_script_is('ecpay-checkout-block-frontend', 'registered') || wp_script_is('ecpay-checkout-block-frontend', 'enqueued')) {
+				wp_set_script_translations(
+					'ecpay-checkout-block-frontend',
+					'ecpay-ecommerce-for-woocommerce',
+					WOOECPAY_PLUGIN_DIR . 'languages'
+				);
+			}
+			
+			// 設置編輯器 block 翻譯
+			if (wp_script_is('ecpay-checkout-block-editor', 'registered') || wp_script_is('ecpay-checkout-block-editor', 'enqueued')) {
+				wp_set_script_translations(
+					'ecpay-checkout-block-editor',
+					'ecpay-ecommerce-for-woocommerce',
+					WOOECPAY_PLUGIN_DIR . 'languages'
+				);
+			}
+		}
 	}
 
 	/**

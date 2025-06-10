@@ -15,7 +15,6 @@ class Wooecpay_Logistic_Base extends WC_Shipping_Method
     {
         $this->init_settings(); // This is part of the settings API. Loads settings you previously init.
 
-        $this->title            = $this->get_option('title');
         $this->tax_status       = $this->get_option('tax_status');
         $this->cost             = $this->get_option('cost');
         $this->cost_requires    = $this->get_option('cost_requires');

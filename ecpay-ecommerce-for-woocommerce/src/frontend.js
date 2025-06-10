@@ -10,10 +10,10 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
     const [invoiceTypeValue, setInvoiceTypeValue] = useState('p');
     const [carruerTypeValue, setCarruerTypeValue] = useState('0');
     const [carruerTypeOptions, setCarruerTypeOptions] = useState([
-        {label: '索取紙本', value: '0'},
-        {label: '雲端發票(中獎寄送紙本)', value: '1'},
-        {label: '自然人憑證', value: '2'},
-        {label: '手機條碼', value: '3'}
+        {label: __('Paper Invoice', 'ecpay-ecommerce-for-woocommerce'), value: '0'},
+        {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+        {label: __('Citizen Digital Certificate', 'ecpay-ecommerce-for-woocommerce'), value: '2'},
+        {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
     ]);
     const [companyNameValue, setCompanyNameValue] = useState('');
     const [companyIdentifierValue, setCompanyIdentifierValue] = useState('');
@@ -23,22 +23,20 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
     let donateCode = '';
     let invoicePapper = 'enable';
 
-    // 最後一個參數留空陣列，表示首次渲染才執行
     useEffect(() => {
-        // 預設捐贈碼
         if (InvoiceData.DonateCode !== null) {
-            donateCode = InvoiceData.DonateCode            
-            setLoveCodeValue(donateCode)
+            donateCode = InvoiceData.DonateCode;
+            setLoveCodeValue(donateCode);
             setExtensionData('ecpay-invoice-block', 'invoice_love_code', donateCode);
         }
         if (InvoiceData.InvoicePapper !== null) {
-            invoicePapper = InvoiceData.InvoicePapper
+            invoicePapper = InvoiceData.InvoicePapper;
             if (invoicePapper == 'disable') {
                 setCarruerTypeOptions([
-                    {label: '雲端發票(中獎寄送紙本)', value: '1'},
-                    {label: '自然人憑證', value: '2'},
-                    {label: '手機條碼', value: '3'}
-                ])
+                    {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+                    {label: __('Citizen Digital Certificate', 'ecpay-ecommerce-for-woocommerce'), value: '2'},
+                    {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
+                ]);
             }
         }
     }, []);
@@ -52,48 +50,44 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
 
     const refreshFields = (type, value) => {
         if (type === 'invoice_type') {
-            // 重設載具Options
             if (value === 'c') {
                 var data = [
-                    {label: '索取紙本', value: '0'},
-                    {label: '雲端發票(中獎寄送紙本)', value: '1'},
-                    {label: '手機條碼', value: '3'},
-                ]
+                    {label: __('Paper Invoice', 'ecpay-ecommerce-for-woocommerce'), value: '0'},
+                    {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+                    {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
+                ];
 
                 if (invoicePapper == 'disable') {
                     data = [
-                        {label: '雲端發票(中獎寄送紙本)', value: '1'},
-                        {label: '手機條碼', value: '3'},
-                    ]
+                        {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+                        {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
+                    ];
                 }
                 setCarruerTypeOptions(data);
             } else if (value === 'p') {
                 var data = [
-                    {label: '索取紙本', value: '0'},
-                    {label: '雲端發票(中獎寄送紙本)', value: '1'},
-                    {label: '自然人憑證', value: '2'},
-                    {label: '手機條碼', value: '3'}
-                ]
+                    {label: __('Paper Invoice', 'ecpay-ecommerce-for-woocommerce'), value: '0'},
+                    {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+                    {label: __('Citizen Digital Certificate', 'ecpay-ecommerce-for-woocommerce'), value: '2'},
+                    {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
+                ];
 
                 if (invoicePapper == 'disable') {
                     data = [
-                        {label: '雲端發票(中獎寄送紙本)', value: '1'},
-                        {label: '自然人憑證', value: '2'},
-                        {label: '手機條碼', value: '3'}
-                    ]
+                        {label: __('Cloud Invoice (Paper sent if winning)', 'ecpay-ecommerce-for-woocommerce'), value: '1'},
+                        {label: __('Citizen Digital Certificate', 'ecpay-ecommerce-for-woocommerce'), value: '2'},
+                        {label: __('Mobile Barcode', 'ecpay-ecommerce-for-woocommerce'), value: '3'}
+                    ];
                 }
                 setCarruerTypeOptions(data);
 
-                // 重設載具類型
                 setCarruerTypeValue(data[0].value);
                 setExtensionData('ecpay-invoice-block', 'invoice_carruer_type', data[0].value);
-
             } else {
                 setCarruerTypeOptions([]);
             }
         }
 
-        // 重設發票欄位值
         setCompanyNameValue('');
         setCompanyIdentifierValue('');
         setLoveCodeValue(donateCode);
@@ -102,9 +96,8 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
         setExtensionData('ecpay-invoice-block', 'invoice_customer_identifier', donateCode);
         setExtensionData('ecpay-invoice-block', 'invoice_love_code', donateCode);
         setExtensionData('ecpay-invoice-block', 'invoice_carruer_num', donateCode);
-    }
+    };
 
-    // 監聽欄位變動
     const handleDataChange = useCallback((value, type) => {
         switch (type) {
             case 'invoice_type':
@@ -129,10 +122,8 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
                 break;
         }
 
-        // 設定拋往後端值
         setExtensionData('ecpay-invoice-block', type, value);
-    },
-    [
+    }, [
         setInvoiceTypeValue, 
         setCarruerTypeValue, 
         setCompanyNameValue, 
@@ -140,17 +131,17 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
         setLoveCodeValue,
         setCarruerNumValue,
         setExtensionData
-    ])
+    ]);
 
     return (
         <div className="ecpay_invoice_fields">
             <SelectControl
-                label="發票開立"
+                label={__('Invoice Type', 'ecpay-ecommerce-for-woocommerce')}
                 value={invoiceTypeValue}
                 options={[
-                    {label: '個人', value: 'p'},
-                    {label: '公司', value: 'c'},
-                    {label: '捐贈', value: 'd'},
+                    {label: __('Personal', 'ecpay-ecommerce-for-woocommerce'), value: 'p'},
+                    {label: __('Company', 'ecpay-ecommerce-for-woocommerce'), value: 'c'},
+                    {label: __('Donation', 'ecpay-ecommerce-for-woocommerce'), value: 'd'}
                 ]}
                 onChange={(value) => handleDataChange(value, 'invoice_type')}
                 required={true}
@@ -158,7 +149,7 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
             />
             {invoiceTypeValue !== 'd' && (
                 <SelectControl
-                    label="載具類型"
+                    label={__('Carrier Type', 'ecpay-ecommerce-for-woocommerce')}
                     value={carruerTypeValue}
                     options={[
                         ...carruerTypeOptions
@@ -170,7 +161,7 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
             )}
             {invoiceTypeValue === 'c' && (
                 <TextControl
-                    label="公司行號"
+                    label={__('Company Name', 'ecpay-ecommerce-for-woocommerce')}
                     value={companyNameValue}
                     onChange={(value) => handleDataChange(value, 'invoice_customer_company')}
                     required={true}
@@ -179,7 +170,7 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
             )}
             {invoiceTypeValue === 'c' && (
                 <TextControl
-                    label="統一編號"
+                    label={__('Uniform Numbers', 'ecpay-ecommerce-for-woocommerce')}
                     value={companyIdentifierValue}
                     onChange={(value) => handleDataChange(value, 'invoice_customer_identifier')}
                     required={true}
@@ -188,7 +179,7 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
             )}
             {invoiceTypeValue === 'd' && (
                 <TextControl
-                    label="捐贈碼"
+                    label={__('Donation Code', 'ecpay-ecommerce-for-woocommerce')}
                     value={loveCodeValue}
                     onChange={(value) => handleDataChange(value, 'invoice_love_code')}
                     required={true}
@@ -197,7 +188,7 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
             )}
             {(carruerTypeValue === '2' || carruerTypeValue === '3') && (
                 <TextControl
-                    label="載具編號"
+                    label={__('Carrier Number', 'ecpay-ecommerce-for-woocommerce')}
                     value={carruerNumValue}
                     onChange={(value) => handleDataChange(value, 'invoice_carruer_num')}
                     required={true}
@@ -205,12 +196,12 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
                 />
             )}
         </div>
-    )
-}
+    );
+};
 
 const ecpayInvoiceOptions = {
-	metadata,
-	component: ecpayInvoiceBlock
+    metadata,
+    component: ecpayInvoiceBlock
 };
 
 registerCheckoutBlock(ecpayInvoiceOptions);

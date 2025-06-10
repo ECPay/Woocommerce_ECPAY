@@ -1,12 +1,5 @@
 <?php
 return [
-    'title' => [
-        'title' => __('Title', 'woocommerce'),
-        'type' => 'text',
-        'default' => $this->method_title,
-        'description' => __('This controls the title which the user sees during checkout.', 'woocommerce'),
-        'desc_tip' => true
-    ],
     'tax_status' => [
         'title' => __('Tax status', 'woocommerce'),
         'type' => 'select',

@@ -7,6 +7,7 @@ class Wooecpay_Logistic_Home_Post extends Wooecpay_Logistic_Base
         $this->id                   = 'Wooecpay_Logistic_Home_Post'; // Id for your shipping method. Should be uunique.
         $this->instance_id          = absint($instance_id);
         $this->method_title         = __('Ecpay Home POST', 'ecpay-ecommerce-for-woocommerce');
+        $this->title                = __('Ecpay Home POST', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = ''; // Description shown in admin
 
         $this->supports = [

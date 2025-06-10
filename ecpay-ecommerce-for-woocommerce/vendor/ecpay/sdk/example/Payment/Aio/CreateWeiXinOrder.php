@@ -17,13 +17,10 @@ $input = [
     'MerchantTradeDate' => date('Y/m/d H:i:s'),
     'PaymentType'       => 'aio',
     'TotalAmount'       => 100,
-    'TradeDesc'         => UrlService::ecpayUrlEncode('交易描述範例'),
+    'TradeDesc'         => UrlService::ecpayUrlEncode('WeiXin交易描述範例'),
     'ItemName'          => '範例商品一批 100 TWD x 1',
-    'ChoosePayment'     => 'Credit',
+    'ChoosePayment'     => 'WeiXin',
     'EncryptType'       => 1,
-
-    // 信用卡分期專用參數
-    'CreditInstallment' => '3,6,18',
 
     // 請參考 example/Payment/GetCheckoutResponse.php 範例開發
     'ReturnURL'         => 'https://www.ecpay.com.tw/example/receive',

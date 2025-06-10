@@ -15,7 +15,7 @@ class Wooecpay_Gateway_Atm extends Wooecpay_Gateway_Base
         $this->method_title         = __('ECPay ATM', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界ATM櫃員機付款';
 
-        $this->title                = $this->get_option('title');
+        $this->title                = __('ECPay ATM', 'ecpay-ecommerce-for-woocommerce');
         $this->description          = $this->get_option('description');
         $this->expire_date          = (int) $this->get_option('expire_date', 3);
         $this->min_amount           = (int) $this->get_option('min_amount', 0);

@@ -15,7 +15,7 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
         $this->method_title         = __('ECPay Credit Installment', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = '使用綠界信用卡(分期)付款';
 
-        $this->title                = $this->get_option('title');
+        $this->title                = __('ECPay Credit Installment', 'ecpay-ecommerce-for-woocommerce');
         $this->description          = $this->get_option('description');
         $this->min_amount           = (int) $this->get_option('min_amount', 0);
         $this->number_of_periods    = $this->get_option('number_of_periods', []);

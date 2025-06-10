@@ -7,13 +7,6 @@ return [
         'type' => 'checkbox',
         'default' => 'no',
     ],
-    'title' => [
-        'title' => __('Title', 'woocommerce'),
-        'type' => 'text',
-        'default' => $this->method_title,
-        'description' => __('This controls the title which the user sees during checkout.', 'woocommerce'),
-        'desc_tip' => true,
-    ],
     'description' => [
         'title' => __('Description', 'woocommerce'),
         'type' => 'text',

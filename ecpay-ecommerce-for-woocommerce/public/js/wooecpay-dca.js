@@ -78,12 +78,14 @@ var fields = {
         return errorFlag;
     },
     process: function() {
-        if (fields.check(fields.get()) > 0) {
-            document.getElementById('fieldsNotification').style = 'color: #ff0000;';
-            jQuery('input[name="save"]').prop('disabled', true);
-        } else {
-            document.getElementById('fieldsNotification').style = 'display: none;';
-            jQuery('input[name="save"]').prop('disabled', false);
+        if (document.getElementById('fieldsNotification') !== null) {
+            if (fields.check(fields.get()) > 0) {
+                document.getElementById('fieldsNotification').style = 'color: #ff0000;';
+                jQuery('input[name="save"]').prop('disabled', true);
+            } else {
+                document.getElementById('fieldsNotification').style = 'display: none;';
+                jQuery('input[name="save"]').prop('disabled', false);
+            }
         }
     }
 }

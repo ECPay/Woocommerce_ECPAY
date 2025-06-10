@@ -375,7 +375,7 @@ class Wooecpay_Gateway_Response
 
                             } else {
                                 // 定期定額付款回傳(非第一次)
-                                if ($info['PeriodType'] == 'Y' || $info['PeriodType'] == 'M' || $info['PeriodType'] == 'D' || $info['PeriodType'] == 'Year' || $info['PeriodType'] == 'Month' || $info['PeriodType'] == 'Day') {
+                                if ($info['PeriodType'] == 'Y' || $info['PeriodType'] == 'M' || $info['PeriodType'] == 'D') {
                                       
                                     // 確認定期定額訂單最後交易成功次數
                                     if ($maxSuccessTimes == 0 && $info['TotalSuccessTimes'] == 1) {

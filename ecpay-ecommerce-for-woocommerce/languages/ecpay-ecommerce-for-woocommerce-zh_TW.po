@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
 "POT-Creation-Date: 2023-12-28 10:31+0800\n"
-"PO-Revision-Date: 2024-12-11 17:05+0800\n"
+"PO-Revision-Date: 2025-05-08 15:18+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: ecpay-ecommerce-for-woocommerce.php\n"
@@ -651,7 +651,7 @@ msgstr "綠界金流特店交易編號 %s"
 msgid "Change store %1$s (%2$s)"
 msgstr "變更門市 %1$s (%2$s)"
 
-#: includes/services/payment/ecpay-gateway-applepay.php:14
+#: includes/services/payment/ecpay-gateway-applepay.php:14 includes/services/payment/ecpay-gateway-applepay.php:17
 msgid "ECPay ApplePay"
 msgstr "綠界ApplePay"
 
@@ -659,7 +659,7 @@ msgstr "綠界ApplePay"
 msgid "Pay via ECPay Applepay"
 msgstr "透過綠界ApplePay付款"
 
-#: includes/services/payment/ecpay-gateway-atm.php:15
+#: includes/services/payment/ecpay-gateway-atm.php:15 includes/services/payment/ecpay-gateway-atm.php:18
 msgid "ECPay ATM"
 msgstr "綠界ATM櫃員機"
 
@@ -678,7 +678,7 @@ msgstr "%s ATM 櫃員機繳費期限超過限制，調整為預設值。"
 msgid "Pay via ECPay ATM"
 msgstr "透過綠界ATM付款"
 
-#: includes/services/payment/ecpay-gateway-barcode.php:15
+#: includes/services/payment/ecpay-gateway-barcode.php:15 includes/services/payment/ecpay-gateway-barcode.php:18
 msgid "ECPay Cvs Barcode"
 msgstr "綠界超商條碼"
 
@@ -695,7 +695,7 @@ msgstr "%1$s 最大訂購金額超過標準的限制 (%2$d)。"
 msgid "Pay via ECPay BARCODE"
 msgstr "透過綠界條碼付款"
 
-#: includes/services/payment/ecpay-gateway-bnpl.php:14
+#: includes/services/payment/ecpay-gateway-bnpl.php:14 includes/services/payment/ecpay-gateway-bnpl.php:17
 msgid "ECPay BNPL"
 msgstr "綠界無卡分期"
 
@@ -703,7 +703,7 @@ msgstr "綠界無卡分期"
 msgid "Pay via ECPay BNPL"
 msgstr "透過綠界無卡分期付款"
 
-#: includes/services/payment/ecpay-gateway-credit-installment.php:15
+#: includes/services/payment/ecpay-gateway-credit-installment.php:15 includes/services/payment/ecpay-gateway-credit-installment.php:18
 msgid "ECPay Credit Installment"
 msgstr "綠界信用卡(分期)"
 
@@ -716,7 +716,7 @@ msgstr "分期期數"
 msgid "Pay via ECPay Credit(installment)"
 msgstr "透過綠界信用卡分期付款"
 
-#: includes/services/payment/ecpay-gateway-credit.php:14
+#: includes/services/payment/ecpay-gateway-credit.php:14 includes/services/payment/ecpay-gateway-credit.php:17
 msgid "ECPay Credit"
 msgstr "綠界信用卡"
 
@@ -724,7 +724,7 @@ msgstr "綠界信用卡"
 msgid "Pay via ECPay Credit"
 msgstr "透過綠界信用卡付款"
 
-#: includes/services/payment/ecpay-gateway-cvs.php:15
+#: includes/services/payment/ecpay-gateway-cvs.php:15 includes/services/payment/ecpay-gateway-cvs.php:18
 msgid "ECPay Cvs"
 msgstr "綠界超商代碼"
 
@@ -736,7 +736,7 @@ msgstr "超商代碼繳費期限超過限制，調整為預設值。"
 msgid "Pay via ECPay CVS"
 msgstr "透過綠界超商代碼付款"
 
-#: includes/services/payment/ecpay-gateway-dca.php:16
+#: includes/services/payment/ecpay-gateway-dca.php:16 includes/services/payment/ecpay-gateway-dca.php:19
 msgid "ECPay DCA"
 msgstr "綠界定期定額"
 
@@ -825,7 +825,7 @@ msgstr "付款完成"
 msgid "Payment failed within paid order"
 msgstr "已付款的訂單收到付款失敗訊息"
 
-#: includes/services/payment/ecpay-gateway-twqr.php:14
+#: includes/services/payment/ecpay-gateway-twqr.php:14 includes/services/payment/ecpay-gateway-twqr.php:17
 msgid "ECPay TWQR"
 msgstr "綠界TWQR"
 
@@ -904,7 +904,7 @@ msgstr "Ecpay Plug for WooCommerce"
 msgid "ECPay Green World FinTech Service Co., Ltd."
 msgstr "綠界科技."
 
-#: includes/services/invoice/checkout-blocks-initialize.php:57
+#: includes/services/invoice/checkout-blocks-initialize.php:57 src/edit.js:17
 msgid "Invoice Type"
 msgstr "發票開立"
 
@@ -912,15 +912,15 @@ msgstr "發票開立"
 msgid "Carruer Type"
 msgstr "載具類型"
 
-#: includes/services/invoice/checkout-blocks-initialize.php:66
+#: includes/services/invoice/checkout-blocks-initialize.php:66 src/edit.js:44 src/frontend.js:164
 msgid "Company Name"
 msgstr "公司行號"
 
-#: includes/services/invoice/checkout-blocks-initialize.php:71
+#: includes/services/invoice/checkout-blocks-initialize.php:71 src/edit.js:50 src/frontend.js:173
 msgid "Uniform Numbers"
 msgstr "統一編號"
 
-#: includes/services/invoice/checkout-blocks-initialize.php:76
+#: includes/services/invoice/checkout-blocks-initialize.php:76 src/edit.js:23 src/frontend.js:144
 msgid "Donation"
 msgstr "捐贈碼"
 
@@ -947,6 +947,50 @@ msgstr "定期定額 (支援傳統短代碼)"
 #: includes/config/payment/settings-gateway-dca.php:107
 msgid "The following settings support the traditional shortcode-based checkout page and do not support the use of the WooCommerce Blocks checkout. Please configure carefully"
 msgstr "以下設定支援舊版傳統短代碼結帳畫面，並不支援 Woocommerce Blocks 結帳使用，請謹慎設定"
+
+#: includes/services/payment/ecpay-gateway-weixin.php:14 includes/services/payment/ecpay-gateway-weixin.php:17
+msgid "ECPay WeiXin"
+msgstr "綠界微信支付"
+
+#: includes/services/payment/ecpay-gateway-weixin.php:52
+msgid "Pay via ECPay WeiXin"
+msgstr "透過綠界微信支付付款"
+
+#: src/edit.js:21 src/frontend.js:142
+msgid "Personal"
+msgstr "個人"
+
+#: src/edit.js:22 src/frontend.js:143
+msgid "Company"
+msgstr "公司"
+
+#: src/edit.js:17 src/frontend.js:152
+msgid "Carrier Type"
+msgstr "載具類型"
+
+#: src/edit.js:34 src/frontend.js:13 src/frontend.js:55 src/frontend.js:69
+msgid "Paper Invoice"
+msgstr "索取紙本"
+
+#: src/edit.js:35 src/frontend.js:14 src/frontend.js:36 src/frontend.js:56 src/frontend.js:62 src/frontend.js:70 src/frontend.js:77
+msgid "Cloud Invoice (Paper sent if winning)"
+msgstr "雲端發票(中獎寄送紙本)"
+
+#: src/edit.js:36 src/frontend.js:15 src/frontend.js:37 src/frontend.js:71 src/frontend.js:78
+msgid "Citizen Digital Certificate"
+msgstr "自然人憑證"
+
+#: src/edit.js:37 src/frontend.js:16 src/frontend.js:38 src/frontend.js:57 src/frontend.js:63 src/frontend.js:72 src/frontend.js:79
+msgid "Mobile Barcode"
+msgstr "手機條碼"
+
+#: src/edit.js:56 src/frontend.js:182
+msgid "Donation Code"
+msgstr "捐贈碼"
+
+#: src/edit.js:62 src/frontend.js:191
+msgid "Carrier Number"
+msgstr "載具編號"
 
 #~ msgid "Duplicate payments for ecpay orders are marked as processed."
 #~ msgstr "綠界訂單重複付款提示標示為已處理."

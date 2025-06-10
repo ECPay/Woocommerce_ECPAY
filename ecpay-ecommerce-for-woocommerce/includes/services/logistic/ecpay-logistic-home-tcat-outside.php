@@ -7,6 +7,7 @@ class Wooecpay_Logistic_Home_Tcat_Outside extends Wooecpay_Logistic_Base
         $this->id                   = 'Wooecpay_Logistic_Home_Tcat_Outside'; // Id for your shipping method. Should be uunique.
         $this->instance_id          = absint($instance_id);
         $this->method_title         = __('Ecpay Home Tcat Outside', 'ecpay-ecommerce-for-woocommerce');
+        $this->title                = __('Ecpay Home Tcat Outside', 'ecpay-ecommerce-for-woocommerce');
         $this->method_description   = ''; // Description shown in admin
 
         $this->supports = [
