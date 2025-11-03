@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
 "POT-Creation-Date: 2023-12-28 10:31+0800\n"
-"PO-Revision-Date: 2025-05-08 15:18+0800\n"
+"PO-Revision-Date: 2025-10-28 11:45+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: ecpay-ecommerce-for-woocommerce.php\n"
@@ -426,6 +426,7 @@ msgstr "此項目控制使用者在結帳時會看到的說明。"
 
 #: includes/config/payment/settings-gateway-applepay.php:29 includes/config/payment/settings-gateway-atm.php:28 includes/config/payment/settings-gateway-barcode.php:29 includes/config/payment/settings-gateway-credit-installment.php:29
 #: includes/config/payment/settings-gateway-credit.php:29 includes/config/payment/settings-gateway-cvs.php:29 includes/config/payment/settings-gateway-dca.php:29 includes/config/payment/settings-gateway-twqr.php:28 includes/config/payment/settings-gateway-webatm.php:29
+#: includes/config/payment/settings-gateway-bnpl.php:20
 msgid "0 to disable minimum amount limit."
 msgstr "0 代表停用最小訂單金額限制。"
 
@@ -446,10 +447,6 @@ msgstr "ATM 櫃員機允許的繳費期限為 1 到 60 天。"
 #: includes/config/payment/settings-gateway-barcode.php:51
 msgid "Barcode allowable payment deadline from 1 day to 60 days."
 msgstr "超商代碼允許的繳費期限為 1天到 60 天。"
-
-#: includes/config/payment/settings-gateway-bnpl.php:27
-msgid "The transaction amount must be at least NT$3,000."
-msgstr "交易金額最低需達新台幣3,000元。"
 
 #: includes/config/payment/settings-gateway-credit-installment.php:36
 msgid "Enable number of periods"
@@ -991,6 +988,18 @@ msgstr "捐贈碼"
 #: src/edit.js:62 src/frontend.js:191
 msgid "Carrier Number"
 msgstr "載具編號"
+
+#: admin/order/class-wooecpay-order.php:164
+msgid "BNPL Provider"
+msgstr "無卡分期服務商"
+
+#: admin/order/class-wooecpay-order.php:164
+msgid "URICH"
+msgstr "裕富數位無卡分期"
+
+#: admin/order/class-wooecpay-order.php:164
+msgid "ZINGALA"
+msgstr "中租銀角零卡"
 
 #~ msgid "Duplicate payments for ecpay orders are marked as processed."
 #~ msgstr "綠界訂單重複付款提示標示為已處理."

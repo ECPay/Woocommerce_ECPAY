@@ -59,8 +59,14 @@ class Wooecpay_Gateway_Response
                     $TradeAmt = 0;
                 }
 
+                // 儲存回傳付款方式到 meta
+                $order->update_meta_data('_ecpay_PaymentType', $info['PaymentType']);
+
                 // 金額比對
                 if ($TradeAmt == $order_total) {
+
+                    // 付款方式
+                    $paymentTypeParts = explode('_', $info['PaymentType']);
 
                     // 計算定期定額付款結果回傳交易成功最大次數
                     $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
@@ -68,6 +74,13 @@ class Wooecpay_Gateway_Response
 
                     // 更新訂單付款結果
                     $this->paymentHelper->update_order_ecpay_orders_payment_status($order_id, $info);
+
+                    // 儲存 BNPL 資訊到 meta
+                    if ($paymentTypeParts[0] === 'BNPL' &&
+                        (empty($order->get_meta('_ecpay_bnpl_BNPLTradeNo')) || empty($order->get_meta('_ecpay_bnpl_BNPLInstallment')))) {
+                        $order->update_meta_data('_ecpay_bnpl_BNPLTradeNo', $info['BNPLTradeNo'] ?? '');
+                        $order->update_meta_data('_ecpay_bnpl_BNPLInstallment', $info['BNPLInstallment'] ?? '');
+                    }
 
                     // 判斷狀態
                     switch ($info['RtnCode']) {
@@ -144,10 +157,9 @@ class Wooecpay_Gateway_Response
 
                             if (! $order->is_paid()) {
 
-                                if ($info['PaymentType'] == 'BNPL_URICH') {
-                                    $order->update_meta_data('_ecpay_bnpl_BNPLTradeNo', $info['BNPLTradeNo']);
-                                    $order->update_meta_data('_ecpay_bnpl_BNPLInstallment', $info['BNPLInstallment']);
-                                } else {
+                                $paymentTypeParts = explode('_', $info['PaymentType']);
+
+                                if ($paymentTypeParts[0] === 'ATM') {
                                     $expireDate = new DateTime($info['ExpireDate'], new DateTimeZone('Asia/Taipei'));
 
                                     $order->update_meta_data('_ecpay_atm_BankCode', $info['BankCode']);
@@ -193,6 +205,7 @@ class Wooecpay_Gateway_Response
 
                         // 付款失敗
                         case 10100058:
+                        case 10200163:
 
                             if ($order->is_paid()) {
 
@@ -311,7 +324,7 @@ class Wooecpay_Gateway_Response
         // 寫入舊訂單備註
         $source_order->add_order_note($note . '，新訂單號: ' . $new_order->get_id());
         $source_order->save();
-        
+
         ecpay_log('綠界定期定額訂單接收付款結果第' . $info['TotalSuccessTimes'] . '次，建立新訂單', 'A00034', $new_order->get_id());
 
         $this->paymentHelper->insert_ecpay_orders_payment_status($new_order->get_id(), $new_order->get_payment_method(), $info['MerchantTradeNo']);
@@ -357,9 +370,22 @@ class Wooecpay_Gateway_Response
                 // 金額比對
                 if ($TradeAmt == $order_total) {
 
+                    // 付款方式
+                    $paymentTypeParts = explode('_', $info['PaymentType']);
+
                     // 更新訂單付款結果
                     $maxSuccessTimes = $this->paymentHelper->check_dca_max_total_success_times($info['MerchantTradeNo']);
                     $this->paymentHelper->update_order_ecpay_orders_payment_status($order_id, $info);
+
+                    // 儲存付款方式到 meta
+                    $order->update_meta_data('_ecpay_PaymentType', $info['PaymentType']);
+
+                    // 儲存 BNPL 資訊到 meta
+                    if ($paymentTypeParts[0] === 'BNPL' &&
+                        (empty($order->get_meta('_ecpay_bnpl_BNPLTradeNo')) || empty($order->get_meta('_ecpay_bnpl_BNPLInstallment')))) {
+                        $order->update_meta_data('_ecpay_bnpl_BNPLTradeNo', $info['BNPLTradeNo'] ?? '');
+                        $order->update_meta_data('_ecpay_bnpl_BNPLInstallment', $info['BNPLInstallment'] ?? '');
+                    }
 
                     // 判斷狀態
                     switch ($info['RtnCode']) {
@@ -376,7 +402,7 @@ class Wooecpay_Gateway_Response
                             } else {
                                 // 定期定額付款回傳(非第一次)
                                 if ($info['PeriodType'] == 'Y' || $info['PeriodType'] == 'M' || $info['PeriodType'] == 'D') {
-                                      
+
                                     // 確認定期定額訂單最後交易成功次數
                                     if ($maxSuccessTimes == 0 && $info['TotalSuccessTimes'] == 1) {
                                         // 第一次
@@ -428,10 +454,7 @@ class Wooecpay_Gateway_Response
 
                             if (! $order->is_paid()) {
 
-                                if ($info['PaymentType'] == 'BNPL_URICH') {
-                                    $order->update_meta_data('_ecpay_bnpl_BNPLTradeNo', $info['BNPLTradeNo']);
-                                    $order->update_meta_data('_ecpay_bnpl_BNPLInstallment', $info['BNPLInstallment']);
-                                } else {
+                                if ($paymentTypeParts[0] === 'ATM') {
                                     $expireDate = new DateTime($info['ExpireDate'], new DateTimeZone('Asia/Taipei'));
 
                                     $order->update_meta_data('_ecpay_atm_BankCode', $info['BankCode']);
@@ -477,6 +500,7 @@ class Wooecpay_Gateway_Response
 
                         // 付款失敗
                         case 10100058:
+                        case 10200163:
 
                             if ($order->is_paid()) {
 

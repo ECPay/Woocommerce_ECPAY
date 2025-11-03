@@ -33,8 +33,8 @@ class Wooecpay_Gateway_Bnpl extends Wooecpay_Gateway_Base
         // 最小值判斷
         $_POST['woocommerce_' . $this->id . '_min_amount'] = (int) $_POST['woocommerce_' . $this->id . '_min_amount'];
 
-        if ($_POST['woocommerce_' . $this->id . '_min_amount'] < 3000) {
-            $_POST['woocommerce_' . $this->id . '_min_amount'] = 3000;
+        if ($_POST['woocommerce_' . $this->id . '_min_amount'] < 0) {
+            $_POST['woocommerce_' . $this->id . '_min_amount'] = 0;
             WC_Admin_Settings::add_error(sprintf(__('%s minimum amount out of range. Set as default value.', 'ecpay-ecommerce-for-woocommerce'), $this->method_title));
         }
 
@@ -48,12 +48,10 @@ class Wooecpay_Gateway_Bnpl extends Wooecpay_Gateway_Base
             $total = $this->get_order_total();
 
             if ($total > 0) {
-                // 訂單金額至少 3000 才開放無卡分期
-                if ($this->min_amount > 0 and ($total < $this->min_amount || $total < 3000)) {
+                if ($this->min_amount > 0 && $total < $this->min_amount) {
                     return false;
                 }
-
-                if ($this->max_amount > 0 && $total > $this->max_amount) {
+                if ($this->max_amount > 0 && ($total > $this->max_amount || $total > 300000)) {
                     return false;
                 }
             }

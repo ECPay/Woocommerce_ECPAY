@@ -24,6 +24,9 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
     let invoicePapper = 'enable';
 
     useEffect(() => {
+        setExtensionData('ecpay-invoice-block', 'invoice_type', invoiceTypeValue);
+        setExtensionData('ecpay-invoice-block', 'invoice_carruer_type', carruerTypeValue);
+
         if (InvoiceData.DonateCode !== null) {
             donateCode = InvoiceData.DonateCode;
             setLoveCodeValue(donateCode);
@@ -124,9 +127,9 @@ const ecpayInvoiceBlock = ({children, checkoutExtensionData}) => {
 
         setExtensionData('ecpay-invoice-block', type, value);
     }, [
-        setInvoiceTypeValue, 
-        setCarruerTypeValue, 
-        setCompanyNameValue, 
+        setInvoiceTypeValue,
+        setCarruerTypeValue,
+        setCompanyNameValue,
         setCompanyIdentifierValue,
         setLoveCodeValue,
         setCarruerNumValue,

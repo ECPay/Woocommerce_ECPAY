@@ -109,7 +109,7 @@ class Wooecpay_Logistic_Helper {
                             'SenderZipCode'         => $sender_zipcode,
                             'SenderAddress'         => $sender_address,
                             'ReceiverName'          => $order->get_shipping_last_name() . $order->get_shipping_first_name(),
-                            'ReceiverCellPhone'     => $order->get_billing_phone(),
+                            'ReceiverCellPhone'     => $order->get_shipping_phone(),
                             'ReceiverZipCode'       => $order->get_shipping_postcode(),
                             'ReceiverAddress'       => $order->get_shipping_state() . $order->get_shipping_city() . $order->get_shipping_address_1() . $order->get_shipping_address_2(),
                             'Temperature'           => '0001',
@@ -117,6 +117,7 @@ class Wooecpay_Logistic_Helper {
                             'Specification'         => '0001',
                             'ScheduledPickupTime'   => '4',
                             'ScheduledDeliveryTime' => '4',
+                            'IsCollection'          => $IsCollection,
                             'ServerReplyURL'        => $serverReplyURL,
                         ];
 
@@ -133,7 +134,7 @@ class Wooecpay_Logistic_Helper {
                             'SenderName'        => $sender_name,
                             'SenderCellPhone'   => $sender_cellphone,
                             'ReceiverName'      => $order->get_shipping_last_name() . $order->get_shipping_first_name(),
-                            'ReceiverCellPhone' => $order->get_billing_phone(),
+                            'ReceiverCellPhone' => $order->get_shipping_phone(),
                             'ReceiverStoreID'   => $CVSStoreID,
                             'IsCollection'      => $IsCollection,
                             'ServerReplyURL'    => $serverReplyURL,
@@ -566,6 +567,14 @@ class Wooecpay_Logistic_Helper {
         $MerchantTradeNo   = $this->get_merchant_trade_no($order_id, get_option('wooecpay_logistic_order_prefix'));
         $LogisticsType     = $this->get_logistics_sub_type($shipping_method_id);
 
+        $order = wc_get_order($order_id);
+        $payment_method = $order->get_payment_method();
+        if ($payment_method == 'cod') {
+            $isCollection = 'Y';
+        } else {
+            $isCollection = 'N';
+        }
+
         try {
             $factory = new Factory([
                 'hashKey'    => $api_logistic_info['hashKey'],
@@ -579,7 +588,7 @@ class Wooecpay_Logistic_Helper {
                 'MerchantTradeNo'  => $MerchantTradeNo,
                 'LogisticsType'    => $LogisticsType['type'],
                 'LogisticsSubType' => $LogisticsType['sub_type'],
-                'IsCollection'     => 'Y',
+                'IsCollection'     => $isCollection,
                 'ServerReplyURL'   => $client_back_url,
             ];
 

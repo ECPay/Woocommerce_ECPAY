@@ -152,6 +152,18 @@ class Wooecpay_Order
                 echo wp_kses_post('<p><strong>' . __('TWQR trade no', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_twqr_trad_no', true) . '</p>');
                 break;
             case 'Wooecpay_Gateway_Bnpl':
+
+                // 撈取 PaymentType
+                $payment_type = $order->get_meta('_ecpay_PaymentType', true);
+                if (empty($payment_type)) {
+                    $payment_type = $this->paymentHelper->get_ecpay_order_payment_field($order->get_id(), 'PaymentType');
+                }
+
+                if (!empty($payment_type)) {
+                    $payment_type_parts = explode('_', $payment_type);
+                    echo wp_kses_post('<p><strong>' . __('BNPL Provider', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . __(strtoupper($payment_type_parts[1]), 'ecpay-ecommerce-for-woocommerce') . '</p>');
+                }
+
                 echo wp_kses_post('<p><strong>' . __('BNPL Trade No', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLTradeNo', true) . '</p>');
                 echo wp_kses_post('<p><strong>' . __('BNPL Installment', 'ecpay-ecommerce-for-woocommerce') . ':&nbsp;</strong>' . $order->get_meta('_ecpay_bnpl_BNPLInstallment', true) . '</p>');
                 break;
@@ -196,7 +208,7 @@ class Wooecpay_Order
 
                     // 若使用者自訂的保留時間 > 綠界時間，則使用使用者設定的時間
                     // 取得保留庫存時間
-                    $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes'); 
+                    $hold_stock_minutes = empty(get_option('woocommerce_hold_stock_minutes')) ? 0 : get_option('woocommerce_hold_stock_minutes');
 
                     if ($hold_stock_minutes > $offset) {
                         $offset = $hold_stock_minutes;

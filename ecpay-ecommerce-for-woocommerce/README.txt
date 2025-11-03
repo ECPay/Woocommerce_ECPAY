@@ -4,9 +4,11 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2506040
+Stable tag: 1.1.2510300
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+* 綠界科技外掛套件，提供合作特店以及個人賣家使用開放原始碼商店系統時，無須自行處理複雜的檢核，直接透過安裝設定外掛套件，便可快速介接綠界科技系統，進行金流、物流、電子發票操作。
 
 == Frequently Asked Questions ==
 = 系統需求 =
@@ -18,6 +20,20 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+
+v1.1.2510300
+增加無卡分期服務商欄位在後台訂單頁綠界金流區塊
+增加無卡分期後台設定「訂單最高金額」限制 30 萬元
+移除無卡分期後台設定「訂單最低金額」限制
+修正 WooCommerce blocks 區塊結帳「發票開立」下拉選單未變更時不會帶值，導致紙本發票誤開為雲端發票的問題
+
+v1.1.2508050
+增加黑貓貨到付款物流
+增加前台 woocommerce blocks 區塊結帳，綠界物流收件人電話號碼檢查
+修正後台訂單頁，建立物流訂單收件人電話號碼使用收件人電話
+
+v1.1.2506100
+調整語系檔
 
 v1.1.2506040
 調整介面語系問題

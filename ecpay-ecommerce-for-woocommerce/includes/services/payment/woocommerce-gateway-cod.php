@@ -39,7 +39,7 @@ class Wooecpay_Gateway_Cod extends Wooecpay_Gateway_Base {
             // 紀錄訂單付款資訊進 DB
             $this->paymentHelper->insert_ecpay_orders_payment_status($orderInfo->get_id(), $payment_method, '', 1);
 
-            if ($this->logisticHelper->is_ecpay_logistics($shipping_method_id)) {
+            if ($this->logisticHelper->is_ecpay_cvs_logistics($shipping_method_id)) {
                 $encryption_order_id  = $this->logisticHelper->encrypt_order_id($orderInfo->get_id());
                 $redirect_cvs_map_url = $this->logisticHelper->get_permalink(WC()->api_request_url('wooecpay_logistic_redirect_map_preprocessor', true)) . 'id=' . $encryption_order_id;
 

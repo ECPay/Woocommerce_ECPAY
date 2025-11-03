@@ -706,4 +706,38 @@ class Wooecpay_Payment_Helper
         }
         return 0;
     }
+
+    /**
+     * 取得 ecpay_orders_payment_status 表中指定欄位值
+     *
+     * @param  int    $order_id 訂單ID
+     * @param  string $field    要取得的欄位名稱
+     * @return mixed  欄位值，若無資料則回傳 null
+     */
+    public function get_ecpay_order_payment_field($order_id, $field)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'ecpay_orders_payment_status';
+
+        // 檢查表是否存在
+        $isTableExists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+
+        if (!$isTableExists) {
+            return null;
+        }
+
+        // 查詢指定欄位的值
+        $result = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT $field
+                FROM $table_name
+                WHERE order_id = %d
+                ORDER BY id DESC
+                LIMIT 1",
+                $order_id
+            )
+        );
+
+        return $result;
+    }
 }

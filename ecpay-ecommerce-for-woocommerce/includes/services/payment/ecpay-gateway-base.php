@@ -67,7 +67,7 @@ class Wooecpay_Gateway_Base extends WC_Payment_Gateway {
                         'MerchantTradeNo'  => $MerchantTradeNo,
                         'LogisticsType'    => $LogisticsType['type'],
                         'LogisticsSubType' => $LogisticsType['sub_type'],
-                        'IsCollection'     => 'Y',
+                        'IsCollection'     => 'N',
                         'ServerReplyURL'   => $client_back_url,
                     ];
 

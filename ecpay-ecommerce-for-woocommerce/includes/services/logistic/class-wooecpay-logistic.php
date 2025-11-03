@@ -24,12 +24,15 @@ class Wooecpay_Logistic {
             add_action('woocommerce_checkout_create_order', array($this, 'wooecpay_save_logistic_fields'), 11, 2);
         }
 
-        // 儲存重量欄位資訊(傳統結帳)   
+        // 儲存重量欄位資訊(傳統結帳)
         add_action('woocommerce_checkout_update_order_meta', array($this, 'save_weight_order'));
-        // 儲存重量欄位資訊(Woocommcer Block結帳) 
+        // 儲存重量欄位資訊(Woocommcer Block結帳)
         add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'save_weight_order'));
 
+        // 前台結帳頁欄位檢查(傳統結帳)
         add_action('woocommerce_after_checkout_validation', array($this, 'validate_checkout_shipping_field'), 10, 2);
+        // 前台結帳頁欄位檢查(Woocommcer Block結帳)
+        add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'wooecpay_block_validate_checkout_shipping_field'), 10, 2);
     }
 
     /**
@@ -62,6 +65,9 @@ class Wooecpay_Logistic {
         if (in_array('Wooecpay_Logistic_CVS_711', get_option('wooecpay_enabled_logistic_outside', []))) {
             include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-cvs-711-outside.php';
         }
+        if (in_array('Wooecpay_Logistic_CVS_Family', get_option('wooecpay_enabled_logistic_outside', []))) {
+            include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-cvs-family-outside.php';
+        }
         if (in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
             include WOOECPAY_PLUGIN_INCLUDE_DIR . '/services/logistic/ecpay-logistic-home-tcat-outside.php';
         }
@@ -81,6 +87,9 @@ class Wooecpay_Logistic {
 
         if (in_array('Wooecpay_Logistic_CVS_711', get_option('wooecpay_enabled_logistic_outside', []))) {
             $methods['Wooecpay_Logistic_CVS_711_Outside'] = 'Wooecpay_Logistic_CVS_711_Outside';
+        }
+        if (in_array('Wooecpay_Logistic_CVS_Family', get_option('wooecpay_enabled_logistic_outside', []))) {
+            $methods['Wooecpay_Logistic_CVS_Family_Outside'] = 'Wooecpay_Logistic_CVS_Family_Outside';
         }
         if (in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
             $methods['Wooecpay_Logistic_Home_Tcat_Outside'] = 'Wooecpay_Logistic_Home_Tcat_Outside';
@@ -128,15 +137,35 @@ class Wooecpay_Logistic {
                     }
                 }
 
-                // 限制貨到付款僅適用超商物流
+                // 貨到付款限制
                 $chosen_methods  = WC()->session->get('chosen_shipping_methods');
                 $chosen_shipping = $chosen_methods[0];
 
+                // 黑貓貨到付款，金額不可超過20000元
                 if (isset($available_gateways['cod']) && (
                     0 === strpos($chosen_shipping, 'Wooecpay_Logistic_Home_Tcat') ||
-                    0 === strpos($chosen_shipping, 'Wooecpay_Logistic_Home_Tcat_Outside') ||
-                    0 === strpos($chosen_shipping, 'Wooecpay_Logistic_Home_Post')
+                    0 === strpos($chosen_shipping, 'Wooecpay_Logistic_Home_Tcat_Outside')
                 )) {
+                    $total    = 0;
+                    $order_id = absint( get_query_var( 'order-pay' ) );
+
+                    // Gets order total from "pay for order" page.
+                    if ( 0 < $order_id ) {
+                        $order = wc_get_order( $order_id );
+                        if ( $order ) {
+                            $total = (float) $order->get_total();
+                        }
+                    } elseif ( 0 < WC()->cart->total ) {
+                        $total = (float) WC()->cart->total;
+                    }
+
+                    if ($total > 20000) {
+                        unset($available_gateways['cod']);
+                    }
+                }
+
+                // 貨到付款僅適用超商物流及黑貓宅配，郵局強制隱藏
+                if (isset($available_gateways['cod']) && (0 === strpos($chosen_shipping, 'Wooecpay_Logistic_Home_Post'))) {
                     unset($available_gateways['cod']);
                 }
             }
@@ -184,6 +213,28 @@ class Wooecpay_Logistic {
             // 黑貓宅配離島檢查
             if (in_array($chosen_shipping, ['Wooecpay_Logistic_Home_Tcat', 'Wooecpay_Logistic_Home_Tcat_Outside']) && in_array('Wooecpay_Logistic_Home_Tcat', get_option('wooecpay_enabled_logistic_outside', []))) {
                 $this->wooecpay_check_logistic_home_fields($data, $errors, $chosen_shipping);
+            }
+        }
+    }
+
+    public function wooecpay_block_validate_checkout_shipping_field($order, $request) {
+        // 取得完整的請求資料
+        $params = $request->get_json_params();
+
+        if (isset($params['shipping_address'])) {
+            // 檢查請求資料是否包含運送欄位
+            $phone = isset($params['shipping_address']['phone']) ? $params['shipping_address']['phone'] : '';
+
+            // 取得當前選擇的運送方式
+            $chosen_shipping = $this->get_chosen_shipping_method_ids();
+            $chosen_shipping = (empty($chosen_shipping)) ? '' : $chosen_shipping[0];
+
+            // 只有綠界物流才要檢查
+            if ($this->logisticHelper->is_ecpay_logistics($chosen_shipping)) {
+                // 驗證電話號碼
+                if (!preg_match('/^09\d{8}$/', $phone)) {
+                    throw new \WC_REST_Exception('ecpay_invalid_checkout_shipping_field', __('No special symbols are allowed in the phone number, it must be ten digits long and start with 09', 'ecpay-ecommerce-for-woocommerce'), 400);
+                }
             }
         }
     }
