@@ -2,9 +2,9 @@
 Contributors: ecpaytechsupport
 Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.2610150
+Stable tag: 1.1.2610151
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,9 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+v1.1.2610151
+版號調整，測試相容性至 Wordpress Version 7.1.1
+
 v1.1.2610150
 安全性修正
 #255541 強化後台訂單 AJAX 操作之安全性驗證
