@@ -378,22 +378,46 @@ class Wooecpay_Gateway_Dca extends Wooecpay_Gateway_Base
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
-        $order->add_order_note(__('Pay via ECPay DCA', 'ecpay-ecommerce-for-woocommerce'));
+        
 
         if (!isset($_POST['ecpay_dca_payment'])) {
+            
             // 新版 Woocommerce Block
             $dca_settings = get_option('woocommerce_Wooecpay_Gateway_Dca_settings', []);
-            if (count($dca_settings) > 0 && (isset($dca_settings['dca_periodType']) && isset($dca_settings['dca_frequency']) && isset($dca_settings['dca_execTimes']))) {
+            
+            if (
+                count($dca_settings) > 0 &&
+                isset($dca_settings['dca_periodType']) &&
+                isset($dca_settings['dca_frequency']) &&
+                isset($dca_settings['dca_execTimes'])
+            ) {
                 $order->update_meta_data('_ecpay_payment_dca_periodtype', $dca_settings['dca_periodType']);
                 $order->update_meta_data('_ecpay_payment_dca_frequency', $dca_settings['dca_frequency']);
                 $order->update_meta_data('_ecpay_payment_dca_exectimes', $dca_settings['dca_execTimes']);
             }
         }
         else {
+
+            // 整理定期定額參數
+            $dcaSettingsTmp = [];
+            $dca_settings = get_option('woocommerce_ecpay_dca', []);
+            foreach ($dca_settings as $key => $value) {
+                $dcaSettingsTmp[$key] = $value['periodType'] . '_' . $value['frequency'] . '_' . $value['execTimes'];
+            }
+
+            // 驗證定期定額參數是否為後台啟用的項目
+            if (!in_array($_POST['ecpay_dca_payment'], $dcaSettingsTmp)) {
+                wc_add_notice(__('Invalid DCA option. Please choose a different one.', 'ecpay-ecommerce-for-woocommerce'), 'error');
+                return [
+                    'result' => 'failure',
+                ];
+            }
+
             // 舊版傳統結帳
             $order->update_meta_data('_ecpay_payment_dca', $_POST['ecpay_dca_payment']);
         }
         
+        $order->add_order_note(__('Pay via ECPay DCA', 'ecpay-ecommerce-for-woocommerce'));
         $order->save();
 
         return array(

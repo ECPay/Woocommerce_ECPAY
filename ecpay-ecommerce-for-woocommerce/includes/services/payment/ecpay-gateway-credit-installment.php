@@ -75,11 +75,37 @@ class Wooecpay_Gateway_Credit_Installment extends Wooecpay_Gateway_Base
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
-        $order->add_order_note(__('Pay via ECPay Credit(installment)', 'ecpay-ecommerce-for-woocommerce'));
-
+        
         if (isset($_POST['ecpay_number_of_periods'])) {
-            $order->update_meta_data('_ecpay_payment_number_of_periods', (int) $_POST['ecpay_number_of_periods']);
+
+            $installmentDatas = get_option('woocommerce_Wooecpay_Gateway_Credit_Installment_settings', []);
+            $allowed_periods = isset($installmentDatas['number_of_periods']) ? $installmentDatas['number_of_periods'] : [];
+
+            // 取得前端傳來的期數
+            $periods = isset($_POST['ecpay_number_of_periods']) ? (int) $_POST['ecpay_number_of_periods'] : 0;
+
+            // 1. 驗證期數是否為後台啟用的項目
+            if ($periods <= 0 || !in_array($periods, $allowed_periods)) {
+                wc_add_notice(__('Invalid installment option. Please choose a different one.', 'ecpay-ecommerce-for-woocommerce'), 'error');
+                return [
+                    'result' => 'failure',
+                ];
+            }
+
+            // 2. 驗證 30 期的金額限制（避免前端竄改 DOM 繞過）
+            if ($periods === 30 && $order->get_total() < 20000) {
+                wc_add_notice(__('A minimum order total of NT$ 20,000 is required for 30 installments.', 'ecpay-ecommerce-for-woocommerce'), 'error');
+                return [
+                    'result' => 'failure',
+                ];
+            }
+
+            $order->update_meta_data('_ecpay_payment_number_of_periods', $periods);
+
         }
+
+        $order->add_order_note(__('Pay via ECPay Credit(installment)', 'ecpay-ecommerce-for-woocommerce'));
+        
         $order->save();
 
         wc_maybe_reduce_stock_levels($order_id);

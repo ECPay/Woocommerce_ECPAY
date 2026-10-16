@@ -415,7 +415,7 @@ class Wooecpay_Order
             'wooecpay_main',
             WOOECPAY_PLUGIN_URL . 'public/js/wooecpay-main.js',
             [],
-            '1.0.2',
+            '1.0.3',
             true
         );
 
@@ -425,6 +425,7 @@ class Wooecpay_Order
         // 傳遞 AJAX URL 和 Nonce
         wp_localize_script('wooecpay_main', 'wooecpay_ajax', [
             'nonce' => wp_create_nonce('ecpay_clear_log_nonce'), // 產生 Nonce
+            'order_action_nonce' => wp_create_nonce('wooecpay_order_action_nonce'),
         ]);
     }
 
@@ -620,10 +621,21 @@ class Wooecpay_Order
      */
     public function ajax_send_logistic_order_action()
     {
+        // 1. 驗證 Nonce (防 CSRF)
+        check_ajax_referer('wooecpay_order_action_nonce', 'security');
+
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
+
+        if (! $order_id || ! current_user_can('edit_shop_order', $order_id)) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+            return;
+        }
+
         ecpay_log('手動產生物流訂單', 'B00008', $order_id);
 
         $this->logisticHelper->send_logistic_order_action();
+
+        wp_die();
     }
 
     /**
@@ -631,12 +643,22 @@ class Wooecpay_Order
      */
     public function ajax_send_invoice_create()
     {
+        // 1. 驗證 Nonce
+        check_ajax_referer('wooecpay_order_action_nonce', 'security');
+
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
+
+        if (! $order_id || ! current_user_can('edit_shop_order', $order_id)) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+            return;
+        }
 
         if ($order = wc_get_order($order_id)) {
             ecpay_log('手動開立發票', 'C00001', $order_id);
             $this->invoiceHelper->invoice_create($order);
         }
+
+        wp_die();
     }
 
     /**
@@ -656,12 +678,22 @@ class Wooecpay_Order
      */
     public function ajax_send_invoice_invalid()
     {
+        // 1. 驗證 Nonce
+        check_ajax_referer('wooecpay_order_action_nonce', 'security');
+
         $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
+
+        if (! $order_id || ! current_user_can('edit_shop_order', $order_id)) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+            return;
+        }
 
         if ($order = wc_get_order($order_id)) {
             ecpay_log('手動作廢發票', 'C00003', $order_id);
             $this->invoiceHelper->invoice_invalid($order);
         }
+
+        wp_die();
     }
 
     /**
@@ -725,8 +757,20 @@ class Wooecpay_Order
      */
     public function ajax_duplicate_payment_complete()
     {
-        if ($order = wc_get_order($_POST['order_id'])) {
-            $result = $this->paymentHelper->update_order_ecpay_orders_payment_status_complete($_POST['order_id']);
+
+        // 1. 驗證 Nonce
+        check_ajax_referer('wooecpay_order_action_nonce', 'security');
+
+        $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : '';
+
+        if (! $order_id || ! current_user_can('edit_shop_order', $order_id)) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+            return;
+        }
+
+        if ($order = wc_get_order($order_id)) {
+
+            $result = $this->paymentHelper->update_order_ecpay_orders_payment_status_complete($order_id);
 
             if (isset($result)) {
                 // 組合綠界金流特店交易編號
@@ -738,6 +782,8 @@ class Wooecpay_Order
                 $order->add_order_note(sprintf(__('Duplicate payments for ecpay orders are marked as processed.%s', 'ecpay-ecommerce-for-woocommerce'), $merchant_trade_no_list));
             }
         }
+
+        wp_die();
     }
 
     /**

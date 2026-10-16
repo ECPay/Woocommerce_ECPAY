@@ -14,14 +14,14 @@ function ecpayCreateLogisticsOrder(order_id) {
 
     query = {
         action: 'send_logistic_order_action',
-        order_id: order_id
+        order_id: order_id,
+        security: wooecpay_ajax.order_action_nonce
     };
 
     jQuery.blockUI({ message: null });
 
     jQuery.post(ajaxurl, query, function(response) {
 
-        var response_info = jQuery.parseJSON(response);
         window.location.reload();
 
         jQuery.unblockUI()
@@ -38,14 +38,14 @@ function wooecpayCreateInvoice(order_id) {
 
     query = {
         action: 'send_invoice_create',
-        order_id: order_id
+        order_id: order_id,
+        security: wooecpay_ajax.order_action_nonce
     };
 
     jQuery.blockUI({ message: null });
 
     jQuery.post(ajaxurl, query, function(response) {
 
-        var response_info = jQuery.parseJSON(response);
         window.location.reload();
 
         jQuery.unblockUI()
@@ -57,14 +57,14 @@ function wooecpayInvalidInvoice(order_id) {
 
     query = {
         action: 'send_invoice_invalid',
-        order_id: order_id
+        order_id: order_id,
+        security: wooecpay_ajax.order_action_nonce
     };
 
     jQuery.blockUI({ message: null });
 
     jQuery.post(ajaxurl, query, function(response) {
 
-        var response_info = jQuery.parseJSON(response);
         window.location.reload();
 
         jQuery.unblockUI()
@@ -77,14 +77,14 @@ function wooecpayDuplicatePaymentComplete(order_id, merchant_trade_no_list) {
     query = {
         action: 'duplicate_payment_complete',
         order_id: order_id,
-        merchant_trade_no_list: merchant_trade_no_list
+        merchant_trade_no_list: merchant_trade_no_list,
+        security: wooecpay_ajax.order_action_nonce
     };
 
     jQuery.blockUI({ message: null });
 
     jQuery.post(ajaxurl, query, function(response) {
 
-        var response_info = jQuery.parseJSON(response);
         window.location.reload();
 
         jQuery.unblockUI()

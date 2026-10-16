@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ECPay Ecommerce for WooCommerce\n"
-"POT-Creation-Date: 2026-01-28 14:41+0800\n"
-"PO-Revision-Date: 2026-05-26 11:06+0800\n"
+"POT-Creation-Date: 2026-09-01 15:29+0800\n"
+"PO-Revision-Date: 2026-09-01 15:30+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: ecpay-ecommerce-for-woocommerce.php\n"
@@ -273,8 +273,8 @@ msgid "None"
 msgstr "無"
 
 #: includes/config/logistic/settings-logistic-base.php:14
-#: includes/services/helpers/invoice/ecpay-invoice-helper.php:570
-#: includes/services/helpers/invoice/ecpay-invoice-helper.php:737
+#: includes/services/helpers/invoice/ecpay-invoice-helper.php:586
+#: includes/services/helpers/invoice/ecpay-invoice-helper.php:784
 msgid "Shipping fee"
 msgstr "物流費"
 
@@ -305,6 +305,7 @@ msgstr "一個有效的免運費折價卷"
 #: includes/config/payment/settings-gateway-credit.php:18
 #: includes/config/payment/settings-gateway-cvs.php:18
 #: includes/config/payment/settings-gateway-dca.php:18
+#: includes/config/payment/settings-gateway-ipass.php:17
 #: includes/config/payment/settings-gateway-jkopay.php:17
 #: includes/config/payment/settings-gateway-twqr.php:17
 #: includes/config/payment/settings-gateway-webatm.php:18
@@ -511,6 +512,7 @@ msgstr ""
 #: includes/config/payment/settings-gateway-credit.php:4
 #: includes/config/payment/settings-gateway-cvs.php:4
 #: includes/config/payment/settings-gateway-dca.php:4
+#: includes/config/payment/settings-gateway-ipass.php:4
 #: includes/config/payment/settings-gateway-jkopay.php:4
 #: includes/config/payment/settings-gateway-twqr.php:4
 #: includes/config/payment/settings-gateway-webatm.php:4
@@ -527,6 +529,7 @@ msgstr "啟用/停用"
 #: includes/config/payment/settings-gateway-credit.php:6
 #: includes/config/payment/settings-gateway-cvs.php:6
 #: includes/config/payment/settings-gateway-dca.php:6
+#: includes/config/payment/settings-gateway-ipass.php:5
 #: includes/config/payment/settings-gateway-jkopay.php:5
 #: includes/config/payment/settings-gateway-twqr.php:5
 #: includes/config/payment/settings-gateway-webatm.php:6
@@ -543,6 +546,7 @@ msgstr "啟用 %s"
 #: includes/config/payment/settings-gateway-credit.php:11
 #: includes/config/payment/settings-gateway-cvs.php:11
 #: includes/config/payment/settings-gateway-dca.php:11
+#: includes/config/payment/settings-gateway-ipass.php:10
 #: includes/config/payment/settings-gateway-jkopay.php:10
 #: includes/config/payment/settings-gateway-twqr.php:10
 #: includes/config/payment/settings-gateway-webatm.php:11
@@ -558,6 +562,7 @@ msgstr "描述"
 #: includes/config/payment/settings-gateway-credit.php:15
 #: includes/config/payment/settings-gateway-cvs.php:15
 #: includes/config/payment/settings-gateway-dca.php:15
+#: includes/config/payment/settings-gateway-ipass.php:14
 #: includes/config/payment/settings-gateway-jkopay.php:14
 #: includes/config/payment/settings-gateway-twqr.php:14
 #: includes/config/payment/settings-gateway-webatm.php:15
@@ -573,6 +578,7 @@ msgstr "此項目控制使用者在結帳時會看到的說明。"
 #: includes/config/payment/settings-gateway-credit.php:22
 #: includes/config/payment/settings-gateway-cvs.php:22
 #: includes/config/payment/settings-gateway-dca.php:22
+#: includes/config/payment/settings-gateway-ipass.php:21
 #: includes/config/payment/settings-gateway-jkopay.php:20
 #: includes/config/payment/settings-gateway-twqr.php:21
 #: includes/config/payment/settings-gateway-webatm.php:22
@@ -585,6 +591,7 @@ msgstr "0 代表停用最小訂單金額限制。"
 #: includes/config/payment/settings-gateway-bnpl.php:27
 #: includes/config/payment/settings-gateway-cvs.php:29
 #: includes/config/payment/settings-gateway-dca.php:29
+#: includes/config/payment/settings-gateway-ipass.php:28
 #: includes/config/payment/settings-gateway-jkopay.php:27
 #: includes/config/payment/settings-gateway-twqr.php:28
 #: includes/config/payment/settings-gateway-webatm.php:29
@@ -596,6 +603,7 @@ msgstr "訂單最高金額"
 #: includes/config/payment/settings-gateway-bnpl.php:31
 #: includes/config/payment/settings-gateway-cvs.php:33
 #: includes/config/payment/settings-gateway-dca.php:33
+#: includes/config/payment/settings-gateway-ipass.php:32
 #: includes/config/payment/settings-gateway-jkopay.php:31
 #: includes/config/payment/settings-gateway-twqr.php:32
 #: includes/config/payment/settings-gateway-webatm.php:33
@@ -771,7 +779,7 @@ msgstr "手機條碼載具格式錯誤"
 msgid "Please Check phone barcode"
 msgstr "請確認輸入的手機條碼載具是否正確，或選擇其他載具類別"
 
-#: includes/services/helpers/invoice/ecpay-invoice-helper.php:904
+#: includes/services/helpers/invoice/ecpay-invoice-helper.php:964
 msgid "Invalid invoice"
 msgstr "作廢發票"
 
@@ -792,7 +800,7 @@ msgid "The name contains ASCII that cannot be used"
 msgstr "姓名包含不支援的ASCII碼"
 
 #: includes/services/helpers/logistic/ecpay-logistic-helper.php:705
-#: includes/services/logistic/class-wooecpay-logistic.php:250
+#: includes/services/logistic/class-wooecpay-logistic.php:251
 msgid ""
 "No special symbols are allowed in the phone number, it must be ten digits "
 "long and start with 09"
@@ -831,11 +839,11 @@ msgstr "捐贈碼"
 msgid "Barcode"
 msgstr "手機條碼"
 
-#: includes/services/logistic/class-wooecpay-logistic.php:201
+#: includes/services/logistic/class-wooecpay-logistic.php:202
 msgid "Ecpay Sipping Setting Error："
 msgstr "綠界物流設定錯誤："
 
-#: includes/services/logistic/class-wooecpay-logistic.php:264
+#: includes/services/logistic/class-wooecpay-logistic.php:265
 msgid ""
 "The selected shipping method does not match the shipping address. Please "
 "choose again."
@@ -872,8 +880,14 @@ msgid "Ecpay Home POST"
 msgstr "綠界物流 宅配 中華郵政"
 
 #: includes/services/logistic/ecpay-logistic-home-post.php:11
-msgid "※ POST shipping fee is calculated based on product weight. Please go to <a href=\"%s\">Product Settings</a> to confirm each product's weight is greater than 0."
-msgstr "※ 中華郵政運費依商品重量計算，請先至<a href=\"%s\">商品設定</a>確認每項商品重量需大於 0。"
+#, php-format
+msgid ""
+"※ POST shipping fee is calculated based on product weight. Please go to <a "
+"href=\"%s\">Product Settings</a> to confirm each product's weight is greater "
+"than 0."
+msgstr ""
+"※ 中華郵政運費依商品重量計算，請先至<a href=\"%s\">商品設定</a>確認每項商品重"
+"量需大於 0。"
 
 #: includes/services/logistic/ecpay-logistic-home-tcat-outside.php:9
 #: includes/services/logistic/ecpay-logistic-home-tcat-outside.php:10
@@ -977,7 +991,15 @@ msgctxt "Checkout info"
 msgid "Number of periods"
 msgstr "分期期數"
 
-#: includes/services/payment/ecpay-gateway-credit-installment.php:78
+#: includes/services/payment/ecpay-gateway-credit-installment.php:89
+msgid "Invalid installment option. Please choose a different one."
+msgstr "無效的分期期數，請重新選擇。"
+
+#: includes/services/payment/ecpay-gateway-credit-installment.php:97
+msgid "A minimum order total of NT$ 20,000 is required for 30 installments."
+msgstr "選擇 30 期分期付款，訂單金額需滿 NT$ 20,000。"
+
+#: includes/services/payment/ecpay-gateway-credit-installment.php:107
 msgid "Pay via ECPay Credit(installment)"
 msgstr "透過綠界信用卡分期付款"
 
@@ -1094,16 +1116,29 @@ msgid ""
 "between 1 and 999."
 msgstr "當週期種類設定為日時，執行次數僅能設定介於1到999。"
 
-#: includes/services/payment/ecpay-gateway-dca.php:381
+#: includes/services/payment/ecpay-gateway-dca.php:410
+msgid "Invalid DCA option. Please choose a different one."
+msgstr "無效的定期定額期數，請重新選擇。"
+
+#: includes/services/payment/ecpay-gateway-dca.php:423
 msgid "Pay via ECPay DCA"
 msgstr "透過綠界定期定額付款"
+
+#: includes/services/payment/ecpay-gateway-ipass.php:14
+#: includes/services/payment/ecpay-gateway-ipass.php:17
+msgid "ECPay iPASS MONEY"
+msgstr "綠界iPASS MONEY"
+
+#: includes/services/payment/ecpay-gateway-ipass.php:63
+msgid "Pay via ECPay iPASS MONEY"
+msgstr "透過綠界iPASS MONEY付款"
 
 #: includes/services/payment/ecpay-gateway-jkopay.php:14
 #: includes/services/payment/ecpay-gateway-jkopay.php:17
 msgid "ECPay Jkopay"
 msgstr "街口支付"
 
-#: includes/services/payment/ecpay-gateway-jkopay.php:52
+#: includes/services/payment/ecpay-gateway-jkopay.php:60
 msgid "Pay via ECPay Jkopay"
 msgstr "透過街口支付付款"
 
@@ -1125,15 +1160,6 @@ msgstr "綠界TWQR"
 #: includes/services/payment/ecpay-gateway-twqr.php:66
 msgid "Pay via ECPay TWQR"
 msgstr "透過綠界TWQR付款"
-
-#: includes/services/payment/ecpay-gateway-ipass.php:14
-#: includes/services/payment/ecpay-gateway-ipass.php:17
-msgid "ECPay iPASS MONEY"
-msgstr "綠界iPASS MONEY"
-
-#: includes/services/payment/ecpay-gateway-ipass.php:85
-msgid "Pay via ECPay iPASS MONEY"
-msgstr "透過綠界iPASS MONEY付款"
 
 #: includes/services/payment/ecpay-gateway-webatm.php:14
 #: includes/services/payment/ecpay-gateway-webatm.php:17

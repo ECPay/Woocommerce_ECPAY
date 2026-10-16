@@ -4,7 +4,7 @@ Tags: shop, cart, checkout, payment, ecpay
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.2
-Stable tag: 1.1.2606090
+Stable tag: 1.1.2610150
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,11 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 請來信詢問綠界技術服務信箱: techsupport@ecpay.com.tw
 
 == Changelog ==
+v1.1.2610150
+安全性修正
+#255541 強化後台訂單 AJAX 操作之安全性驗證
+#256687 新增定期定額付款選項後端驗證機制
+#256599 新增信用卡分期期數與金額限制驗證
 
 v1.1.2606090
 增加後台物流「中華郵政」運送方式描述
