@@ -73,6 +73,10 @@ class Wooecpay_Order
             // 自動開立
             if ('auto_paid' === get_option('wooecpay_enabled_invoice_auto', 'manual')) {
                 add_action('woocommerce_order_status_processing', [$this, 'auto_invoice_create']);
+                // 添加虛擬商品支持：訂單狀態變為完成時也觸發
+                add_action('woocommerce_order_status_completed', [$this, 'auto_invoice_create_on_completed']);
+                // 添加payment complete hook支援（某些支付方式會使用）
+                add_action('woocommerce_payment_complete', [$this, 'auto_invoice_create_on_payment_complete']);
             }
         }
     }
@@ -667,10 +671,65 @@ class Wooecpay_Order
     public function auto_invoice_create($order_id)
     {
         if ($order = wc_get_order($order_id)) {
-            ecpay_log('自動開立發票', 'C00002', $order_id);
+            // 檢查是否已經開立過發票
+            $wooecpay_invoice_process = $order->get_meta('_wooecpay_invoice_process', true);
+            
+            // 記錄觸發信息
+            $trigger_info = 'Hook 觸發: woocommerce_order_status_processing | ' .
+                           '訂單狀態: ' . $order->get_status() . ' | ' .
+                           '發票處理狀態: ' . ($wooecpay_invoice_process ?: '未設置') . ' | ' .
+                           '發票類型: ' . ($order->get_meta('_wooecpay_invoice_type', true) ?: '未設置');
+            
+            ecpay_log('自動開立發票 - ' . $trigger_info, 'C00002', $order_id);
             $this->invoiceHelper->invoice_create($order);
+        } else {
+            ecpay_log('自動開立發票失敗 - 無法取得訂單', 'C00002', $order_id);
         }
 
+    }
+
+    /**
+     * 訂單完成時的自動開立發票（虛擬商品支持）
+     */
+    public function auto_invoice_create_on_completed($order_id)
+    {
+        if ($order = wc_get_order($order_id)) {
+            // 檢查是否已經開立過發票
+            $wooecpay_invoice_process = $order->get_meta('_wooecpay_invoice_process', true);
+            
+            // 記錄觸發信息
+            $trigger_info = 'Hook 觸發: woocommerce_order_status_completed | ' .
+                           '訂單狀態: ' . $order->get_status() . ' | ' .
+                           '發票處理狀態: ' . ($wooecpay_invoice_process ?: '未設置') . ' | ' .
+                           '發票類型: ' . ($order->get_meta('_wooecpay_invoice_type', true) ?: '未設置');
+            
+            ecpay_log('自動開立發票(completed) - ' . $trigger_info, 'C00002', $order_id);
+            $this->invoiceHelper->invoice_create($order);
+        } else {
+            ecpay_log('自動開立發票(completed)失敗 - 無法取得訂單', 'C00002', $order_id);
+        }
+    }
+
+    /**
+     * 支付完成時的自動開立發票（特定支付方式支持）
+     */
+    public function auto_invoice_create_on_payment_complete($order_id)
+    {
+        if ($order = wc_get_order($order_id)) {
+            // 檢查是否已經開立過發票
+            $wooecpay_invoice_process = $order->get_meta('_wooecpay_invoice_process', true);
+            
+            // 記錄觸發信息
+            $trigger_info = 'Hook 觸發: woocommerce_payment_complete | ' .
+                           '訂單狀態: ' . $order->get_status() . ' | ' .
+                           '發票處理狀態: ' . ($wooecpay_invoice_process ?: '未設置') . ' | ' .
+                           '發票類型: ' . ($order->get_meta('_wooecpay_invoice_type', true) ?: '未設置');
+            
+            ecpay_log('自動開立發票(payment_complete) - ' . $trigger_info, 'C00002', $order_id);
+            $this->invoiceHelper->invoice_create($order);
+        } else {
+            ecpay_log('自動開立發票(payment_complete)失敗 - 無法取得訂單', 'C00002', $order_id);
+        }
     }
 
     /**
